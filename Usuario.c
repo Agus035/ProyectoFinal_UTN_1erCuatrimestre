@@ -31,19 +31,30 @@ Usuario registrarUsuario()
 
     do
     {
+
         printf("Ingrese el nombre de usuario: ");
         fflush(stdin);
         scanf("%50[^\n]", inputTeclado);
         if(strlen(inputTeclado) >= LIMITE)
             printf("\nVuelva a ingresar un nombre dentro del rango!\n");
+
     }while(strlen(inputTeclado) >= LIMITE);
 
     strcpy(usuarioCargado.userName, inputTeclado);
 
-    printf("\nPASSWORD: ");
-    fflush(stdin);
-    scanf("%49[^\n]", usuarioCargado.password);
-    //HACER PARA CUANDO SI SE PASA DE CARACTERES VOLVER A PEDIR EL USUARIO/CONTRA
+    do
+    {
+
+        printf("\nPASSWORD: ");
+        fflush(stdin);
+        scanf("%50[^\n]", inputTeclado);
+        if(strlen(inputTeclado) >= LIMITE)
+            printf("\nVuelva a ingresar un password dentro del rango!\n");
+
+    }while(strlen(inputTeclado) >= LIMITE);
+
+    strcpy(usuarioCargado.password, inputTeclado);
+
     usuarioCargado.billetera         = 0;
     usuarioCargado.bibliotecaUsuario = NULL;
     usuarioCargado.validosBiblioteca = 0;
