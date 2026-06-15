@@ -70,7 +70,7 @@ void cargarABibliotecaUsuario(Juego **arr, int *validos, Juego juegoACargar)
     if ((*validos) <= 0)
         (*validos) = 1;
     else
-        (*validos) + 1;          // ← bug existente, no tocar por ahora
+        (*validos) ++;
 
     (*arr) = (Juego *) realloc((*arr), sizeof(Juego) * (*validos));
     if (!(*arr))
