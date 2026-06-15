@@ -1,4 +1,5 @@
 #include "Usuario.h"
+#include "Juego.h"
 
 ///Main
 int main()

@@ -15,7 +15,7 @@ typedef struct
     char nombreJuego[LIMITE];
     char categoriaJuego[LIMITE];
     float precioJuego;
-    int id;
+    int id; //tengo que ver cómo mantener las IDs, con variable global que se guarda en archivo o simplemente los eliminados mantienen su id para siempre
     int eliminado; //0 es NO ----1 es SI
 }Juego;
 

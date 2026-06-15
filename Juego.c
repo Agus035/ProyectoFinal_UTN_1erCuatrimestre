@@ -44,6 +44,9 @@ Juego cargarNuevoJuego()
     printf("\nIngrese el precio del juego: ");
     scanf("%f", &nuevoJuego.precioJuego);
     printf("\n=============FIN DE LA CREACION================\n");
+    nuevoJuego.eliminado = 0;
+    //[nota para hacer yo]para id tal vez contar los juegos que hay en archivo en otra función y darle la cantidad actual+1 como id.
+    //Puede haber problemas con eso si se elimina un juego, pero en ese caso verifico si la id ya existe en la función madre a esta
     return nuevoJuego;
 }
 
@@ -66,10 +69,13 @@ void leerJuegosArchivo(FILE *archi)
 
     while (fread(&aux, sizeof(Juego), 1, archi) > 0)
     {
-        printf("\n=============Juego #%i================\n", contador);
-        leerUnJuego(aux);
-        printf("\n======================================\n");
-        contador++;
+        if (aux.eliminado != 1)
+        {
+            printf("\n=============Juego #%i================\n", contador);
+            leerUnJuego(aux);
+            printf("\n======================================\n");
+            contador++;
+        }
     }
 }
 
@@ -81,6 +87,7 @@ void leerUnJuego(Juego unJuego)
 }
 
 // --- BAJA (buscar dato en archivo, eliminarlo, guardar cambios) ------------------------------------
+// Después ver como hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
 
 //Eliminar un juego de la tienda
 void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
@@ -134,7 +141,7 @@ void marcarJuegoComoEliminado (FILE *archi)
 
 // ── Filtrado por categoría ────────────────────────────────────────────────────
 
-int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego.h p q lo puse acá (considerar cambiar de lugar maybe?)
+int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego.h por qué lo puse acá (considerar cambiar de lugar maybe?)
 {
     int flag = 0; //0 significa "no existe"
 
