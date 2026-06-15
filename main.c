@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <malloc.h>
-#include "pila.h"
 #include "Usuario.h"
 
 ///Main
