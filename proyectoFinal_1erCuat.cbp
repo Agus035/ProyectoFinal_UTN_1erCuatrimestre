@@ -31,6 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Juego.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Juego.h" />
+		<Unit filename="Usuario.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Usuario.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -38,10 +46,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="pila.h" />
-		<Unit filename="stom.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="stom.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

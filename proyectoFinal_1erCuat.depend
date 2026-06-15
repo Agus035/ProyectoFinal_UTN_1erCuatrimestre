@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1780786086 source:d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<malloc.h>
+	"pila.h"
+	"stom.h"
+
+1780782724 d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1774381052 source:d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\pila.c
+	"pila.h"
+
+1781494424 source:d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\juego.c
+	"juego.h"
+
+1781490276 d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\juego.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<malloc.h>
+
+1781493567 source:d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\usuario.c
+	"usuario.h"
+
+1781490735 d:\utn\programacion\programacion_1\proyecto final\proyectofinal_1ercuat\usuario.h
+	"Juego.h"
+
