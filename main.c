@@ -14,6 +14,7 @@ int main()
 //*********************************************
 //    guardarJuegosEnArchivo(JUEGOSTIENDA, "ab");
 //    leerJuegosDeTienda(JUEGOSTIENDA);
+
     leerJuegosOrdenadosNombreTienda(JUEGOSTIENDA);
     return 0;
 }
