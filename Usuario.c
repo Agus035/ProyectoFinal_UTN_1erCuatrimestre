@@ -1,4 +1,24 @@
 #include "usuario.h"
+// ── Mostrar──────────────────────────────────────────────────────────────────
+
+void mostrarDatosUsuario(Usuario usuarioCargado)
+{
+    printf("\n=============DATOS DEL USUARIO (%s)==================\n", usuarioCargado.userName);
+
+    printf("Nombre de usuario: %s\n", usuarioCargado.userName);
+    //printf("Password: %s\n", usuarioCargado.password);
+    printf("Dinero en la cuenta: $%.2f\n", usuarioCargado.billetera);
+    printf("Juegos obtenidos: %i\n",usuarioCargado.validosBiblioteca);
+    printf("Juegos en Carrito: %i\n",usuarioCargado.validosCarrito);
+
+    printf("\n===============FIN DE LA MUESTRA================\n");
+}
+
+void mostrarArrUsuarios(Usuario arr[], int validos)
+{
+    for (int i = 0 ; i < validos ; i++)
+        mostrarDatosUsuario(arr[i]);
+}
 
 // ── Registro ──────────────────────────────────────────────────────────────────
 
@@ -7,6 +27,7 @@ Usuario registrarUsuario()
     Usuario usuarioCargado;
 
     printf("\n=============CREACION DEL USUARIO================\n");
+
     printf("Ingrese el nombre de usuario: ");
     fflush(stdin);
     scanf("%49[^\n]", usuarioCargado.userName);

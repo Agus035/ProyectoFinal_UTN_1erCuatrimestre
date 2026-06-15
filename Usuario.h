@@ -14,6 +14,10 @@ typedef struct
     int    eliminado;
 } Usuario;
 
+// Mostrar Datos
+void mostrarDatosUsuario(Usuario usuarioCargado);
+void mostrarArrUsuarios(Usuario arr[], int validos);
+
 // Registro / creación
 Usuario registrarUsuario();
 int cargarArrDeUsuariosDinamico (Usuario **arr);
