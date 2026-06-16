@@ -243,7 +243,7 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
 
     ultimoJuegoComprado.id = desapilar(historialId);
 
-    Juego juegoAQuitar = //buscarJuegoPorId(); //FALTA HACER ESTA FUNCION AA
+    Juego juegoAQuitar = //buscarJuegoPorId(ultimoJuegoComprado.id); //FALTA HACER ESTA FUNCION AA
 
     float montoAReembolsar = juegoAQuitar.precioJuego;
 
