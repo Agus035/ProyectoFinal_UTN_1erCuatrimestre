@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
+#include "pila.h"
 
 #define LIMITE 50
 #define VERIFICARLIMITE 51
@@ -16,6 +17,7 @@ typedef struct
     char categoriaJuego[LIMITE];
     float precioJuego;
     int id; //tengo que ver cómo mantener las IDs, con variable global que se guarda en archivo o simplemente los eliminados mantienen su id para siempre
+            ///Yo digo que se mantengan las ids. Hace que se sume +1 y fue, si no usando random, pero yo diria que mejor uses +1
     int eliminado; //0 es NO ----1 es SI
 }Juego;
 

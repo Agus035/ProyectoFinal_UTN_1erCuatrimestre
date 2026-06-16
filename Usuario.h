@@ -61,4 +61,8 @@ void cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoACargar);
 
+// Quitar de biblioteca
+void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar);
+void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego); //Y reembolsa el dinero al usuario
+
 #endif // USUARIO_H_INCLUDED

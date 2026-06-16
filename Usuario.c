@@ -1,4 +1,5 @@
 #include "usuario.h"
+
 // ── Pasar usuarios de archivo a ARREGLO  ──────────────────────────────────────────────────────────────────
 
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
@@ -236,6 +237,20 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
 }
 
 // ── Billetera ─────────────────────────────────────────────────────────────────
+void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
+{
+    Juego ultimoJuegoComprado;
+
+    ultimoJuegoComprado.id = desapilar(historialId);
+
+    Juego juegoAQuitar = //buscarJuegoPorId(); //FALTA HACER ESTA FUNCION AA
+
+    float montoAReembolsar = juegoAQuitar.precioJuego;
+
+    quitarJuegoDeBibliotecaUsuario(&(*usuarioAReembolsarJuego).bibliotecaUsuario, &(*usuarioAReembolsarJuego).validosBiblioteca, juegoAQuitar);
+
+    (*usuarioAReembolsarJuego).billetera += montoAReembolsar;
+}
 
 void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar)
 {
@@ -284,6 +299,28 @@ void cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar
 }
 
 // ── Biblioteca personal ──────────────────────────────────────────────────────
+void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar) //siendo el arr de tipo juego la biblioteca de ese usuario y
+                                                                                            //SABIENDO QUE ESE USUARIO TIENE ESE JUEGO POR VERIFICACION PREVIA/FUERA DE LA FUNCION
+{
+    int flag = 0;
+
+    for(int i = 0 ; i < (*validosBiblioteca) && flag == 0 ; i++)
+    {
+        if((*arr)[i].id == juegoAQuitar.id)
+        {
+            flag = 1;
+            (*arr)[i] = (*arr)[((*validosBiblioteca) - 1)];
+            (*validosBiblioteca) -= 1; //pasa el juego a eliminar al final para hacer realloc
+        }
+    }
+
+    (*arr) = (Juego*) realloc((*arr), sizeof(Juego) * (*validosBiblioteca));
+    if(!(*arr))
+    {
+        printf("\nERROR EN REALLOC. . .\n");
+        return;
+    }
+}
 
 void cargarABibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoACargar)
 {
