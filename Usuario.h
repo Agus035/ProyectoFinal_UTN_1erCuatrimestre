@@ -53,6 +53,7 @@ int cargarArrDeUsuariosDinamico (Usuario **arr);
 
 // Billetera / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);
+void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
 
 // Carrito / Modificacion
 void cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar);

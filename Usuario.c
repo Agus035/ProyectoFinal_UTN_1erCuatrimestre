@@ -237,6 +237,19 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
 
 // ── Billetera ─────────────────────────────────────────────────────────────────
 
+void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar)
+{
+    float sueldoDeUsuario = (*usuarioADebitar).billetera;
+
+    if((sueldoDeUsuario - montoADebitar) < 0)
+        printf("\nMonto insuficiente en la cuenta\n");
+    else
+    {
+        (*usuarioADebitar).billetera -= montoADebitar;
+        printf("\nMonto actual en la cuenta: %.2f\n", (*usuarioADebitar).billetera);
+    }
+}
+
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
 {
     float saldoACargar;
