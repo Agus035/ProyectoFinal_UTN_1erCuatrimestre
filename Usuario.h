@@ -21,9 +21,6 @@ typedef struct
 ///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios más activos también)
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos* (vamos a tener) en juegos.h/c)
 
-///Son dos funciones de busqueda por campo de struct por CADA struct? O sea, 4 funciones en total?
-///o ya con 2 estamos? Si es asi, tenemos la de buscar por usuario y la de buscar por nombre de juego
-
 // Borrado Logico / Baja
 void eliminarUsuario(Usuario *usuarioAEliminar);
 
