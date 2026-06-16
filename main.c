@@ -1,6 +1,11 @@
 #include "Usuario.h"
 #include "Juego.h"
 
+char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña
+//matAdmin[0] = username
+//matAdmin[1] = password
+
+
 ///Main
 int main()
 {

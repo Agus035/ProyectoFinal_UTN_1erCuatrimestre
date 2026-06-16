@@ -15,7 +15,6 @@ typedef struct
 
 } Usuario;
 
-
 ///No te quiero tocar esto por si acaso, lo podes ordenar en Alta, Baja, Modificación, Consulta, Listados?
 ///Igual veo faltan los últimos 2 de consul. y listados que hay que pensar cómo hacerlos
 ///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios más activos también)
@@ -35,7 +34,6 @@ void mostrarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int 
 //Buscar y mostrar usuario con mayor cantidad de juegos / Consulta?? no se
 int buscarUsuarioMayorCantDeJuegosComprados (Usuario arr[], int validos);
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
-
 
 // Registro / creación / Alta
 Usuario registrarUsuario();

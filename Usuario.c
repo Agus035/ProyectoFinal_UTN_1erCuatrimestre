@@ -1,4 +1,15 @@
 #include "usuario.h"
+
+// ── Verificar Admin   ──────────────────────────────────────────────────────────────────
+
+int verificarAdmin(char mat[][], char usuarioAdmin[], char passwordAdmin[])
+{
+    int esAdmin = 0;
+    if(strcmp(mat[0], usuarioAdmin) == 0 && strcmp(mat[1], passwordAdmin) == 0) //mat[0] es toda la fila, mismo para mat[1]
+        esAdmin = 1;
+    return esAdmin;
+}
+
 // ── Eliminar──────────────────────────────────────────────────────────────────
 
 void eliminarUsuario(Usuario *usuarioAEliminar)
@@ -36,6 +47,7 @@ int buscarUsuarioMayorCantDeJuegosComprados (Usuario arr[], int validos)
         pos = -1;
 
     return pos; //devuelve la pos del usuario con la mayor cantidad de juegos, si es -1 nadie tiene juegos
+}
 
 void mostrarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int validos)
 {
