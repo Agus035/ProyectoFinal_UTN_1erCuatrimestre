@@ -37,16 +37,21 @@ Juego cargarNuevoJuego()
     printf("\n=============CREACION DEL JUEGO NUEVO================\n");
     printf("Ingrese el nombre del juego: ");
     fflush(stdin);
-    scanf("%49s", &nuevoJuego.nombreJuego);
+    scanf("%49s", nuevoJuego.nombreJuego);
     printf("\nIngrese la categoria del juego: ");
     fflush(stdin);
-    scanf("%49s", &nuevoJuego.categoriaJuego);
+    scanf("%49s", nuevoJuego.categoriaJuego);
     printf("\nIngrese el precio del juego: ");
     scanf("%f", &nuevoJuego.precioJuego);
-    printf("\n=============FIN DE LA CREACION================\n");
+
     nuevoJuego.eliminado = 0;
-    //[nota para hacer yo]para id tal vez contar los juegos que hay en archivo en otra función y darle la cantidad actual+1 como id.
-    //Puede haber problemas con eso si se elimina un juego, pero en ese caso verifico si la id ya existe en la función madre a esta
+
+    //TEMA ID
+    //[nota para hacer yo] para id tal vez contar los juegos que hay en archivo en otra función y darle la cantidad actual+1 como id.
+    //Puede haber problemas con eso si se elimina un juego, pero en ese caso verifico si la id ya existe en la función madre a esta y le sumo
+
+    printf("\n=============FIN DE LA CREACION================\n");
+
     return nuevoJuego;
 }
 
@@ -87,7 +92,7 @@ void leerUnJuego(Juego unJuego)
 }
 
 // --- BAJA (buscar dato en archivo, eliminarlo, guardar cambios) ------------------------------------
-// Después ver como hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
+// Después ver cómo hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
 
 //Eliminar un juego de la tienda
 void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
@@ -105,18 +110,12 @@ void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
 
         flag = verificarExistenciaJuego(archi, juegoAEliminar);
 
-        Juego aux;
-
         if (flag == 0)
         {
             printf("\nEl nombre del juego ingresado no existe.\n");
         }else
-        {//[NOTA:] Revisar si puedo modularizar despues, considerar tal vez cambiar nombre de esta función?
-            fseek(archi, -sizeof(Juego), SEEK_CUR); //retrocedo para posicionarme y leer
-            fread(&aux, sizeof(Juego), 1, archi);
-            aux.eliminado = 1;
-            fseek(archi, -sizeof(Juego), SEEK_CUR);  //retrocedo para posicionarme y reemplazar
-            fwrite(&aux, sizeof(Juego), 1, archi);
+        {
+            marcarJuegoActualComoEliminado(archi);
         }
 
         fclose(archi);
@@ -127,7 +126,7 @@ void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
     }
 }
 
-void marcarJuegoComoEliminado (FILE *archi)
+void marcarJuegoActualComoEliminado (FILE *archi) //se asume el indicador de posición está inmediatamente después del "juego actual"
 {
     Juego aux;
 
@@ -147,7 +146,7 @@ int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego
 
     Juego juegoEnArchivo; //sería un "aux"
 
-    while(fread(&juegoEnArchivo, sizeof(Juego), 1, archi) > 0 && flag != 1) //lee todos los juegos en archivo hasta encontrar uno o llegar al final
+    while(fread(&juegoEnArchivo, sizeof(Juego), 1, archi) > 0 && flag != 1) //lee todos los juegos en archivo hasta encontrar el buscado o llegar al final
     {
         if(strcmpi(juegoEnArchivo.nombreJuego, nombreBuscado) == 0)
             flag = 1; //Si los nombres coinciden, el juego ya existe en la tienda
@@ -188,7 +187,7 @@ void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])
 
 int compararJuegoCategoria(Juego juegoAFiltrar, char categoria[])
 {
-    return (strcmpi(juegoAFiltrar.categoriaJuego, categoria) == 0) ? 1 : 0;
+    return (strcmpi(juegoAFiltrar.categoriaJuego, categoria) == 0) ? 1 : 0; //no entiendo qué significa esto
 }
 
 // ── Ordenamiento por selección (nombre A-Z) ───────────────────────────────────
@@ -201,19 +200,19 @@ void leerJuegosOrdenadosNombreTienda(char nombreArchivo[])
 
     if (archi)
     {
-        while (fread(&aux, sizeof(Juego), 1, archi) > 0)
+        while (fread(&aux, sizeof(Juego), 1, archi) > 0) //contamos cuántos juegos hay
             validos++;
 
         rewind(archi);
-        Juego arr[validos];
-        fread(arr, sizeof(Juego), validos, archi);
+        Juego arr[validos]; //creamos un array con la cantidad de juegos que hay
+        fread(arr, sizeof(Juego), validos, archi); //metemos todos los juegos dentro
 
         ordSeleccionNombreJuego(arr, validos);
         mostrarArrJuegosOrdenado(arr, validos);
+        fclose(archi); //estaba fuera del else, pero el archivo solo se cierra si se pudo abrir
     }
     else
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
-    fclose(archi);
 }
 
 void ordSeleccionNombreJuego(Juego arr[], int validos)
@@ -253,4 +252,7 @@ void mostrarArrJuegosOrdenado(Juego arr[], int validos)
         printf("\n======================================\n");
     }
 }
+
 // ── Ordenamiento por Insercion (Menor precio a mayor) ───────────────────────────────────
+
+//Como lo hiciste pasando todos los juegos a un array voy a hacer lo mismo

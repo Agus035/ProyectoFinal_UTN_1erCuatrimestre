@@ -19,7 +19,6 @@ typedef struct
 ///No te quiero tocar esto por si acaso, lo podes ordenar en Alta, Baja, Modificación, Consulta, Listados?
 ///Igual veo faltan los últimos 2 de consul. y listados que hay que pensar cómo hacerlos
 ///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios más activos también)
-///(^ esto porque el "ABMCL" la consigna dice hacerlo en relación a CADA UNA de las DOS structs que se piden como mínimo)
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos* (vamos a tener) en juegos.h/c)
 
 // Borrado Logico
