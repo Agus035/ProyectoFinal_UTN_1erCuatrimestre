@@ -1,13 +1,36 @@
 #include "usuario.h"
+// ── Pasar usuarios de archivo a ARREGLO  ──────────────────────────────────────────────────────────────────
 
+void pasarUsuariosDeArchivoAArr (char nombreUsuario[])
+{
+
+}
+
+///Funciones de ADMIN
 // ── Verificar Admin   ──────────────────────────────────────────────────────────────────
 
 int verificarAdmin(char mat[][], char usuarioAdmin[], char passwordAdmin[])
 {
     int esAdmin = 0;
+
     if(strcmp(mat[0], usuarioAdmin) == 0 && strcmp(mat[1], passwordAdmin) == 0) //mat[0] es toda la fila, mismo para mat[1]
         esAdmin = 1;
-    return esAdmin;
+
+    return esAdmin; //1 si es admin, 0 si no
+}
+// ── Eliminar usuarios como Admin   ──────────────────────────────────────────────────────────────────
+
+void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos)
+{
+    int pos = buscarUsuarioPorNombreUsuario(nombreDeUsuarioAEliminar, arr, validos);
+
+    if (pos > -1)
+    {
+        eliminarUsuario(&arr[pos]);
+        printf("\nUsuario [%s] eliminado.\n", nombreDeUsuarioAEliminar);
+    }
+    else
+        printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuario);
 }
 
 // ── Eliminar──────────────────────────────────────────────────────────────────

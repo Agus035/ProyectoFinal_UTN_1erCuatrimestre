@@ -20,6 +20,10 @@ typedef struct
 ///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios más activos también)
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos* (vamos a tener) en juegos.h/c)
 
+// Funciones para el usuario Admin
+int verificarAdmin(char mat[][], char usuarioAdmin[], char passwordAdmin[]);
+void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos);
+
 // Borrado Logico / Baja
 void eliminarUsuario(Usuario *usuarioAEliminar);
 
