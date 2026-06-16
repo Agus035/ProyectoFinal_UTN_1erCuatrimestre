@@ -167,8 +167,7 @@ void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])
         {
             if (compararJuegoCategoria(aux, categoria))
             {
-                printf("\n=============Juego #%i - Categoria: %s================\n",
-                       contador + 1, categoria);
+                printf("\n=============Juego #%i - Categoria: %s================\n", contador + 1, categoria);
                 leerUnJuego(aux);
                 printf("\n======================================\n");
                 contador++;
@@ -179,10 +178,10 @@ void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])
             printf("\nNo existen juegos con esa categoria. . .\n\n");
             system("pause");
         }
+        fclose(archi);
     }
     else
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
-    fclose(archi);
 }
 
 int compararJuegoCategoria(Juego juegoAFiltrar, char categoria[])
@@ -279,7 +278,11 @@ void leerJuegosOrdenadosPrecioTienda (char nombreArchivo[])
 
         fread(arr, sizeof(Juego), validos, archi); //paso todos los juegos al array
 
+        ordInsercionPrecioJuego(arr, validos);
 
+        mostrarArrJuegosOrdenado(arr, validos, 'p');
+
+        fclose(archi);
 
     }else
     {

@@ -45,6 +45,9 @@ int posMenorNombreJuego(Juego arr[], int validos, int posInicial);
 void mostrarArrJuegosOrdenado(Juego arr[], int validos, char tipoDeOrdenado);
 
 // Ordenamiento por insercion (mostrar juegos del menor a mayor precio)
+void leerJuegosOrdenadosPrecioTienda (char nombreArchivo[]);
+void ordInsercionPrecioJuego (Juego arr[], int validos);
+void ordenarInsertadamente (Juego arr[], int posActual, int posDatoAColocar);
 
 
 #endif // JUEGO_H_INCLUDED
