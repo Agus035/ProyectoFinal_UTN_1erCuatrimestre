@@ -192,7 +192,6 @@ int compararJuegoCategoria(Juego juegoAFiltrar, char categoria[])
         juegoDeCategoria = 1;
 
     return juegoDeCategoria; //si es 0, el juego, no pertenece a esa categoria.
-    ///la puta de claude seguro me cambio el codigo cuando le pasé para que me separe unicamente las funciones asi puedo pegar y copiar para tener sus libs separadas
 }
 
 // ── Ordenamiento por selección (nombre A-Z) ───────────────────────────────────
