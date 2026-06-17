@@ -216,11 +216,11 @@ void modificarJuego (char nombreArchivo[])
             fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
             fread(&aux, sizeof(Juego), 1, archi); //el auxiliar ahora contiene los datos del juego
 
-            cambio = menuSelectorModificarJuego(&aux); //se modifica lo que se necesita en otra función, devuelve la opcion que se eligió
+            cambio = menuSelectorModificarJuego(&aux); //se modifica lo que se necesita en otra función, devuelve la opcion que se eligió en el menú
             if (cambio >= 1 && cambio <= 3)
             {
                 fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
-                fwrite(&aux, sizeof(Juego), 1, archi); //se haya modificado o no
+                fwrite(&aux, sizeof(Juego), 1, archi);
                 printf("\nEl cambio se ha realizado correctamente.\n");
             }
         }else
@@ -272,7 +272,7 @@ int menuSelectorModificarJuego (Juego *aux)
         }
     }while (opcion < 1 || opcion > 4);
 
-    return opcion; //unicamente devuelve opcion para cambiar el printf que se muestra la funcion madre
+    return opcion; //devuelve opcion para reemplazar y poner un printf en la función madre
 }
 
 
