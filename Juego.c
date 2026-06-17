@@ -2,14 +2,14 @@
 
 // ── Alta ─────────────────────────────────────────────────────────────────────
 
-void guardarJuegosEnArchivo(char nombreArchivo[], char modo[])
+void guardarJuegosEnArchivo(char nombreArchivo[])
 {
-    FILE *archi = fopen(nombreArchivo, modo);
+    FILE *archi = fopen(nombreArchivo, "a+b");
     if (archi)
         cargarJuegoATienda(archi);
+        fclose(archi);
     else
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
-    fclose(archi);
 }
 
 void cargarJuegoATienda(FILE *archi)
