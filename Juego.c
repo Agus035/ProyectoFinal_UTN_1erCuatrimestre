@@ -137,6 +137,14 @@ void marcarJuegoActualComoEliminado (FILE *archi) //se asume el indicador de pos
     fwrite(&aux, sizeof(Juego), 1, archi);
 }
 
+// ── Modificación (buscar dato, modificarlo, eliminarlo) ───────────────────────────--
+
+//Puede modificarse cualquier cosa MENOS la ID
+
+void modificarJuego (char nombreArchivo[])
+
+
+
 
 // ── Filtrado por categoría ────────────────────────────────────────────────────
 

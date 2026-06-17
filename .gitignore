@@ -1,2 +1,6 @@
 proyectoFinal_1erCuat.layout
 *.layout
+*.layout
+*.depend
+/bin/Debug
+/obj/Debug
