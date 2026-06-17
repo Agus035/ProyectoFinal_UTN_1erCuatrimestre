@@ -108,6 +108,41 @@ void leerUnJuego(Juego unJuego)
     printf("Precio del juego: %.2f",    unJuego.precioJuego);
 }
 
+Juego buscarJuegoPorId (int idBuscada) //función separada porque parece solo la vamos a usar en relación al usuario
+{
+    FILE *archi =  fopen(JUEGOSTIENDA, "r+b");
+
+    Juego aux;
+    aux.id = -1; //devuelve el juego con esta id en caso de no poder abrirse el archivo
+
+    int flag = 0;
+
+    if (archi != NULL)
+    {
+        while (fread(&aux, sizeof(Juego), 1, archi) > 0 && flag == 0)
+        {
+            if (aux.id == idBuscada)
+            {
+                flag = 1;
+            }
+        }
+
+        if (flag == 0) //si no se encontró, va a seguirse teniendo la id del ultimo valor leído, lo reemplazo por -1 para marcar error
+        {
+            aux.id = -1;
+        }
+
+        fclose (archi);
+
+    }else
+    {
+        printf("\nHubo un error en la apertura del archivo.\n");
+    }
+
+    return aux;
+}
+
+
 // --- BAJA (buscar dato en archivo, eliminarlo, guardar cambios) ------------------------------------
 // Después ver cómo hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
 //^ mañana preguntar si es necesario o si borrado lógico es suficiente

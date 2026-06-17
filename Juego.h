@@ -30,6 +30,7 @@ int determinarIDNuevoJuego (FILE* archi);
 void leerJuegosDeTienda(char nombreArchivo[]);
 void leerJuegosArchivo(FILE *archi);
 void leerUnJuego(Juego unJuego);
+Juego buscarJuegoPorId (int idBuscada);
 
 // Baja / eliminar
 void eliminarJuegoDeTienda (char nombreArchivo[]);
