@@ -161,7 +161,83 @@ void marcarJuegoActualComoEliminado (FILE *archi) //se asume el indicador de pos
 
 void modificarJuego (char nombreArchivo[])
 {
+    FILE* archi = fopen(nombreArchivo, "r+b");
 
+    if (archi != NULL)
+    {
+        char nombreJuegoBuscado[LIMITE];
+        int flag = 0;
+
+        printf("\nCual es el nombre del juego que desea modificar? ");
+        fflush(stdin);
+        scanf("%49[^\n]", nombreJuegoBuscado);
+
+        flag = verificarExistenciaJuego(archi, nombreJuegoBuscado);
+
+        if (flag > 0)
+        {
+            int cambio;
+            Juego aux; //creo un auxiliar
+            fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
+            fread(&aux, sizeof(Juego), 1, archi); //el auxiliar ahora contiene los datos del juego
+
+            cambio = menuSelectorModificarJuego(&aux); //se modifica lo que se necesita en otra función, devuelve la opcion que se eligió
+            if (cambio >= 1 && cambio <= 3)
+            {
+                fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
+                fwrite(&aux, sizeof(Juego), 1, archi); //se haya modificado o no
+                printf("\nEl cambio se ha realizado correctamente.\n");
+            }
+        }else
+        {
+            printf("\nNo se ha encontrado el juego buscado. Intente de nuevo.\n");
+        }
+
+        fclose(archi);
+
+    }else
+    {
+        printf("\nHa ocurrido un error en la apertura del archivo.\n");
+    }
+
+}
+
+int menuSelectorModificarJuego (Juego *aux)
+{
+    int opcion;
+
+    printf("\nIngrese que es lo que quiere modificar del juego seleccionado: \n");
+    printf("'1' -> Cambiar el nombre.\n");
+    printf("'2' -> Cambiar la categoria.\n");
+    printf("'3' -> Cambiar el precio.\n");
+    printf("'4' -> No quiero cambiar nada.\n");
+
+    do
+    {
+        printf("\nSu decision: ");
+        scanf("%i", &opcion);
+        switch(opcion)
+        {
+        case 1:
+            printf("\nIngrese el nuevo nombre del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).nombreJuego);
+        case 2:
+            printf("\nIngrese la nueva categoria del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).categoriaJuego);
+        case 3:
+            printf("\nIngrese el nuevo precio del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).precioJuego);
+        case 4:
+            printf("\nSaliendo del menu...\n\n");
+        default:
+            printf("\nHa ingresado un valor invalido. Intente de nuevo.\n");
+        }
+    }while (opcion < 1 || opcion > 4);
+
+    return opcion; //unicamente devuelve opcion para cambiar el printf que se muestra la funcion madre
 }
 
 
@@ -169,8 +245,11 @@ void modificarJuego (char nombreArchivo[])
 
 // ── Filtrado por categoría ────────────────────────────────────────────────────
 
+
 int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego.h por qué lo puse acá (considerar cambiar de lugar maybe?)
 {
+    rewind(archi); //para poder verificar si un juego existe debo recorrer todo el archivo
+
     int flag = 0; //0 significa "no existe"
 
     Juego juegoEnArchivo; //sería un "aux"
@@ -181,7 +260,7 @@ int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego
             flag = 1; //Si los nombres coinciden, el juego ya existe en la tienda
     }
 
-    return flag;
+    return flag; //recordatorio que el indicador queda inmediatamente después del archivo encontrado (si se encontró)
 }
 
 void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])

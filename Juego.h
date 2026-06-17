@@ -8,7 +8,6 @@
 #include "pila.h"
 
 #define LIMITE 50
-#define VERIFICARLIMITE 51
 #define JUEGOSTIENDA "tienda.bin"
 
 typedef struct
@@ -35,6 +34,10 @@ void leerUnJuego(Juego unJuego);
 // Baja / eliminar
 void eliminarJuegoDeTienda (char nombreArchivo[]);
 void marcarJuegoActualComoEliminado (FILE *archi);
+
+// Modificar
+void modificarJuego (char nombreArchivo[]); //puede modificarse todo menos la id (y tampoco puede eliminarse el juego porque hay una función aparte para eso)
+int menuSelectorModificarJuego (Juego *aux);
 
 // Filtrado por categoría
 int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]); //indica por flag 1 si un juego existe por nombre (lo pongo en esta sección de filtrado porque si no no sé donde)

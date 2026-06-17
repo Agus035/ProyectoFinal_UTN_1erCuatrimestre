@@ -2,6 +2,8 @@
 #define USUARIO_H_INCLUDED
 #include "Juego.h"
 
+#define VERIFICARLIMITE 51 //estaba en juegos, te lo traje acá pq en juegos no se usa
+
 typedef struct
 {
     char userName[LIMITE];
