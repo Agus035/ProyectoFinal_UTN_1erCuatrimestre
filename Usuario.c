@@ -219,7 +219,6 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
 
     do
     {
-
         (*arr)[i] = registrarUsuario();
         i++;
 
@@ -245,20 +244,25 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
 {
     Juego ultimoJuegoComprado;
 
-    ultimoJuegoComprado.id = desapilar(historialId);
-
-    Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id);
-
-    if(ultimoJuegoComprado.id != -1)
+    if(!pilavacia(historialId))
     {
-        float montoAReembolsar = juegoAQuitar.precioJuego;
+        ultimoJuegoComprado.id = desapilar(historialId);
 
-        quitarJuegoDeBibliotecaUsuario(&(*usuarioAReembolsarJuego).bibliotecaUsuario, &(*usuarioAReembolsarJuego).validosBiblioteca, juegoAQuitar);
+        Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id);
 
-        (*usuarioAReembolsarJuego).billetera += montoAReembolsar;
+        if(ultimoJuegoComprado.id != -1)
+        {
+            float montoAReembolsar = juegoAQuitar.precioJuego;
+
+            quitarJuegoDeBibliotecaUsuario(&(*usuarioAReembolsarJuego).bibliotecaUsuario, &(*usuarioAReembolsarJuego).validosBiblioteca, juegoAQuitar);
+
+            (*usuarioAReembolsarJuego).billetera += montoAReembolsar;
+        }
+        else
+            printf("\nERROR, EL JUEGO A REEMBOLSAR NO EXISTE. . .\n");
     }
     else
-        printf("\nERROR, EL JUEGO A REEMBOLSAR NO EXISTE. . .\n");
+        printf("\nNO TIENES UN JUEGO PARA REEMBOLSAR. . .\n");
 }
 
 void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar)
