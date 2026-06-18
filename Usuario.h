@@ -14,7 +14,7 @@ typedef struct
     int validosBiblioteca;
     int validosCarrito;
     int eliminado;
-    Pila historialDeJuego; //ultimos juegos comprados del usuario
+    Pila historialDeJuego; //ultimos juegos comprados del usuario, adios a la idea de usuarios activos
 
 } Usuario;
 

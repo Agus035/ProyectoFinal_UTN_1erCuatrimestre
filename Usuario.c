@@ -319,6 +319,8 @@ float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoACompra
     sumaJuegosEnCarrito = sumarPrecioJuegos((*arr), (*validosCarrito), 0); //le paso un puntero simple (un arreglo)
 
     return sumaJuegosEnCarrito;
+
+    //tengo que ver si la dejo asi esta o la cambio, o le paso los parametros individuales o la variable especifica de ese usuario(de tipo usuario)
 }
 
 float sumarPrecioJuegos (Juego arr[], int validos, int i) // devuelve suma del precio de un juego/s
@@ -381,8 +383,6 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
 }
 
 // ──  Pilas ──────────────────────────────────────────────────────
-
-
 
 void reajustarDimPilaTope(Pila *pila, int datoAIngresar) // agregar dato al principio en una pila llena
 {
