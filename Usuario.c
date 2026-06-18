@@ -253,7 +253,6 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
         ultimoJuegoComprado.id = desapilar(historialId);
 
         Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id);
-<<<<<<< HEAD
 
         if(ultimoJuegoComprado.id != -1)
         {
