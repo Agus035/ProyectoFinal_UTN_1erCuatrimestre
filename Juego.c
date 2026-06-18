@@ -2,21 +2,25 @@
 
 // ── Alta ─────────────────────────────────────────────────────────────────────
 
-void guardarJuegosEnArchivo(char nombreArchivo[], char modo[])
+void guardarJuegosEnArchivo(char nombreArchivo[])
 {
-    FILE *archi = fopen(nombreArchivo, modo);
+    FILE *archi = fopen(nombreArchivo, "a+b");
     if (archi)
+    {
         cargarJuegoATienda(archi);
-    else
+        fclose(archi);
+    }
+    else //lo tuve que cambiar de cómo estaba porque no compilaba no se por q
+    {
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
-    fclose(archi);
+    }
 }
 
 void cargarJuegoATienda(FILE *archi)
 {
     int flag = 0;
-    Juego juegoEnArchivo;
-    Juego nuevoJuego = cargarNuevoJuego();
+    Juego juegoEnArchivo; //REVISAR ESTA VARIABLE PQ NO SE USO
+    Juego nuevoJuego = cargarNuevoJuego(archi);
 
     rewind(archi);
     flag = verificarExistenciaJuego(archi, nuevoJuego.nombreJuego); //separé la parte de verificar si el juego existe en una función para usarla en otro lado
@@ -31,28 +35,42 @@ void cargarJuegoATienda(FILE *archi)
     }
 }
 
-Juego cargarNuevoJuego()
+Juego cargarNuevoJuego(FILE *archi) //le agregué archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
 {
     Juego nuevoJuego;
     printf("\n=============CREACION DEL JUEGO NUEVO================\n");
     printf("Ingrese el nombre del juego: ");
     fflush(stdin);
-    scanf("%49s", nuevoJuego.nombreJuego);
+    scanf("%49[^\n]", nuevoJuego.nombreJuego);
     printf("\nIngrese la categoria del juego: ");
     fflush(stdin);
-    scanf("%49s", nuevoJuego.categoriaJuego);
+    scanf("%49[^\n]", nuevoJuego.categoriaJuego);
     printf("\nIngrese el precio del juego: ");
-    scanf("%f", &nuevoJuego.precioJuego);
+    while(scanf("%f", &nuevoJuego.precioJuego) != 1)
+    {
+        printf("\nTipo de dato invalido. . .\nIngrese el precio del juego: ");
+        fflush(stdin);
+    }
 
+
+    nuevoJuego.id = determinarIDNuevoJuego (archi);
     nuevoJuego.eliminado = 0;
 
     //TEMA ID
     //[nota para hacer yo] para id tal vez contar los juegos que hay en archivo en otra función y darle la cantidad actual+1 como id.
     //Puede haber problemas con eso si se elimina un juego, pero en ese caso verifico si la id ya existe en la función madre a esta y le sumo
+    //Me dejo esto anotado en caso de que nos digan es necesario borrar estructuras directamente del archivo (creando otro sin los marcados como eliminados)
 
     printf("\n=============FIN DE LA CREACION================\n");
 
     return nuevoJuego;
+}
+
+int determinarIDNuevoJuego (FILE* archi) //Se ignora la ID de juegos eliminados (nota debajo)
+{ //(nosostros estamos borrando lógicamente las estructuras, mañana voy a preguntar si también es necesario borrarlas del archivo. En caso de ser así, voy a modificar esto para también usar la ID de los juegos eliminados.)
+    int cantJuegos = fseek(archi, 0, SEEK_END)/sizeof(Juego);
+
+    return cantJuegos; //las IDs empiezan en 0
 }
 
 // ── Consulta / lectura ────────────────────────────────────────────────────────
@@ -61,10 +79,14 @@ void leerJuegosDeTienda(char nombreArchivo[])
 {
     FILE *archi = fopen(nombreArchivo, "rb");
     if (archi)
+    {
         leerJuegosArchivo(archi);
+        fclose(archi);
+    }
     else
-        printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
-    fclose(archi);
+    {
+        printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE/NO existe. . .\n");
+    }
 }
 
 void leerJuegosArchivo(FILE *archi)
@@ -91,8 +113,46 @@ void leerUnJuego(Juego unJuego)
     printf("Precio del juego: %.2f",    unJuego.precioJuego);
 }
 
+Juego buscarJuegoPorId (int idBuscada) //función separada porque parece solo la vamos a usar en relación al usuario
+{
+    FILE *archi =  fopen(JUEGOSTIENDA, "r+b");
+
+    Juego aux;
+    aux.id = -1; //devuelve el juego con esta id en caso de no poder abrirse el archivo
+
+    int flag = 0;
+
+    if (archi != NULL)
+    {
+        while (fread(&aux, sizeof(Juego), 1, archi) > 0 && flag == 0)
+        {
+            if (aux.id == idBuscada)
+            {
+                flag = 1;
+            }
+        }
+
+        if (flag == 0) //si no se encontró, va a seguirse teniendo la id del ultimo valor leído, lo reemplazo por -1 para marcar error
+        {
+            aux.id = -1;
+        }
+        ///No se que tan necesario sea verificar si existe, porque eso lo haria otra funcion. Basicamente, porque si existe la id en la pila
+        ///Es porque el juego se compro, es una id valida, como mucho si el juego se borra del archivo, igual hice una verificacion. (Igual es poco probable que salte ese error al tener una tienda fija)
+
+        fclose (archi);
+
+    }else
+    {
+        printf("\nHubo un error en la apertura del archivo.\n");
+    }
+
+    return aux;
+}
+
+
 // --- BAJA (buscar dato en archivo, eliminarlo, guardar cambios) ------------------------------------
 // Después ver cómo hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
+//^ mañana preguntar si es necesario o si borrado lógico es suficiente
 
 //Eliminar un juego de la tienda
 void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
@@ -106,6 +166,7 @@ void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
         char juegoAEliminar[LIMITE];
 
         printf("\nIngrese el nombre del juego que quiere eliminar: ");
+        fflush(stdin);
         scanf("%49[^\n]", juegoAEliminar);
 
         flag = verificarExistenciaJuego(archi, juegoAEliminar);
@@ -133,15 +194,108 @@ void marcarJuegoActualComoEliminado (FILE *archi) //se asume el indicador de pos
     fseek(archi, -sizeof(Juego), SEEK_CUR); //retrocedo para posicionarme y leer
     fread(&aux, sizeof(Juego), 1, archi);
     aux.eliminado = 1;
+
     fseek(archi, -sizeof(Juego), SEEK_CUR);  //retrocedo para posicionarme y reemplazar
     fwrite(&aux, sizeof(Juego), 1, archi);
+}
+
+// ── Modificación (buscar dato, modificarlo, eliminarlo) ───────────────────────────--
+
+//Puede modificarse cualquier cosa MENOS la ID
+
+void modificarJuego (char nombreArchivo[])
+{
+    FILE* archi = fopen(nombreArchivo, "r+b");
+
+    if (archi != NULL)
+    {
+        char nombreJuegoBuscado[LIMITE];
+        int flag = 0;
+
+        printf("\nCual es el nombre del juego que desea modificar? ");
+        fflush(stdin);
+        scanf("%49[^\n]", nombreJuegoBuscado);
+
+        flag = verificarExistenciaJuego(archi, nombreJuegoBuscado);
+
+        if (flag > 0)
+        {
+            int cambio;
+            Juego aux; //creo un auxiliar
+            fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
+            fread(&aux, sizeof(Juego), 1, archi); //el auxiliar ahora contiene los datos del juego
+
+            cambio = menuSelectorModificarJuego(&aux); //se modifica lo que se necesita en otra función, devuelve la opcion que se eligió en el menú
+            if (cambio >= 1 && cambio <= 3)
+            {
+                fseek(archi, sizeof(Juego)*(-1), SEEK_CUR);
+                fwrite(&aux, sizeof(Juego), 1, archi);
+                printf("\nEl cambio se ha realizado correctamente.\n");
+            }
+        }
+        else
+        {
+            printf("\nNo se ha encontrado el juego buscado. Intente de nuevo.\n");
+        }
+
+        fclose(archi);
+
+    }else
+    {
+        printf("\nHa ocurrido un error en la apertura del archivo.\n");
+    }
+
+}
+
+int menuSelectorModificarJuego (Juego *aux)
+{
+    int opcion;
+
+    printf("\nIngrese que es lo que quiere modificar del juego seleccionado: \n");
+    printf("'1' -> Cambiar el nombre.\n");
+    printf("'2' -> Cambiar la categoria.\n");
+    printf("'3' -> Cambiar el precio.\n");
+    printf("'4' -> No quiero cambiar nada.\n");
+
+    do
+    {
+        fflush(stdin);
+
+        printf("\nSu decision: ");
+        scanf("%i", &opcion);
+        switch(opcion)
+        {
+        case 1:
+            printf("\nIngrese el nuevo nombre del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).nombreJuego);
+        case 2:
+            printf("\nIngrese la nueva categoria del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).categoriaJuego);
+        case 3:
+            printf("\nIngrese el nuevo precio del juego: ");
+            fflush(stdin);
+            scanf("%49[^\n]", (*aux).precioJuego);
+        case 4:
+            printf("\nSaliendo del menu...\n\n");
+        default:
+            printf("\nHa ingresado un valor invalido. Intente de nuevo.\n");
+        }
+        fflush(stdin);
+    }while (opcion < 1 || opcion > 4);
+
+    return opcion; //devuelve opcion para reemplazar y poner un printf en la función madre
 }
 
 
 // ── Filtrado por categoría ────────────────────────────────────────────────────
 
+
 int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego.h por qué lo puse acá (considerar cambiar de lugar maybe?)
 {
+    rewind(archi); //para poder verificar si un juego existe debo recorrer todo el archivo
+
     int flag = 0; //0 significa "no existe"
 
     Juego juegoEnArchivo; //sería un "aux"
@@ -152,7 +306,7 @@ int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]) //leer en juego
             flag = 1; //Si los nombres coinciden, el juego ya existe en la tienda
     }
 
-    return flag;
+    return flag; //recordatorio que el indicador queda inmediatamente después del archivo encontrado (si se encontró)
 }
 
 void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])
@@ -277,6 +431,7 @@ void leerJuegosOrdenadosPrecioTienda (char nombreArchivo[])
 
         int validos = ftell(archi)/sizeof(Juego); // consigo la cantidad de juegos existentes para poner en array
         ///fijate que hay una funcion para esto, si queres usala, si no, no. lmao
+        //encontré la función que me decís pero esa es específicamente para usuarios
 
         Juego arr[validos]; //creo el array de juegos
 
@@ -316,19 +471,5 @@ void ordenarInsertadamente (Juego arr[], int posActual, int posDatoAColocar) //i
         arr[posActual+1] = arr[posActual];
         posActual--;
     }
-
     arr[posActual+1] = aux;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

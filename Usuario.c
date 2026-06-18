@@ -5,7 +5,7 @@
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
 {
     FILE *archi = fopen(nombreArchivo, "rb");
-    int validos;
+    int validos = 0;
 
     if(archi)
     {
@@ -116,7 +116,7 @@ void mostrarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int 
 {
     int pos = buscarUsuarioPorNombreUsuario(nombreDeUsuario, arr, validos);
 
-    if (pos > -1)
+    if (pos > -1 && arr[pos].eliminado == 0)
         mostrarDatosUsuario(arr[pos]);
     else
         printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuario);
@@ -195,6 +195,10 @@ Usuario registrarUsuario()
     usuarioCargado.carritoDeJuegos   = NULL;
     usuarioCargado.validosCarrito    = 0;
 
+    usuarioCargado.eliminado = 0;
+
+    inicpila(&usuarioCargado.historialDeJuego);
+
     printf("\n=============FIN DE LA CREACION DEL USUARIO================\n");
 
     return usuarioCargado;
@@ -212,15 +216,18 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
         return -1;
     }
 
-
     do
     {
-
         (*arr)[i] = registrarUsuario();
         i++;
 
-        printf("\nDesea registrar otro usuario? 1. SI 0.NO\n");
-        scanf("%i", &continuar);
+        printf("\nDesea registrar otro usuario? 1. SI 0.NO: ");
+
+        while(scanf("%i", &continuar) != 1)
+        {
+            printf("\nIngrese 1 o 0. . .\nDesea registrar otro usuario? 1. SI 0.NO: ");
+            fflush(stdin);
+        }
 
         if(continuar == 1)
         {
@@ -239,17 +246,27 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
 // ── Billetera ─────────────────────────────────────────────────────────────────
 void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
 {
-    Juego ultimoJuegoComprado;
+    if(!pilavacia(historialId))
+    {
+        Juego ultimoJuegoComprado;
 
-    ultimoJuegoComprado.id = desapilar(historialId);
+        ultimoJuegoComprado.id = desapilar(historialId);
 
-    Juego juegoAQuitar = //buscarJuegoPorId(ultimoJuegoComprado.id); //FALTA HACER ESTA FUNCION AA
+        Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id);
 
-    float montoAReembolsar = juegoAQuitar.precioJuego;
+        if(ultimoJuegoComprado.id != -1)
+        {
+            float montoAReembolsar = juegoAQuitar.precioJuego;
 
-    quitarJuegoDeBibliotecaUsuario(&(*usuarioAReembolsarJuego).bibliotecaUsuario, &(*usuarioAReembolsarJuego).validosBiblioteca, juegoAQuitar);
+            quitarJuegoDeBibliotecaUsuario(&(*usuarioAReembolsarJuego).bibliotecaUsuario, &(*usuarioAReembolsarJuego).validosBiblioteca, juegoAQuitar);
 
-    (*usuarioAReembolsarJuego).billetera += montoAReembolsar;
+            (*usuarioAReembolsarJuego).billetera += montoAReembolsar;
+        }
+        else
+            printf("\nERROR, EL JUEGO A REEMBOLSAR NO EXISTE. . .\n");
+    }
+    else
+        printf("\nNO TIENES UN JUEGO PARA REEMBOLSAR. . .\n");
 }
 
 void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar)
@@ -273,29 +290,54 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
     printf("Datos Guardados de la Tarjeta\n\nTarjeta: 12325-55458-9923\n");
     printf("CVV: 155\n");
     printf("Ingrese saldo que desea ingresar a la cuenta: ");
-    do
+
+    while (scanf("%f", &saldoACargar) != 1 || saldoACargar <= 0)
     {
-        scanf("%f", &saldoACargar);
-    } while (saldoACargar <= 0);
+        printf("\nTipo de dato incorrecto/Insuficiente. . .\nIngrese saldo que desea ingresar a la cuenta: ");
+        fflush(stdin);
+    }
 
     (*usuarioACargarDinero).billetera += saldoACargar;
 
     printf("\n=============FINALIZACION DE INGRESO================\n");
 }
 
+
+
 // ── Carrito ───────────────────────────────────────────────────────────────────
 
-void cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar)
+float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar) // devuelve lo que se debe de debitar al usuario
 {
+    float sumaJuegosEnCarrito = 0;
+
     (*validosCarrito) += 1;
 
     (*arr) = (Juego *) realloc((*arr), sizeof(Juego) * (*validosCarrito));
     if (!(*arr))
     {
         printf("\nERROR EN REALLOC. . .\n");
-        return;
+        (*validosCarrito) -= 1;
+        return -1;
     }
     (*arr)[(*validosCarrito) - 1] = juegoAComprar;
+
+    sumaJuegosEnCarrito = sumarPrecioJuegos((*arr), (*validosCarrito), 0); //le paso un puntero simple (un arreglo)
+
+    return sumaJuegosEnCarrito;
+
+    //tengo que ver si la dejo asi esta o la cambio, o le paso los parametros individuales o la variable especifica de ese usuario(de tipo usuario)
+}
+
+float sumarPrecioJuegos (Juego arr[], int validos, int i) // devuelve suma del precio de un juego/s
+{
+    float sumaTotal = 0;
+
+    if(i == validos - 1)
+        sumaTotal = arr[i].precioJuego;
+    else
+        sumaTotal = arr[i].precioJuego + sumarPrecioJuegos(arr, validos, i + 1);
+
+    return sumaTotal;
 }
 
 // ── Biblioteca personal ──────────────────────────────────────────────────────
@@ -322,15 +364,59 @@ void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego j
     }
 }
 
-void cargarABibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoACargar)
+void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //verificacion si el usuario tiene o no el juego se hace previamente
 {
-    (*validosBiblioteca) += 1;
+    (*usuarioACargar).validosBiblioteca += 1;
 
-    (*arr) = (Juego *) realloc((*arr), sizeof(Juego) * (*validosBiblioteca));
-    if (!(*arr))
+    (*usuarioACargar).bibliotecaUsuario = (Juego*) realloc((*usuarioACargar).bibliotecaUsuario, sizeof(Juego) * (*usuarioACargar).validosBiblioteca);
+
+    if (!(*usuarioACargar).bibliotecaUsuario)
     {
         printf("\nERROR EN REALLOC. . .\n");
+        (*usuarioACargar).validosBiblioteca -= 1;
         return;
     }
-    (*arr)[(*validosBiblioteca) - 1] = juegoACargar;
+
+    (*usuarioACargar).bibliotecaUsuario[((*usuarioACargar).validosBiblioteca - 1)] = juegoACargar;
+
+
+    int contarDimHistorial = contarDimPila((*usuarioACargar).historialDeJuego);
+
+    if(contarDimHistorial >= 50)
+        reajustarDimPilaTope(&(*usuarioACargar).historialDeJuego, juegoACargar.id);
+    else
+        apilar(&(*usuarioACargar).historialDeJuego, juegoACargar.id);
+}
+
+// ──  Pilas ──────────────────────────────────────────────────────
+
+void reajustarDimPilaTope(Pila *pila, int datoAIngresar) // agregar dato al principio en una pila llena
+{
+    Pila aux;
+    inicpila(&aux);
+
+    while(!pilavacia(pila))
+        apilar(&aux, desapilar(pila));
+
+    desapilar(&aux); //desapilo el valor mas viejo
+
+    while(!pilavacia(&aux))
+        apilar(pila, desapilar(&aux));
+
+    apilar(pila, datoAIngresar);
+}
+
+int contarDimPila(Pila pila)
+{
+    Pila aux;
+    inicpila(&aux);
+
+    int cont = 0;
+
+    while(!pilavacia(&pila))
+    {
+        apilar(&aux, desapilar(&pila));
+        cont++;
+    }
+    return cont;
 }

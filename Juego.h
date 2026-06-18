@@ -8,7 +8,6 @@
 #include "pila.h"
 
 #define LIMITE 50
-#define VERIFICARLIMITE 51
 #define JUEGOSTIENDA "tienda.bin"
 
 typedef struct
@@ -22,18 +21,24 @@ typedef struct
 }Juego;
 
 // Alta / escritura
-void guardarJuegosEnArchivo(char nombreArchivo[], char modo[]);
+void guardarJuegosEnArchivo(char nombreArchivo[]);
 void cargarJuegoATienda(FILE *archi);
 Juego cargarNuevoJuego();
+int determinarIDNuevoJuego (FILE* archi);
 
 // Consulta / lectura
 void leerJuegosDeTienda(char nombreArchivo[]);
 void leerJuegosArchivo(FILE *archi);
 void leerUnJuego(Juego unJuego);
+Juego buscarJuegoPorId (int idBuscada); //verificar que el Juego que devuelve no tenga id -1 (significa error/que no se encontró)
 
 // Baja / eliminar
 void eliminarJuegoDeTienda (char nombreArchivo[]);
 void marcarJuegoActualComoEliminado (FILE *archi);
+
+// Modificar
+void modificarJuego (char nombreArchivo[]); //puede modificarse todo menos la id (y tampoco puede eliminarse el juego porque hay una función aparte para eso)
+int menuSelectorModificarJuego (Juego *aux);
 
 // Filtrado por categoría
 int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]); //indica por flag 1 si un juego existe por nombre (lo pongo en esta sección de filtrado porque si no no sé donde)
@@ -51,5 +56,8 @@ void leerJuegosOrdenadosPrecioTienda (char nombreArchivo[]);
 void ordInsercionPrecioJuego (Juego arr[], int validos);
 void ordenarInsertadamente (Juego arr[], int posActual, int posDatoAColocar);
 
+// Pilas
+int contarDimPila(Pila pila);
+void reajustarDimPilaTope(Pila *pila, int datoAIngresar);
 
 #endif // JUEGO_H_INCLUDED
