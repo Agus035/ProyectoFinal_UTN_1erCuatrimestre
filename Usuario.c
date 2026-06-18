@@ -312,6 +312,7 @@ float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoACompra
     if (!(*arr))
     {
         printf("\nERROR EN REALLOC. . .\n");
+        (*validosCarrito) -= 1;
         return -1;
     }
     (*arr)[(*validosCarrito) - 1] = juegoAComprar;
@@ -368,6 +369,7 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
     if (!(*usuarioACargar).bibliotecaUsuario)
     {
         printf("\nERROR EN REALLOC. . .\n");
+        (*usuarioACargar).validosBiblioteca -= 1;
         return;
     }
 
