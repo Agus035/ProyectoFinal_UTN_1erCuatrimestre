@@ -67,9 +67,17 @@ Juego cargarNuevoJuego(FILE *archi) //le agregué archi para que pueda identific
     return nuevoJuego;
 }
 
+//int determinarIDNuevoJuego (FILE* archi) //Se ignora la ID de juegos eliminados (nota debajo)
+//{ //(nosostros estamos borrando lógicamente las estructuras, mañana voy a preguntar si también es necesario borrarlas del archivo. En caso de ser así, voy a modificar esto para también usar la ID de los juegos eliminados.)
+//    int cantJuegos = fseek(archi, 0, SEEK_END)/sizeof(Juego);
+//
+//    return cantJuegos; //las IDs empiezan en 0
+//}
 int determinarIDNuevoJuego (FILE* archi) //Se ignora la ID de juegos eliminados (nota debajo)
 { //(nosostros estamos borrando lógicamente las estructuras, mañana voy a preguntar si también es necesario borrarlas del archivo. En caso de ser así, voy a modificar esto para también usar la ID de los juegos eliminados.)
-    int cantJuegos = fseek(archi, 0, SEEK_END)/sizeof(Juego);
+    fseek(archi, 0, SEEK_END);
+    int cantJuegos = ftell(archi)/sizeof(Juego);
+//    rewind(archi);
 
     return cantJuegos; //las IDs empiezan en 0
 }
@@ -151,7 +159,6 @@ Juego buscarJuegoPorId (int idBuscada) //función separada porque parece solo la
 
 // --- BAJA (buscar dato en archivo, eliminarlo, guardar cambios) ------------------------------------
 // Después ver cómo hacer que cada vez que se abra/cierre el programa, se quiten del archivo los juegos marcados como "eliminados"
-//^ mañana preguntar si es necesario o si borrado lógico es suficiente
 
 //Eliminar un juego de la tienda
 void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
@@ -311,7 +318,7 @@ void leerJuegosFiltradosTienda(char nombreArchivo[], char categoria[])
     Juego aux;
     int contador = 0;
 
-    if (archi)
+    if(archi)
     {
         while (fread(&aux, sizeof(Juego), 1, archi) > 0)
         {

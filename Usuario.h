@@ -48,7 +48,7 @@ void mostrarArrUsuarios(Usuario arr[], int validos);
 int buscarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int validos);
 void mostrarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int validos);
 
-//Buscar y mostrar usuario con mayor cantidad de juegos / Consulta?? no se
+//Buscar y mostrar usuario con mayor cantidad de juegos
 int buscarUsuarioMayorCantDeJuegosComprados (Usuario arr[], int validos);
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 
@@ -65,7 +65,7 @@ float sumarPrecioJuegos (Juego arr[], int validos, int i);
 float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar);
 
 // Biblioteca personal / Modificacion
-void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //la funcion mas chota en mi opinion
+void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
 
 // Quitar de biblioteca
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar);
