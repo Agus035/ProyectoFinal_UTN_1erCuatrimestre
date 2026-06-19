@@ -1,6 +1,6 @@
 #include "usuario.h"
 
-// ── Pasar usuarios de archivo a ARREGLO  ──────────────────────────────────────────────────────────────────
+/// Pasar usuarios de archivo a ARREGLO =======================================================
 
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
 {
@@ -47,7 +47,7 @@ int contarCantDeUsuariosEnArchi(FILE *archi)
 }
 
 ///Funciones de ADMIN
-// ── Verificar Admin   ──────────────────────────────────────────────────────────────────
+/// Verificar Admin =======================================================================================
 
 int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[])
 {
@@ -58,7 +58,7 @@ int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]
 
     return esAdmin; //1 si es admin, 0 si no
 }
-// ── Eliminar usuarios como Admin   ──────────────────────────────────────────────────────────────────
+/// Eliminar usuarios como Admin =======================================================================================
 
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos)
 {
@@ -73,14 +73,14 @@ void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], in
         printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuarioAEliminar);
 }
 
-// ── Eliminar──────────────────────────────────────────────────────────────────
+/// Eliminar =======================================================================================
 
 void eliminarUsuario(Usuario *usuarioAEliminar)
 {
     (*usuarioAEliminar).eliminado = 1;
 }
 
-// ── Mostrar──────────────────────────────────────────────────────────────────
+/// Mostrar =======================================================================================
 
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos)
 {
@@ -154,7 +154,7 @@ void mostrarArrUsuarios(Usuario arr[], int validos)
         mostrarDatosUsuario(arr[i]);
 }
 
-// ── Registro ──────────────────────────────────────────────────────────────────
+/// Registro =======================================================================================
 
 Usuario registrarUsuario()
 {
@@ -243,7 +243,7 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
     return i;
 }
 
-// ── Billetera ─────────────────────────────────────────────────────────────────
+/// Billetera =======================================================================================
 void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego)
 {
     if(!pilavacia(historialId))
@@ -302,9 +302,7 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
     printf("\n=============FINALIZACION DE INGRESO================\n");
 }
 
-
-
-// ── Carrito ───────────────────────────────────────────────────────────────────
+/// Carrito =======================================================================================
 
 float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar) // devuelve lo que se debe de debitar al usuario
 {
@@ -340,7 +338,7 @@ float sumarPrecioJuegos (Juego arr[], int validos, int i) // devuelve suma del p
     return sumaTotal;
 }
 
-// ── Biblioteca personal ──────────────────────────────────────────────────────
+/// Biblioteca personal =======================================================================================
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar) //siendo el arr de tipo juego la biblioteca de ese usuario y
                                                                                             //SABIENDO QUE ESE USUARIO TIENE ESE JUEGO POR VERIFICACION PREVIA/FUERA DE LA FUNCION
 {
@@ -387,7 +385,7 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
         apilar(&(*usuarioACargar).historialDeJuego, juegoACargar.id);
 }
 
-// ──  Pilas ──────────────────────────────────────────────────────
+/// Pilas =======================================================================================
 
 void reajustarDimPilaTope(Pila *pila, int datoAIngresar) // agregar dato al principio en una pila llena
 {
