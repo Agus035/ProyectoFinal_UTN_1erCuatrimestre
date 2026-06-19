@@ -24,7 +24,7 @@ typedef struct
 void guardarJuegosEnArchivo(char nombreArchivo[]);
 void cargarJuegoATienda(FILE *archi);
 Juego cargarNuevoJuego();
-int determinarIDNuevoJuego (FILE* archi);
+int determinarIDNuevoJuego();
 
 // Consulta / lectura
 void leerJuegosDeTienda(char nombreArchivo[]);

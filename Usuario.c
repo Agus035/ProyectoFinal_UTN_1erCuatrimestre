@@ -1,5 +1,94 @@
 #include "usuario.h"
 
+/// Registro =======================================================================================
+
+Usuario registrarUsuario()
+{
+    Usuario usuarioCargado;
+    char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
+
+    printf("\n=============CREACION DEL USUARIO================\n");
+
+    do
+    {
+
+        printf("Ingrese el nombre de usuario: ");
+        fflush(stdin);
+        scanf("%50[^\n]", inputTeclado);
+        if(strlen(inputTeclado) >= LIMITE)
+            printf("\nVuelva a ingresar un nombre dentro del rango!\n");
+
+    }while(strlen(inputTeclado) >= LIMITE);
+
+    strcpy(usuarioCargado.userName, inputTeclado);
+
+    do
+    {
+
+        printf("\nPASSWORD: ");
+        fflush(stdin);
+        scanf("%50[^\n]", inputTeclado);
+        if(strlen(inputTeclado) >= LIMITE)
+            printf("\nVuelva a ingresar un password dentro del rango!\n");
+
+    }while(strlen(inputTeclado) >= LIMITE);
+
+    strcpy(usuarioCargado.password, inputTeclado);
+
+    usuarioCargado.billetera         = 0;
+    usuarioCargado.bibliotecaUsuario = NULL;
+    usuarioCargado.validosBiblioteca = 0;
+    usuarioCargado.carritoDeJuegos   = NULL;
+    usuarioCargado.validosCarrito    = 0;
+
+    usuarioCargado.eliminado = 0;
+
+    inicpila(&usuarioCargado.historialDeJuego);
+
+    printf("\n=============FIN DE LA CREACION DEL USUARIO================\n");
+
+    return usuarioCargado;
+}
+
+int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo mismo que la funcion de pasar de archi a arreglo
+{ //Nota: esto no tiene uso dijiste?
+    int i = 0;
+    int continuar = 1;
+
+    (*arr) = (Usuario*) malloc(sizeof(Usuario));
+    if(!(*arr))
+    {
+        printf("\nERROR EN MALLOC.\n");
+        return -1;
+    }
+
+    do
+    {
+        (*arr)[i] = registrarUsuario();
+        i++;
+
+        printf("\nDesea registrar otro usuario? 1. SI 0.NO: ");
+
+        while(scanf("%i", &continuar) != 1)
+        {
+            printf("\nIngrese 1 o 0. . .\nDesea registrar otro usuario? 1. SI 0.NO: ");
+            fflush(stdin);
+        }
+
+        if(continuar == 1)
+        {
+            (*arr) = (Usuario*) realloc((*arr), sizeof(Usuario) * (i+1));
+            if(!(*arr))
+            {
+                printf("\nERROR EN REALLOC\n");
+                return -1;
+            }
+        }
+    }while(continuar == 1);
+
+    return i;
+}
+
 /// Pasar usuarios de archivo a ARREGLO =======================================================
 
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
@@ -83,7 +172,7 @@ void eliminarUsuario(Usuario *usuarioAEliminar)
 /// Mostrar =======================================================================================
 
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos)
-{
+{ //Nota: esto no se usa tampoco?
     int pos = buscarUsuarioMayorCantDeJuegosComprados(arr, validos);
 
     if (pos > -1)
@@ -152,95 +241,6 @@ void mostrarArrUsuarios(Usuario arr[], int validos)
 {
     for (int i = 0 ; i < validos ; i++)
         mostrarDatosUsuario(arr[i]);
-}
-
-/// Registro =======================================================================================
-
-Usuario registrarUsuario()
-{
-    Usuario usuarioCargado;
-    char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
-
-    printf("\n=============CREACION DEL USUARIO================\n");
-
-    do
-    {
-
-        printf("Ingrese el nombre de usuario: ");
-        fflush(stdin);
-        scanf("%50[^\n]", inputTeclado);
-        if(strlen(inputTeclado) >= LIMITE)
-            printf("\nVuelva a ingresar un nombre dentro del rango!\n");
-
-    }while(strlen(inputTeclado) >= LIMITE);
-
-    strcpy(usuarioCargado.userName, inputTeclado);
-
-    do
-    {
-
-        printf("\nPASSWORD: ");
-        fflush(stdin);
-        scanf("%50[^\n]", inputTeclado);
-        if(strlen(inputTeclado) >= LIMITE)
-            printf("\nVuelva a ingresar un password dentro del rango!\n");
-
-    }while(strlen(inputTeclado) >= LIMITE);
-
-    strcpy(usuarioCargado.password, inputTeclado);
-
-    usuarioCargado.billetera         = 0;
-    usuarioCargado.bibliotecaUsuario = NULL;
-    usuarioCargado.validosBiblioteca = 0;
-    usuarioCargado.carritoDeJuegos   = NULL;
-    usuarioCargado.validosCarrito    = 0;
-
-    usuarioCargado.eliminado = 0;
-
-    inicpila(&usuarioCargado.historialDeJuego);
-
-    printf("\n=============FIN DE LA CREACION DEL USUARIO================\n");
-
-    return usuarioCargado;
-}
-
-int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo mismo que la funcion de pasar de archi a arreglo
-{
-    int i = 0;
-    int continuar = 1;
-
-    (*arr) = (Usuario*) malloc(sizeof(Usuario));
-    if(!(*arr))
-    {
-        printf("\nERROR EN MALLOC.\n");
-        return -1;
-    }
-
-    do
-    {
-        (*arr)[i] = registrarUsuario();
-        i++;
-
-        printf("\nDesea registrar otro usuario? 1. SI 0.NO: ");
-
-        while(scanf("%i", &continuar) != 1)
-        {
-            printf("\nIngrese 1 o 0. . .\nDesea registrar otro usuario? 1. SI 0.NO: ");
-            fflush(stdin);
-        }
-
-        if(continuar == 1)
-        {
-            (*arr) = (Usuario*) realloc((*arr), sizeof(Usuario) * (i+1));
-            if(!(*arr))
-            {
-                printf("\nERROR EN REALLOC\n");
-                return -1;
-            }
-        }
-    }while(continuar == 1);
-
-    return i;
 }
 
 /// Billetera =======================================================================================

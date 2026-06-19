@@ -2,7 +2,7 @@
 #define USUARIO_H_INCLUDED
 #include "Juego.h"
 
-#define VERIFICARLIMITE 51 //estaba en juegos, te lo traje ac· pq en juegos no se usa
+#define VERIFICARLIMITE 51 //estaba en juegos, te lo traje ac√° pq en juegos no se usa
 
 typedef struct
 {
@@ -19,10 +19,14 @@ typedef struct
 
 } Usuario;
 
-///No te quiero tocar esto por si acaso, lo podes ordenar en Alta, Baja, ModificaciÛn, Consulta, Listados?
-///Igual veo faltan los ˙ltimos 2 de consul. y listados que hay que pensar cÛmo hacerlos
-///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios m·s activos tambiÈn)
-///(hoy/maÒana te ayudo pq algunos creo serÌa literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos en juegos.h/c)
+///No te quiero tocar esto por si acaso, lo podes ordenar en Alta, Baja, Modificaci√≥n, Consulta, Listados?
+///Igual veo faltan los √∫ltimos 2 de consul. y listados que hay que pensar c√≥mo hacerlos
+///Tal vez que el admin puede acceder a consulta y listados (en alguno de estos dos va la idea de la pila de la profe de los usuarios m√°s activos tambi√©n)
+///(hoy/ma√±ana te ayudo pq algunos creo ser√≠a literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos en juegos.h/c)
+
+// Registro / creaci√≥n / Alta
+Usuario registrarUsuario();
+int cargarArrDeUsuariosDinamico (Usuario **arr);
 
 //Funciones con Pilas
 int contarDimPila(Pila pila);
@@ -51,10 +55,8 @@ void mostrarUsuarioPorNombreUsuario (char nombreDeUsuario[], Usuario arr[], int 
 //Buscar y mostrar usuario con mayor cantidad de juegos
 int buscarUsuarioMayorCantDeJuegosComprados (Usuario arr[], int validos);
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
-
-// Registro / creaciÛn / Alta
-Usuario registrarUsuario();
-int cargarArrDeUsuariosDinamico (Usuario **arr);
+//Nota: no voy a usar estos (a menos que objetes)
+//pq sino como admin tendr√≠a 3 opciones de consulta
 
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);

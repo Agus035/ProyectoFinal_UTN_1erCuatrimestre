@@ -18,9 +18,7 @@ void cargarJuegoATienda(FILE *archi)
 {
     int flag = 0;
 
-    Juego juegoEnArchivo; //REVISAR ESTA VARIABLE PQ NO SE USO
-
-    Juego nuevoJuego = cargarNuevoJuego(archi);
+    Juego nuevoJuego = cargarNuevoJuego();
 
     rewind(archi);
     flag = verificarExistenciaJuego(archi, nuevoJuego.nombreJuego); //separé la parte de verificar si el juego existe en una función para usarla en otro lado
@@ -35,7 +33,7 @@ void cargarJuegoATienda(FILE *archi)
     }
 }
 
-Juego cargarNuevoJuego(FILE *archi) //le agregué archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
+Juego cargarNuevoJuego() //le agregué archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
 {
     Juego nuevoJuego;
     printf("\n=============CREACION DEL JUEGO NUEVO================\n");
@@ -52,7 +50,7 @@ Juego cargarNuevoJuego(FILE *archi) //le agregué archi para que pueda identific
         fflush(stdin);
     }
 
-    nuevoJuego.id = determinarIDNuevoJuego (archi);
+    nuevoJuego.id = determinarIDNuevoJuego (); //En caso de ocurrir cualquier error dentro de la función (específicamente que no abra el archivo), la ID del juego va a ser -1.
     nuevoJuego.eliminado = 0;
 
     //TEMA ID
@@ -65,17 +63,21 @@ Juego cargarNuevoJuego(FILE *archi) //le agregué archi para que pueda identific
     return nuevoJuego;
 }
 
-//int determinarIDNuevoJuego (FILE* archi) //Se ignora la ID de juegos eliminados (nota debajo)
-//{ //(nosostros estamos borrando lógicamente las estructuras, mañana voy a preguntar si también es necesario borrarlas del archivo. En caso de ser así, voy a modificar esto para también usar la ID de los juegos eliminados.)
-//    int cantJuegos = fseek(archi, 0, SEEK_END)/sizeof(Juego);
-//
-//    return cantJuegos; //las IDs empiezan en 0
-//}
-int determinarIDNuevoJuego (FILE* archi) //Se ignora la ID de juegos eliminados (nota debajo)
-{ //(nosostros estamos borrando lógicamente las estructuras, mañana voy a preguntar si también es necesario borrarlas del archivo. En caso de ser así, voy a modificar esto para también usar la ID de los juegos eliminados.)
-    fseek(archi, 0, SEEK_END);
-    int cantJuegos = ftell(archi)/sizeof(Juego);
-//    rewind(archi);
+int determinarIDNuevoJuego()//Se ignora la ID de juegos eliminados (nota debajo)
+{
+    FILE *archi = fopen(JUEGOSTIENDA, "rb");
+
+    int cantJuegos = -1;
+
+    if (archi != NULL)
+    {
+        fseek(archi, 0, SEEK_END);
+        cantJuegos = ftell(archi)/sizeof(Juego);
+        fclose(archi);
+    }else
+    {
+        printf("\n\nHa ocurrido un error en la lectura del archivo. No puedo asignarse ID.");
+    }
 
     return cantJuegos; //las IDs empiezan en 0
 }
@@ -269,18 +271,23 @@ int menuSelectorModificarJuego (Juego *aux)
             printf("\nIngrese el nuevo nombre del juego: ");
             fflush(stdin);
             scanf("%49[^\n]", (*aux).nombreJuego);
+            break;
         case 2:
             printf("\nIngrese la nueva categoria del juego: ");
             fflush(stdin);
             scanf("%49[^\n]", (*aux).categoriaJuego);
+            break;
         case 3:
             printf("\nIngrese el nuevo precio del juego: ");
             fflush(stdin);
             scanf("%49[^\n]", (*aux).precioJuego);
+            break;
         case 4:
             printf("\nSaliendo del menu...\n\n");
+            break;
         default:
             printf("\nHa ingresado un valor invalido. Intente de nuevo.\n");
+            break;
         }
         fflush(stdin);
 
