@@ -57,6 +57,7 @@ int buscarUsuarioMayorCantDeJuegosComprados (Usuario arr[], int validos);
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 //Nota: no voy a usar estos (a menos que objetes)
 //pq sino como admin tendría 3 opciones de consulta
+///Igual esto es lo que pedia la consigna de buscar una struct por un campo en especifico de ella
 
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);

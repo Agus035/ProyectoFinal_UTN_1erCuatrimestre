@@ -172,7 +172,7 @@ void eliminarUsuario(Usuario *usuarioAEliminar)
 /// Mostrar =======================================================================================
 
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos)
-{ //Nota: esto no se usa tampoco?
+{ //Nota: esto no se usa tampoco? //No es que no se usa, lo pedia la consigna, lo metemos por ahi y fue
     int pos = buscarUsuarioMayorCantDeJuegosComprados(arr, validos);
 
     if (pos > -1)
