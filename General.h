@@ -1,12 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifndef GENERAL_H_INCLUDED
 #define GENERAL_H_INCLUDED
 
-char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en la mat del admin
-//matAdmin[0] = username
-//matAdmin[1] = password
+///Prototipado
 
-
+void pausarLimpiarInt();
 
 #endif // GENERAL_H_INCLUDED

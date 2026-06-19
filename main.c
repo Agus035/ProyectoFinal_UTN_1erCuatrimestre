@@ -1,6 +1,10 @@
 #include "Usuario.h"
 #include "General.h"
 
+char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en la mat del admin
+//matAdmin[0] = username
+//matAdmin[1] = password
+
 ///Main
 int main()
 {
@@ -10,9 +14,7 @@ int main()
 //    guardarJuegosEnArchivo(JUEGOSTIENDA);
 //    leerJuegosDeTienda(JUEGOSTIENDA);
 
-    leerJuegosOrdenadosNombreTienda(JUEGOSTIENDA);
+//    leerJuegosOrdenadosNombreTienda(JUEGOSTIENDA);
 
-
-    //Yo creo que ya estariamos maso, despues en clase hacemos el main
     return 0;
 }
