@@ -14,6 +14,8 @@ int main()
     //Que admin sea el primer usuario
     //Recordatorio que usuarios es todo trabajado con array
 
+    printf("Bienvenido a STOM! El mejor programa para comprar juegos.\n\n\n");
+
     //Para ordernarme pongo lo que necesito
     //0) Intro de STOM (msg de bienvenida)
     //1) Registro/Iniciar sesión
