@@ -8,7 +8,7 @@ char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en 
 ///Main
 int main()
 {
-    Usuario *arr = NULL //arreglo que contiene a todos los usuarios
+    Usuario *arr = NULL; //arreglo que contiene a todos los usuarios
 
     //Recordatorio de crear admin y al menos 10 juegos
     //Que admin sea el primer usuario

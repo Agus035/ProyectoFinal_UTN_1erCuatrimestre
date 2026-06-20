@@ -1,7 +1,7 @@
 #include "General.h"
 
 // sys cls y sys pause
-void pausarLimpiarInt()
+void pausarLimpiarInt() //q hace esto ¿
 {
     system("pause");
     system("cls");
@@ -32,31 +32,41 @@ void menuInicio()
         }
     }while(decision > 3 || decision < 1);
 
-    menuOpcionesValidas(decision)
+    menuOpcionesValidas(decision);
 }
 
 void menuOpcionesValidas (int decision) //solamente es llamado cuando se verifica el usuario introduce una decisión válida
 {
-    //lo primero que hay que hacer llegado a este punto es cargar el array que tenemos de usuarios
-
     int cantUsuarios = 0;
 
-    if (decision != 3) //3 significa que el usuario quiere salir del programa, entonces no cargo el array en ese caso
+    if (decision != 3) //no se continua con el resto del programa si se eligió salirse (que es la opcion 3)
     {
-        Usuario *arr //array de usuarios va a existir a partir de ahora
-        cantUsuarios = pasarUsuariosAArr();
-    }
+        Usuario *arrUsuarios; //el array de usuarios va a existir a partir de ahora
+        cantUsuarios = pasarUsuariosDeArchivoAArr(LISTAUSUARIOS, &arrUsuarios); //se llena el arreglo de usuarios (con los que haya en archivos) y se devuelven validos
 
-    switch (opcion)
+        if (cantUsuarios != -1)
+        {
+            switch (decision)
+            {
+            case 1:
+                printf("\nIngrese su nombre de usuario: ");
+                //tengo que hacer una función que verifique el usuario y contraseña que se ingrese coincida con alguno que se encuentre en el array de usuarios
+                break;
+            case 2:
+                //aca iria la funcion de registro en usuario.h
+                fflush(stdin);
+            }
+        }else //tengo que revisar esto, porque jamás va a dejar crear un usuario si el archivo de usuarios no existe todavía/se eliminó. El else ocurre si aparece algún error al cargar el archivo (porque está en modo lectura). Ej, si se saca
+        {
+            printf("\nHa ocurrido un error en la carga de usuarios. Cierre y abra el programa nuevamente.\n");
+        }
+    }else
     {
-    case 1:
-        printf("\nIngrese su nombre de usuario: "); //continuo creando esto después de crear el registro
-        break;
-    case 2:
-        printf("\nIngrese el nombre de usuario (lo utilizara para logearse, no olvidar): ");
-        fflush(stdin);
-
+        printf("\nMuchas gracias por haber utilizado STOM. Vuelva pronto.\n"); //TERMINA EL PROGRAMA
     }
 }
 
-void registroUsuario
+
+
+
+

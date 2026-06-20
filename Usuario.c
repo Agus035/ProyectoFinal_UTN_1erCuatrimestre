@@ -89,6 +89,23 @@ int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo
     return i;
 }
 
+void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro, la había empezado en general pero es mejor ponerla acá.
+{
+    *cantUsuarios++;
+
+    Usuario *aux = Usuario realloc(*arr, sizeof(Usuario)*cantUsuarios); //hago un espacio para el nuevo usuario
+
+    if (aux != NULL)
+    {
+        (*aux)[cantUsuarios-1] = registrarUsuario(); //agrego al usuario en la posición que acabo de crear
+        printf("\nUsuario creado exitosamente.\n");
+        *arr = aux;
+    }else
+    {
+        printf("\nHa ocurrido un error en la ampliacion del array para guardar al usuario. Intente de nuevo.\n");
+    }
+}
+
 /// Pasar usuarios de archivo a ARREGLO =======================================================
 
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
@@ -98,11 +115,14 @@ int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
 
     if(archi)
     {
-        validos = pasarUsuariosAArr(archi, arr);
+        validos = pasarUsuariosAArr(archi, arr); //devuelve -1 en caso de error
         fclose(archi);
     }
     else
-        printf("\nEl archivo %s NO existe/NO se pudo abrir. . .\n", nombreArchivo);
+    {
+        printf("\n\nADVERTENCIA: El archivo de usuarios ''%s'' aún NO existe o NO se pudo abrir. . .\n\n", nombreArchivo); //estoy 67% seguro que para intentar romper el programa van a sacar uno/ambos de los archivos
+        (*arr) = NULL; // para que quede inicializado aunque sea en null si no existe todavía el archivo
+    }
 
     return validos;
 }
@@ -121,7 +141,7 @@ int pasarUsuariosAArr(FILE *archi, Usuario **arr)
 
     fread((*arr), sizeof(Usuario), cantDeUsuarios, archi);
 
-    return cantDeUsuarios; //validos
+    return cantDeUsuarios; //validos -> si existe error, devuelve -1
 }
 
 int contarCantDeUsuariosEnArchi(FILE *archi)
@@ -134,6 +154,23 @@ int contarCantDeUsuariosEnArchi(FILE *archi)
 
     return cant;
 }
+
+//falta una función para pasar el array de usuarios devuelta al archivo
+void pasarUsuariosDeArrAArchivo (Usuario *arr, int validos) //En teoría está "hecho", pero no se guarda la biblioteca ni el carrito.
+{
+    FILE *archi = fopen(LISTAUSUARIOS, "w+b"); //w+b porque siempre trabajo con el listado completo de usuarios en un array, a+b agregaría solo al final
+
+    if (archi != NULL)
+    {
+        fwrite(arr, sizeof(Usuario), validos, archi);
+        fclose(archi);
+    }else
+    {
+        printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
+    }
+}
+
+
 
 ///Funciones de ADMIN
 /// Verificar Admin =======================================================================================

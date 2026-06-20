@@ -55,14 +55,14 @@
 1781742195 d:\github\proyectofinal_utn_1ercuatrimestre\usuario.h
 	"Juego.h"
 
-1781891494 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\main.c
+1781930263 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\main.c
 	"Usuario.h"
 	"General.h"
 
-1781891176 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.h
+1781913786 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.h
 	"Juego.h"
 
-1781894914 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.h
+1781912534 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -72,11 +72,11 @@
 1781554752 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\pila.c
 	"pila.h"
 
-1781554752 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\pila.h
+1781930312 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\pila.h
 	<stdio.h>
 	<malloc.h>
 
-1781892223 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.c
+1781913806 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.c
 	"usuario.h"
 
 1781888875 source:d:\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.c
@@ -106,7 +106,7 @@
 1781838949 source:d:\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.c
 	"usuario.h"
 
-1781715588 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.c
+1781898929 source:c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.c
 	"juego.h"
 
 1781715588 D
@@ -146,8 +146,11 @@
 1781890647 source:d:\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\general.c
 	"General.h"
 
-1781891494 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\general.h
+1781929308 c:\users\mamá\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\general.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"Juego.h"
+	"Usuario.h"
+	"pila.h"
 
