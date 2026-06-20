@@ -1,7 +1,7 @@
 #include "General.h"
 
 // sys cls y sys pause
-void pausarLimpiarInt() //q hace esto ¿
+void pausarLimpiarInt() //q hace esto ¿ Pausa y despues limpia la terminal 💔
 {
     system("pause");
     system("cls");

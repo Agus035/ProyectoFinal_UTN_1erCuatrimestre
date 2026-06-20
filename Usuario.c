@@ -2,9 +2,12 @@
 
 /// Registro =======================================================================================
 
-Usuario registrarUsuario()
+Usuario registrarUsuario(int *cantUsuariosEnElPrograma)
 {
     Usuario usuarioCargado;
+
+    (*cantUsuariosEnElPrograma) += 1;
+
     char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
 
     printf("\n=============CREACION DEL USUARIO================\n");
@@ -50,56 +53,60 @@ Usuario registrarUsuario()
     return usuarioCargado;
 }
 
-int cargarArrDeUsuariosDinamico (Usuario **arr) //Carga de arreglo din, no es lo mismo que la funcion de pasar de archi a arreglo
-{ //Nota: esto no tiene uso dijiste?
-    int i = 0;
-    int continuar = 1;
-
-    (*arr) = (Usuario*) malloc(sizeof(Usuario));
-    if(!(*arr))
-    {
-        printf("\nERROR EN MALLOC.\n");
-        return -1;
-    }
-
-    do
-    {
-        (*arr)[i] = registrarUsuario();
-        i++;
-
-        printf("\nDesea registrar otro usuario? 1. SI 0.NO: ");
-
-        while(scanf("%i", &continuar) != 1)
-        {
-            printf("\nIngrese 1 o 0. . .\nDesea registrar otro usuario? 1. SI 0.NO: ");
-            fflush(stdin);
-        }
-
-        if(continuar == 1)
-        {
-            (*arr) = (Usuario*) realloc((*arr), sizeof(Usuario) * (i+1));
-            if(!(*arr))
-            {
-                printf("\nERROR EN REALLOC\n");
-                return -1;
-            }
-        }
-    }while(continuar == 1);
-
-    return i;
-}
+//int cargarArrDeUsuariosDinamico (Usuario **arr, int *cantUsuariosEnElPrograma) //Carga de arreglo din, no es lo mismo que la funcion de pasar de archi a arreglo
+//{ //Nota: esto no tiene uso dijiste?
+///// SOY MUY TONTO, esto es lo principal que vamos a usar mientras se ejecuta el programa
+///// despues, cuando el usuario quiera cerrarlo, lo ultimo que hace es pasar todo ese arreglo de usuarios que se cargaron (o no) al archivo
+///// Por ejemplo. Ejecuto, creo un usuario, vuelvo y registro otro usuario, ya tengo 2 usuarios distintos
+///// creo :3cc
+//    int i = 0;
+//    int continuar = 1;
+//
+//    (*arr) = (Usuario*) malloc(sizeof(Usuario));
+//    if(!(*arr))
+//    {
+//        printf("\nERROR EN MALLOC.\n");
+//        return -1;
+//    }
+//
+//    do
+//    {
+//        (*arr)[i] = registrarUsuario(cantUsuariosEnElPrograma);
+//        i++;
+//
+//        printf("\nDesea registrar otro usuario? 1. SI 0.NO: ");
+//
+//        while(scanf("%i", &continuar) != 1)
+//        {
+//            printf("\nIngrese 1 o 0. . .\nDesea registrar otro usuario? 1. SI 0.NO: ");
+//            fflush(stdin);
+//        }
+//
+//        if(continuar == 1)
+//        {
+//            (*arr) = (Usuario*) realloc((*arr), sizeof(Usuario) * (i+1));
+//            if(!(*arr))
+//            {
+//                printf("\nERROR EN REALLOC\n");
+//                return -1;
+//            }
+//        }
+//    }while(continuar == 1);
+//
+//    return i;
+//}
 
 void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro, la había empezado en general pero es mejor ponerla acá.
 {
-    *cantUsuarios++;
+    (*cantUsuarios) += 1;
 
-    Usuario *aux = Usuario realloc(*arr, sizeof(Usuario)*cantUsuarios); //hago un espacio para el nuevo usuario
+    Usuario (*aux) = (Usuario*) realloc((*arr), sizeof(Usuario) * (*cantUsuarios)); //hago un espacio para el nuevo usuario
 
     if (aux != NULL)
     {
-        (*aux)[cantUsuarios-1] = registrarUsuario(); //agrego al usuario en la posición que acabo de crear
+        aux[((*cantUsuarios)-1)] = registrarUsuario(cantUsuarios); //agrego al usuario en la posición que acabo de crear
         printf("\nUsuario creado exitosamente.\n");
-        *arr = aux;
+        (*arr) = aux;
     }else
     {
         printf("\nHa ocurrido un error en la ampliacion del array para guardar al usuario. Intente de nuevo.\n");
@@ -108,69 +115,141 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 
 /// Pasar usuarios de archivo a ARREGLO =======================================================
 
-int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr)
+//int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr, int validosUsuarios)
+//{
+//    FILE *archi = fopen(nombreArchivo, "rb");
+//    int validos = 0;
+//
+//    if(archi)
+//    {
+//        validos = pasarUsuariosAArr(archi, arr, validosUsuarios); //devuelve -1 en caso de error
+//        fclose(archi);
+//    }
+//    else
+//    {
+//        printf("\n\nADVERTENCIA: El archivo de usuarios ''%s'' aún NO existe o NO se pudo abrir. . .\n\n", nombreArchivo);
+//        //estoy 67% seguro que para intentar romper el programa van a sacar uno/ambos de los archivos
+//        (*arr) = NULL; // para que quede inicializado aunque sea en null si no existe todavía el archivo
+//    }
+//
+//    return validos;
+//}
+
+//int pasarUsuariosAArr(FILE *archi, Usuario **arr, int cantDeUsuarios)
+//{
+////    int cantDeUsuarios = contarCantDeUsuariosEnArchi(archi);
+//
+//    (*arr) = (Usuario*) malloc(sizeof(Usuario) * cantDeUsuarios);
+//
+//    if(!(*arr))
+//    {
+//        printf("\nERROR EN MALLOC\n");
+//        return -1;
+//    }
+//
+//    fread((*arr), sizeof(Usuario), cantDeUsuarios, archi);
+//
+//    return cantDeUsuarios; //validos -> si existe error, devuelve -1
+//}
+
+//int contarCantDeUsuariosEnArchi(FILE *archi)
+//{
+//    int cant;
+//
+//    fseek(archi, 0, SEEK_END);
+//    cant = ftell(archi)/sizeof(Usuario);
+//    rewind(archi);
+//
+//    return cant;
+//}
+
+void pasarUsuarioArchiAArrDin (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema)
 {
-    FILE *archi = fopen(nombreArchivo, "rb");
-    int validos = 0;
+    int i = 0;
 
-    if(archi)
-    {
-        validos = pasarUsuariosAArr(archi, arr); //devuelve -1 en caso de error
-        fclose(archi);
-    }
-    else
-    {
-        printf("\n\nADVERTENCIA: El archivo de usuarios ''%s'' aún NO existe o NO se pudo abrir. . .\n\n", nombreArchivo); //estoy 67% seguro que para intentar romper el programa van a sacar uno/ambos de los archivos
-        (*arr) = NULL; // para que quede inicializado aunque sea en null si no existe todavía el archivo
-    }
-
-    return validos;
-}
-
-int pasarUsuariosAArr(FILE *archi, Usuario **arr)
-{
-    int cantDeUsuarios = contarCantDeUsuariosEnArchi(archi);
-
-    (*arr) = (Usuario*) malloc(sizeof(Usuario) * cantDeUsuarios);
-
+    (*arr) = (Usuario*) malloc(sizeof(Usuario) * usuariosRegistradosEnSistema);
     if(!(*arr))
     {
-        printf("\nERROR EN MALLOC\n");
-        return -1;
+        printf("\nERROR EN MALLOC. . .\n");
+        return;
     }
 
-    fread((*arr), sizeof(Usuario), cantDeUsuarios, archi);
-
-    return cantDeUsuarios; //validos -> si existe error, devuelve -1
+    while(i <= usuariosRegistradosEnSistema)
+    {
+        (*arr)[i] = leerUsuarioCompletoDeArchi(archi);
+        i++;
+    }
 }
 
-int contarCantDeUsuariosEnArchi(FILE *archi)
+Usuario leerUsuarioCompletoDeArchi(FILE *archi)
 {
-    int cant;
+    Usuario usuarioLeido;
 
-    fseek(archi, 0, SEEK_END);
-    cant = ftell(archi)/sizeof(Usuario);
-    rewind(archi);
+    fread(&usuarioLeido, sizeof(Usuario), 1, archi);
 
-    return cant;
+    usuarioLeido.bibliotecaUsuario = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosBiblioteca);
+    if(!usuarioLeido.bibliotecaUsuario)
+    {
+        strcpy(usuarioLeido.userName, "ERROR. . .");
+        printf("\nERROR EN MALLOC. . .\n");
+        return usuarioLeido;
+    }
+
+    fread(usuarioLeido.bibliotecaUsuario, sizeof(Juego), usuarioLeido.validosBiblioteca, archi);
+
+    usuarioLeido.carritoDeJuegos = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosCarrito);
+    if(!usuarioLeido.carritoDeJuegos)
+    {
+        strcpy(usuarioLeido.userName, "ERROR. . .");
+        printf("\nERROR EN MALLOC. . .\n");
+        free(usuarioLeido.bibliotecaUsuario);
+        return usuarioLeido;
+    }
+
+    fread(usuarioLeido.carritoDeJuegos, sizeof(Juego), usuarioLeido.validosCarrito, archi);
+
+    return usuarioLeido;
 }
 
 //falta una función para pasar el array de usuarios devuelta al archivo
-void pasarUsuariosDeArrAArchivo (Usuario *arr, int validos) //En teoría está "hecho", pero no se guarda la biblioteca ni el carrito.
-{
-    FILE *archi = fopen(LISTAUSUARIOS, "w+b"); //w+b porque siempre trabajo con el listado completo de usuarios en un array, a+b agregaría solo al final
+//void pasarUsuariosDeArrAArchivo (Usuario arr[] , int validos) //En teoría está "hecho", pero no se guarda la biblioteca ni el carrito.
+//{
+//    FILE *archi = fopen(LISTAUSUARIOS, "w+b"); //w+b porque siempre trabajo con el listado completo de usuarios en un array, a+b agregaría solo al final
+//
+//    if (archi != NULL)
+//    {
+//        fwrite(arr, sizeof(Usuario), validos, archi);
+//        fclose(archi);
+//    }else
+//    {
+//        printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
+//    }
+//}
 
-    if (archi != NULL)
+void guardarArrUsuariosEnArchivo(char nombreArchivo[] ,Usuario arr[], int validosUsuarios)
+{
+    FILE *archi = fopen(nombreArchivo, "wb");
+
+    if(archi)
     {
-        fwrite(arr, sizeof(Usuario), validos, archi);
+        for(int i = 0 ; i < validosUsuarios ; i++)
+        {
+            guardarUnUsuarioEnArchi(archi, arr[i]); //lito :3
+        }
         fclose(archi);
-    }else
-    {
-        printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
     }
+    else
+        printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
 }
 
+void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario)
+{
+    fwrite(&usuario, sizeof(Usuario), 1, archi);
 
+    fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi);
+
+    fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi);
+}
 
 ///Funciones de ADMIN
 /// Verificar Admin =======================================================================================

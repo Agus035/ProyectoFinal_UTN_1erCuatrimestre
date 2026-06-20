@@ -26,7 +26,7 @@ typedef struct
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos en juegos.h/c)
 
 // Registro / creación / Alta
-Usuario registrarUsuario();
+Usuario registrarUsuario(int *cantUsuariosEnElPrograma);
 int cargarArrDeUsuariosDinamico (Usuario **arr);
 
 //Funciones con Pilas
@@ -37,6 +37,13 @@ void reajustarDimPilaTope(Pila *pila, int datoAIngresar);
 int contarCantDeUsuariosEnArchi(FILE *archi);
 int pasarUsuariosAArr(FILE *archi, Usuario **arr);
 int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr);
+Usuario leerUsuarioCompletoDeArchi(FILE *archi);
+void pasarUsuarioArchiAArrDin (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema);
+
+// Pasar arreglo dinamico de usuarios a Archivo
+void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario);
+void guardarArrUsuariosEnArchivo(char nombreArchivo[] ,Usuario arr[], int validosUsuarios);
+
 
 // Funciones para el usuario Admin
 int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]);

@@ -11,6 +11,7 @@
 ///Prototipado
 
 void pausarLimpiarInt();
+void menuOpcionesValidas (int decision);
 
 //me había olvidado de sacar el array global, al final recién aparece cuando el usuario quiere iniciar sesión/registrarse
 

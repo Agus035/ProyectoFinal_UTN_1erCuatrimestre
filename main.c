@@ -5,9 +5,13 @@ char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en 
 //matAdmin[0] = username
 //matAdmin[1] = password
 
+int cantUsuariosEnElPrograma = 0;
+
 ///Main
 int main()
 {
+
+
     Usuario *arr = NULL; //arreglo que contiene a todos los usuarios
 
     //Recordatorio de crear admin y al menos 10 juegos
