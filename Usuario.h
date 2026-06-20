@@ -9,12 +9,12 @@ typedef struct
 {
     char userName[LIMITE];
     char password[LIMITE];
-    float billetera;
-    Juego *bibliotecaUsuario; //Dolor de cabeza significativo: hice mal (aunque excelente enterarnos ahora) y le pregunté a chatGPT por esto, resulta que en el archivo no se guardan la biblioteca ni el carrito como array, sino como una dirección de memoria/puntero. No incluye a los datos. Para guardar los datos hay que hacer muchos fwrite para cada una de las variables de la estructura, lo mismo para leer cada usuario, es un fread por cada variable. Es medio engorroso por lo que estuve viendo y funciones como la de contar la cantidad de usuarios dejan de funcionar. Si es lo suficientemente engorroso, voy a dejar estos arrays como fijos o separo al menos la bilbioteca de todos los usuarios en otro archivo. Ya estamos usando arrays dinámicos para trabajar con los usuarios en el main así que seguiríamos cumpliendo el requisito del TP.
-    Juego *carritoDeJuegos;
-    int validosBiblioteca;
-    int validosCarrito;
     int eliminado; //acordarse cuando se busca un usuario verificar si esta eliminado
+    float billetera;
+    int validosBiblioteca;
+    Juego *bibliotecaUsuario; //Dolor de cabeza significativo: hice mal (aunque excelente enterarnos ahora) y le pregunté a chatGPT por esto, resulta que en el archivo no se guardan la biblioteca ni el carrito como array, sino como una dirección de memoria/puntero. No incluye a los datos. Para guardar los datos hay que hacer muchos fwrite para cada una de las variables de la estructura, lo mismo para leer cada usuario, es un fread por cada variable. Es medio engorroso por lo que estuve viendo y funciones como la de contar la cantidad de usuarios dejan de funcionar. Si es lo suficientemente engorroso, voy a dejar estos arrays como fijos o separo al menos la bilbioteca de todos los usuarios en otro archivo. Ya estamos usando arrays dinámicos para trabajar con los usuarios en el main así que seguiríamos cumpliendo el requisito del TP.
+    int validosCarrito;
+    Juego *carritoDeJuegos;
 
     Pila historialDeJuego; //ultimos juegos comprados del usuario, adios a la idea de usuarios activos //El problemón aplica para pila también, pero hice un mini-arreglo y debería estar bien
 

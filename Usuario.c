@@ -100,7 +100,8 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 {
     (*cantUsuarios) += 1;
 
-    Usuario (*aux) = (Usuario*) realloc((*arr), sizeof(Usuario) * (*cantUsuarios)); //hago un espacio para el nuevo usuario
+    Usuario *aux = (Usuario*) realloc((*arr), sizeof(Usuario) * (*cantUsuarios)); //hago un espacio para el nuevo usuario
+    //^ lo estoy declarando por primera vez, no creo lleve paréntesis (hace falta?)
 
     if (aux != NULL)
     {
@@ -109,6 +110,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
         (*arr) = aux;
     }else
     {
+        (*cantUsuarios) -= 1;
         printf("\nHa ocurrido un error en la ampliacion del array para guardar al usuario. Intente de nuevo.\n");
     }
 }
@@ -134,7 +136,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 //
 //    return validos;
 //}
-
+//
 //int pasarUsuariosAArr(FILE *archi, Usuario **arr, int cantDeUsuarios)
 //{
 ////    int cantDeUsuarios = contarCantDeUsuariosEnArchi(archi);
@@ -151,7 +153,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 //
 //    return cantDeUsuarios; //validos -> si existe error, devuelve -1
 //}
-
+//
 //int contarCantDeUsuariosEnArchi(FILE *archi)
 //{
 //    int cant;
@@ -163,7 +165,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 //    return cant;
 //}
 
-void pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr, int *usuariosRegistradosEnSistema)
+void pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr, int *usuariosRegistradosEnSistema) //es necesario traer usuarios como parametro? a menos que esta no sea variable global
 {
     FILE *archi = fopen(nombreArchivo, "r+b");
 
@@ -227,6 +229,46 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi)
     return usuarioLeido;
 }
 
+//esto es a lo que me refería con el conteo de usuarios
+int contarCantUsuariosArchi () //cuantos existen en el archivo
+{
+    FILE *archi = fopen ("example.bin", "rb");
+
+    int contador = 0;
+
+    Usuario aux;
+
+    if (archi)
+    {
+        while (fread(&aux.userName, sizeof(char), LIMITE, archi) > 0)
+        {
+            contador++;
+            fread(&aux.password, sizeof(char), LIMITE, archi);
+            fread(&aux.eliminado, sizeof(int), 1, archi); //da igual si está eliminado, es para hacer el array con el que voy a trabajar
+            fread(&aux.billetera, sizeof(float), 1, archi);
+
+            fread(&aux.validosBiblioteca, sizeof(int), 1, archi); //leo cuántos validos de biblioteca hay
+            aux.bibliotecaUsuario = malloc(sizeof(Juego)*aux.validosBiblioteca); // los uso para ahí crear el array
+            fread(aux.bibliotecaUsuario, sizeof(Juego), aux.validosBiblioteca, archi); //y lo leo con la cantidad de validos, supuestamente así sí funciona
+
+            fread(&aux.validosCarrito, sizeof(int), 1, archi); // hago lo mismo en cuanto
+            aux.carritoDeJuegos = malloc (sizeof(Juego)*aux.validosCarrito);
+            fread(aux.carritoDeJuegos, sizeof(Juego), aux.validosCarrito, archi);
+
+            fread(&aux.historialDeJuego, sizeof(Pila), 1, archi);
+
+            free (aux.bibliotecaUsuario);
+            free(aux.carritoDeJuegos);
+        }
+        fclose(archi);
+    }else
+    {
+        printf("\nHa ocurrido un problema en la apertura del archivo.\n");
+    }
+
+    return contador;
+}
+
 //falta una función para pasar el array de usuarios devuelta al archivo
 //void pasarUsuariosDeArrAArchivo (Usuario arr[] , int validos) //En teoría está "hecho", pero no se guarda la biblioteca ni el carrito.
 //{
@@ -242,7 +284,7 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi)
 //    }
 //}
 
-void guardarArrUsuariosEnArchivo(char nombreArchivo[] ,Usuario arr[], int validosUsuarios)
+void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int validosUsuarios)
 {
     FILE *archi = fopen(nombreArchivo, "wb");
 
@@ -261,8 +303,8 @@ void guardarArrUsuariosEnArchivo(char nombreArchivo[] ,Usuario arr[], int valido
 
 void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario)
 {
-    fwrite(&usuario, sizeof(Usuario), 1, archi);
-
+    fwrite(&usuario, sizeof(Usuario), 1, archi); //osea ahorra tiempo de escribir código pero quedan aisladas los 2 de abajo
+    //pero creo que el principal problema que se me viene es cómo cargar los arrays con las bibliotecas y carritos
     fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi);
 
     fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi);
