@@ -13,5 +13,6 @@
 void pausarLimpiarInt();
 
 Usuario *arr //arreglo global de usuarios, acá van a estar todos los usuarios, pero vamos a estar trabajando con 1 solo por sesión
+//Supongo que la pos del arreglo / del archivo es la id, no?
 
 #endif // GENERAL_H_INCLUDED
