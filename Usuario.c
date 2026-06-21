@@ -117,7 +117,6 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
     (*cantUsuarios) += 1;
 
     Usuario *aux = (Usuario*) realloc((*arr), sizeof(Usuario) * (*cantUsuarios)); //hago un espacio para el nuevo usuario
-    //^ lo estoy declarando por primera vez, no creo lleve paréntesis (hace falta?) nono, vi mal yo. Asi esta bien
 
     if (aux != NULL)
     {
@@ -225,7 +224,7 @@ void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegi
 
     while(i < usuariosRegistradosEnSistema)
     {
-        (*arr)[i] = leerUsuarioCompletoDeArchi(archi); //pq me muestra a todos los usuarios?
+        (*arr)[i] = leerUsuarioCompletoDeArchi(archi); //rta comentario anterior: confundí leer con que se imprimían todos dios
         i++;
     }
 }
@@ -234,19 +233,29 @@ int creacionArchivoDeUsuarios (Usuario **arr) //si no existe el archivo usuario,
 {
     FILE *archi = fopen(LISTAUSUARIOS, "wb");
 
-    int flag = -1; //se devuelve en "validos" en el main. Es -1 si hay error en fopen
+    int validos = -1; //se devuelve como "validos" en el main. Es -1 si hay error en fopen
+
+    Usuario aux;
 
     if (archi)
     {
-        flag = 1;
+        validos = 1;
 
-        fwrite(&flag, sizeof(int), 1, archi); //escribo "1" al principio del archivo, que serían los validos
+        fwrite(&validos, sizeof(int), 1, archi); //escribo "1" al principio del archivo, que serían los validos
 
-        (*arr) = malloc(sizeof(Usuario)*1); //hago espacio para 1 usuario en el array dinámico
+        aux = malloc(sizeof(Usuario)*1); //hago espacio para 1 usuario en el array dinámico
 
-        (*arr)[0] = crearUsuarioAdmin(); //coloco al usuario admin en el array
+        if (aux != NULL)
+        {
+            (*arr) = aux;
 
-        fwrite(&(*arr)[0], sizeof(Usuario), 1, archi); //y después agrego admin al archivo
+            (*arr)[0] = crearUsuarioAdmin(); //coloco al usuario admin en el array
+
+            fwrite(&(*arr)[0], sizeof(Usuario), 1, archi); //y después agrego admin al archivo
+        }else
+        {
+            validos = -1; //error en malloc en este caso
+        }
 
         fclose(archi);
     }else
@@ -254,7 +263,7 @@ int creacionArchivoDeUsuarios (Usuario **arr) //si no existe el archivo usuario,
         printf("\nHa ocurrido un error en la creacion del archivo usuarios. Reinice el programa e intente nuevamente.\n");
     }
 
-    return flag;
+    return validos;
 }
 
 Usuario leerUsuarioCompletoDeArchi(FILE *archi) //NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo

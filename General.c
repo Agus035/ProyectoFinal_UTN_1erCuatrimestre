@@ -46,11 +46,8 @@ void menuOpcionesValidas (int decision) //solamente es llamado cuando se verific
 
         if (cantUsuarios == 0)
         {
-
+            cantUsuarios = creacionArchivoDeUsuarios(&arrUsuarios); //cant usuarios es igual a -1 si hay error en malloc/abrir el archivo
         }
-
-        //if cant usuarios == 0 -> aca va la funcion de crear el archivo -> llevo como parametro al array dinámico
-        //dentro del if igualo la funcion a validos (porque devuelve 1 si todo bien), devuelve -1 en caso de error en malloc
 
         if (cantUsuarios != -1)
         {
@@ -64,7 +61,7 @@ void menuOpcionesValidas (int decision) //solamente es llamado cuando se verific
                 //aca iria la funcion de registro en usuario.h
                 fflush(stdin);
             }
-        }else //El else ocurre si aparece algún error al cargar el archivo (porque está en modo lectura). Ej, si se saca
+        }else //El else ocurre si aparece algún error al abrir el archivo/error en malloc
         {
             printf("\nHa ocurrido un error en la carga de usuarios. Cierre y abra el programa nuevamente.\n");
         }
