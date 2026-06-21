@@ -329,6 +329,7 @@ void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario)
 
     fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi);
 
+    fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi); //creo que era así
 }
 
 //
