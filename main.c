@@ -61,6 +61,8 @@ int main()
     // consultar saldo, cargar saldo
     // eliminar usuario (requiere de su contraseña, escondido detrás de "funciones especiales")
 
+    //Dentro del menú de arriba, pongo un if mostrando más opciones si el usuario es admin, y pasa lo de abajo
+
     //2 B) Opciones ADMIN (disponibles únicamente si el usuario es el admin):
     //2 B) Eliminar usuario,
     // agregar/quitar/modificar juegos de tienda,
