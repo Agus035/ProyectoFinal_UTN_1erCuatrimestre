@@ -11,7 +11,9 @@
 ///Prototipado
 
 void pausarLimpiarInt();
-void menuOpcionesValidas (int decision);
+void menuInicio();
+void menuOpcionesValidasVerificadas (int decision); //solamente es llamado cuando se verifica el usuario introduce una decisión válida
+void menuOpcionesLoggeoRegistro(int decision, Usuario **arrUsuarios, int *cantUsuarios); //tiene solo las funciones de registro y loggeo (se hace después de muchas verificaciones)
 
 
 

@@ -2,13 +2,16 @@
 
 /// Registro =======================================================================================
 
-Usuario registrarUsuario() //los validos de esto se establecen en función madre
+Usuario registrarUsuario() //crea y devuelve un solo usuario. los validos de esto se establecen en función madre
 {
     Usuario usuarioCargado;
+
+    int flag = 0;
 
     char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
 
     printf("\n=============CREACION DEL USUARIO================\n");
+
 
     do
     {
@@ -21,6 +24,7 @@ Usuario registrarUsuario() //los validos de esto se establecen en función madre
     }while(strlen(inputTeclado) >= LIMITE);
 
     strcpy(usuarioCargado.userName, inputTeclado);
+
 
     do
     {
@@ -114,8 +118,7 @@ Usuario crearUsuarioAdmin()
 //    return i;
 //}
 
-void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro,
-                                                            //la había empezado en general pero es mejor ponerla acá.
+void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro.
 {
     (*cantUsuarios) += 1;
 
@@ -184,7 +187,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 //    return cant;
 //}
 
-int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr)
+int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr) //Trae los validos, usuarios y sus respectivas biblioteca y carriots a un array. Devuelve los validos que obtuvo del principio del archivo.
 ///Decidí que esta función devuelva los validos. Solo quiero que existan los validos cuando se quiere registrar/logear, no siempre que se inicia el programa. por quisquilloso nomás
 {
     FILE *archi = fopen(nombreArchivo, "r+b");
@@ -304,8 +307,8 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi) //NOTA: antes de llamar a esta f
     ///devuelvo ese usuario con todos sus parametros cargados
 }
 
-void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int validosUsuarios)
-{
+void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario *arr, int validosUsuarios) //Guarda todos los usuarios en archivo. Nota: utiliza "wb", se elimina el archivo ya existente
+{ //por el tema mencionado en case 2 del menu de switch en main, debo hacer que devuelva un flag de error si se falla en abrir el archivo
     FILE *archi = fopen(nombreArchivo, "wb");
 
     if(archi)
@@ -322,7 +325,7 @@ void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int valido
         printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
 }
 
-void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario)
+void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario) //Guarda los datos de un usuario en el archivo
 {
     fwrite(&usuario, sizeof(Usuario), 1, archi);
 
@@ -621,7 +624,7 @@ int contarDimPila(Pila pila)
 
 ///Consulta?
 
-int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char password[])
+int verificarUsuarioRegistrado(Usuario *arr, int validos, char username[], char password[])
 {
     int flag = -1;
 
@@ -634,6 +637,22 @@ int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char
     return flag; //Devuelve la pos de ese usuario para luego hacer usuario de la sesion iniciada = arr[esa posicion que devuelve
                 //devuelve -1 si la contraseña o usuario son incorrectos
 }
+
+//literal copié y levemente modifiqué la función de arriba para esto
+int verificarNombreUsuarioRegistrado(Usuario *arr, int validos, char username[])
+{
+    int flag = 0;
+
+    for(int i = 0 ; i < validos && flag == 0; i++)
+    {
+        if(strcmp(arr[i].userName, username) == 0)
+            flag = 1;
+    }
+
+    return flag; //1 si usuario existe, 0 si no existe
+}
+
+
 
 /// Mostrar Juegos del carrito de ese Usuario
 void mostrarCarritoDeUsuario (Usuario usuario)

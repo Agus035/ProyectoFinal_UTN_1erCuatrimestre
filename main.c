@@ -9,6 +9,8 @@ char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en 
 
 ///RECORDATORIO: hay que explicar lo que hace cada una de las funciones en comentarios, según lo que dice la consigna.
 
+///Agregar en algún lado método para que no se creen usuarios con nombre igual. Hice una función para eso al final de usuario.c, dsps ver donde ponerla
+
 ///Main
 int main()
 {
@@ -19,19 +21,23 @@ int main()
     ///Temporal para probar carrito
 
     Juego test = cargarNuevoJuego();
-//    Juego test2 = cargarNuevoJuego();
+    Juego test2 = cargarNuevoJuego();
 
-    Usuario *arrUsuarios = malloc(sizeof(Usuario)*1); //creo un array de 1 usuario
+    Usuario *arrUsuarios = malloc(sizeof(Usuario)*2); //creo un array de 1 usuario
 
     Usuario admin = crearUsuarioAdmin();
 
     arrUsuarios[0] = admin;
 
     cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test);
-//    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test2);
+    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test2);
 
     mostrarDatosUsuario(arrUsuarios[0]);
-    ///Temporal
+
+    mostrarCarritoDeUsuario(arrUsuarios[0]);
+
+
+    ///FIN Temporal
 
     //Recordatorio de crear admin y al menos 10 juegos
     //Que admin sea el primer usuario

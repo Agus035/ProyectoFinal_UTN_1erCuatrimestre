@@ -37,13 +37,13 @@ int cargarArrDeUsuariosDinamico (Usuario **arr);
 int contarDimPila(Pila pila);
 void reajustarDimPilaTope(Pila *pila, int datoAIngresar);
 
-// Funciones con Archivos
+/// Funciones con Archivos
 int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr);
 void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema);
 int creacionArchivoDeUsuarios (Usuario **arr); //si no existe el archivo usuario, lo crea y añade al primer usuario admin
 Usuario leerUsuarioCompletoDeArchi(FILE *archi); //NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo
 // Pasar arreglo dinamico de usuarios a Archivo
-void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int validosUsuarios);
+void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario *arr, int validosUsuarios); //Guarda todos los usuarios en archivo. Nota: utiliza "wb", se elimina el archivo ya existente
 void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario);
 
 // Funciones para el usuario Admin
@@ -75,8 +75,8 @@ void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
 float sumarPrecioJuegos (Juego arr[], int validos, int i);
 
 // Carrito / Modificacion
-float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoAComprar); // devuelve lo que se debe de debitar al usuario
-void mostrarCarritoDeUsuario (Usuario usuario);
+float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoAComprar); //Carga un juego al carrito de un usuario. Devuelve lo que se debe de debitar al usuario
+void mostrarCarritoDeUsuario (Usuario usuario); //Muestra el carrito de un usuario
 
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
@@ -87,6 +87,7 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego); 
 
 // Consulta?
 int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char password[]);
+int verificarNombreUsuarioRegistrado(Usuario *arr, int validos, char username[]);
 
 
 #endif // USUARIO_H_INCLUDED

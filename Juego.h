@@ -15,8 +15,7 @@ typedef struct
     char nombreJuego[LIMITE];
     char categoriaJuego[LIMITE];
     float precioJuego;
-    int id; //tengo que ver cómo mantener las IDs, con variable global que se guarda en archivo o simplemente los eliminados mantienen su id para siempre
-            ///Yo digo que se mantengan las ids. Hace que se sume +1 y fue, si no usando random, pero yo diria que mejor uses +1
+    int id; //comienzan en 0, los eliminados mantienen su id
     int eliminado; //0 es NO ----1 es SI
 }Juego;
 
