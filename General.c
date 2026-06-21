@@ -37,16 +37,24 @@ void menuInicio()
 
 void menuOpcionesValidas (int decision) //solamente es llamado cuando se verifica el usuario introduce una decisión válida
 {
-    int cantUsuarios = 0;
+    int cantUsuarios;
 
     if (decision != 3) //no se continua con el resto del programa si se eligió salirse (que es la opcion 3)
     {
-        Usuario *arrUsuarios; //el array de usuarios va a existir a partir de ahora
-        cantUsuarios = pasarUsuariosDeArchivoAArr(LISTAUSUARIOS, &arrUsuarios); //se llena el arreglo de usuarios (con los que haya en archivos) y se devuelven validos
+        Usuario *arrUsuarios = NULL; //el array de usuarios va a existir a partir de ahora
+        cantUsuarios = pasarUsuariosArchivoAArrDin(LISTAUSUARIOS, &arrUsuarios); //se llena el arreglo de usuarios (si existen) y se devuelven validos
+
+        if (cantUsuarios == 0)
+        {
+
+        }
+
+        //if cant usuarios == 0 -> aca va la funcion de crear el archivo -> llevo como parametro al array dinámico
+        //dentro del if igualo la funcion a validos (porque devuelve 1 si todo bien), devuelve -1 en caso de error en malloc
 
         if (cantUsuarios != -1)
         {
-            switch (decision)
+            switch (decision) //modularizar las opciones del switch
             {
             case 1:
                 printf("\nIngrese su nombre de usuario: ");
@@ -56,7 +64,7 @@ void menuOpcionesValidas (int decision) //solamente es llamado cuando se verific
                 //aca iria la funcion de registro en usuario.h
                 fflush(stdin);
             }
-        }else //tengo que revisar esto, porque jamás va a dejar crear un usuario si el archivo de usuarios no existe todavía/se eliminó. El else ocurre si aparece algún error al cargar el archivo (porque está en modo lectura). Ej, si se saca
+        }else //El else ocurre si aparece algún error al cargar el archivo (porque está en modo lectura). Ej, si se saca
         {
             printf("\nHa ocurrido un error en la carga de usuarios. Cierre y abra el programa nuevamente.\n");
         }

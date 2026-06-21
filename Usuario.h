@@ -1,6 +1,7 @@
 #ifndef USUARIO_H_INCLUDED
 #define USUARIO_H_INCLUDED
 #include "Juego.h"
+#include <errno.h> //errno es una variable global. Al ocurrir cualquier error al ejecutar algo, codeblocks guarda el error en esta variable. Me sirve para saber si un fopen falló porque el archivo no existe, o porque hubo cualquier otro problema con el fopen
 
 #define VERIFICARLIMITE 51 //estaba en juegos, te lo traje acá pq en juegos no se usa
 #define LISTAUSUARIOS "usuarios.bin"
@@ -11,12 +12,12 @@ typedef struct
     char password[LIMITE];
     int eliminado; //acordarse cuando se busca un usuario verificar si esta eliminado
     float billetera;
+    int validosCarrito;
+    Juego carritoDeJuegos[10];
+    Pila historialDeJuego; //ultimos 50 juegos comprados del usuario
+
     int validosBiblioteca;
     Juego *bibliotecaUsuario; //Dolor de cabeza significativo: hice mal (aunque excelente enterarnos ahora) y le pregunté a chatGPT por esto, resulta que en el archivo no se guardan la biblioteca ni el carrito como array, sino como una dirección de memoria/puntero. No incluye a los datos. Para guardar los datos hay que hacer muchos fwrite para cada una de las variables de la estructura, lo mismo para leer cada usuario, es un fread por cada variable. Es medio engorroso por lo que estuve viendo y funciones como la de contar la cantidad de usuarios dejan de funcionar. Si es lo suficientemente engorroso, voy a dejar estos arrays como fijos o separo al menos la bilbioteca de todos los usuarios en otro archivo. Ya estamos usando arrays dinámicos para trabajar con los usuarios en el main así que seguiríamos cumpliendo el requisito del TP.
-    int validosCarrito;
-    Juego *carritoDeJuegos;
-
-    Pila historialDeJuego; //ultimos juegos comprados del usuario, adios a la idea de usuarios activos //El problemón aplica para pila también, pero hice un mini-arreglo y debería estar bien
 
 } Usuario;
 
@@ -26,7 +27,9 @@ typedef struct
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos en juegos.h/c)
 
 // Registro / creación / Alta
-Usuario registrarUsuario(int *cantUsuariosEnElPrograma);
+Usuario registrarUsuario();
+Usuario crearUsuarioAdmin();
+void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) ;
 int cargarArrDeUsuariosDinamico (Usuario **arr);
 
 //Funciones con Pilas
@@ -34,20 +37,18 @@ int contarDimPila(Pila pila);
 void reajustarDimPilaTope(Pila *pila, int datoAIngresar);
 
 // Funciones con Archivos
-int contarCantDeUsuariosEnArchi(FILE *archi);
-int pasarUsuariosAArr(FILE *archi, Usuario **arr);
-int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr);
-Usuario leerUsuarioCompletoDeArchi(FILE *archi);
+int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr);
 void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema);
-void pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr, int *usuariosRegistradosEnSistema);
+int creacionArchivoDeUsuarios (Usuario **arr); //si no existe el archivo usuario, lo crea y añade al primer usuario admin
+Usuario leerUsuarioCompletoDeArchi(FILE *archi); //NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo
 // Pasar arreglo dinamico de usuarios a Archivo
+void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int validosUsuarios);
 void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario);
-void guardarArrUsuariosEnArchivo(char nombreArchivo[] ,Usuario arr[], int validosUsuarios);
-
 
 // Funciones para el usuario Admin
 int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]);
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos);
+///hay que hacer un ordenamiento de usuarios con selección e inserción (parte de consigna). Tal vez crear una copia del array usuarios y que el admin pueda ordenar y mostrar ese array para ver a todos los usuarios
 
 // Borrado Logico / Baja
 void eliminarUsuario(Usuario *usuarioAEliminar);

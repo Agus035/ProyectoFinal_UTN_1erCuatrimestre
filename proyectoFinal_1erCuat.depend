@@ -157,3 +157,36 @@
 	"Usuario.h"
 	"pila.h"
 
+1781996786 source:c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\pila.c
+	"pila.h"
+
+1782005368 c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1782006952 source:c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.c
+	"juego.h"
+
+1781996786 c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\juego.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<malloc.h>
+	"pila.h"
+
+1782007368 source:c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\main.c
+	"Usuario.h"
+	"General.h"
+
+1782007368 c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\usuario.h
+	"Juego.h"
+	<errno.h>
+
+1781998938 c:\users\sebastian\documents\github\proyectofinal_interfazjuegosc_utn_1ercuatrimestre\general.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Juego.h"
+	"Usuario.h"
+	"pila.h"
+

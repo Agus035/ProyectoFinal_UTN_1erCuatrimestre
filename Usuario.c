@@ -2,11 +2,9 @@
 
 /// Registro =======================================================================================
 
-Usuario registrarUsuario(int *cantUsuariosEnElPrograma)
+Usuario registrarUsuario() //los validos de esto se establecen en función madre
 {
     Usuario usuarioCargado;
-
-    (*cantUsuariosEnElPrograma) += 1;
 
     char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
 
@@ -14,7 +12,6 @@ Usuario registrarUsuario(int *cantUsuariosEnElPrograma)
 
     do
     {
-
         printf("Ingrese el nombre de usuario: ");
         fflush(stdin);
         scanf("%50[^\n]", inputTeclado);
@@ -41,7 +38,8 @@ Usuario registrarUsuario(int *cantUsuariosEnElPrograma)
     usuarioCargado.billetera         = 0;
     usuarioCargado.bibliotecaUsuario = NULL;
     usuarioCargado.validosBiblioteca = 0;
-    usuarioCargado.carritoDeJuegos   = NULL;
+
+    //saqué el igualar el array de carrito a null porque ahora es array fijo
     usuarioCargado.validosCarrito    = 0;
 
     usuarioCargado.eliminado = 0;
@@ -51,6 +49,23 @@ Usuario registrarUsuario(int *cantUsuariosEnElPrograma)
     printf("\n=============FIN DE LA CREACION DEL USUARIO================\n");
 
     return usuarioCargado;
+}
+
+Usuario crearUsuarioAdmin()
+{
+    Usuario admin;
+
+    strcpy(admin.userName, "admin");
+    strcpy(admin.password, "admin");
+    admin.eliminado = 0;
+    admin.billetera = 1000;
+    admin.validosCarrito = 0; //recordar que no se inicializa el array de 10 fijo del carrito
+    inicpila(&admin.historialDeJuego);
+
+    admin.bibliotecaUsuario = NULL;
+    admin.validosBiblioteca = 0;
+
+    return admin;
 }
 
 //int cargarArrDeUsuariosDinamico (Usuario **arr, int *cantUsuariosEnElPrograma) //Carga de arreglo din, no es lo mismo que la funcion de pasar de archi a arreglo
@@ -106,7 +121,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 
     if (aux != NULL)
     {
-        aux[((*cantUsuarios)-1)] = registrarUsuario(cantUsuarios); //agrego al usuario en la posición que acabo de crear
+        aux[((*cantUsuarios)-1)] = registrarUsuario(); //agrego al usuario en la posición que acabo de crear
         printf("\nUsuario creado exitosamente.\n");
         (*arr) = aux;
     }else
@@ -118,6 +133,7 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 
 /// Pasar usuarios de archivo a ARREGLO =======================================================
 
+///Borrar maybe
 //int pasarUsuariosDeArchivoAArr (char nombreArchivo[], Usuario **arr, int validosUsuarios)
 //{
 //    FILE *archi = fopen(nombreArchivo, "rb");
@@ -166,22 +182,34 @@ void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) //recibe el array, au
 //    return cant;
 //}
 
-void pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr, int *usuariosRegistradosEnSistema) //es necesario traer usuarios como parametro? a menos que esta no
-                                                                                                        //sea variable global
-///Si te referis a la variable "*usuariosRegistradosEnSistema", si, es necesario porque es lo que nos sirve de validos para cuando el proyecto se ejecuta
+int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr)
+///Decidí que esta función devuelva los validos. Solo quiero que existan los validos cuando se quiere registrar/logear, no siempre que se inicia el programa. por quisquilloso nomás
 {
     FILE *archi = fopen(nombreArchivo, "r+b");
 
+    int validos = -1; //solo se queda así si no se abre el archivo (si devuelve esto se termina el programa)
+
     if(archi)
     {
-        fread(usuariosRegistradosEnSistema, sizeof(int), 1, archi);
+        fread(&validos, sizeof(int), 1, archi);
 
-        pasarUsuarioArchiAArrDinArchi(archi, arr, (*usuariosRegistradosEnSistema));
+        pasarUsuarioArchiAArrDinArchi(archi, arr, validos);
 
         fclose(archi);
     }
     else
-        printf("\nERROR, ARCHIVO %s NO EXISTE. . .\n", nombreArchivo);
+    {
+        if (errno == ENOENT) //"ENOENT" significa que el error es que el archivo NO EXISTE
+        {
+            validos = 0;
+        }else
+        {
+            printf("\n\nHa ocurrido un error en la apertura del archivo de usuarios. Reinice el programa e intente nuevamente.\n");
+        }
+
+    }
+
+        return validos; //tambien decidí que devuelva los validos, porque aparecen al principio del archivo
 }
 
 void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema)
@@ -197,12 +225,39 @@ void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegi
 
     while(i < usuariosRegistradosEnSistema)
     {
-        (*arr)[i] = leerUsuarioCompletoDeArchi(archi);
+        (*arr)[i] = leerUsuarioCompletoDeArchi(archi); //pq me muestra a todos los usuarios?
         i++;
     }
 }
 
-Usuario leerUsuarioCompletoDeArchi(FILE *archi)
+int creacionArchivoDeUsuarios (Usuario **arr) //si no existe el archivo usuario, lo crea y añade al primer usuario admin
+{
+    FILE *archi = fopen(LISTAUSUARIOS, "wb");
+
+    int flag = -1; //se devuelve en "validos" en el main. Es -1 si hay error en fopen
+
+    if (archi)
+    {
+        flag = 1;
+
+        fwrite(&flag, sizeof(int), 1, archi); //escribo "1" al principio del archivo, que serían los validos
+
+        (*arr) = malloc(sizeof(Usuario)*1); //hago espacio para 1 usuario en el array dinámico
+
+        (*arr)[0] = crearUsuarioAdmin(); //coloco al usuario admin en el array
+
+        fwrite(&(*arr)[0], sizeof(Usuario), 1, archi); //y después agrego admin al archivo
+
+        fclose(archi);
+    }else
+    {
+        printf("\nHa ocurrido un error en la creacion del archivo usuarios. Reinice el programa e intente nuevamente.\n");
+    }
+
+    return flag;
+}
+
+Usuario leerUsuarioCompletoDeArchi(FILE *archi) //NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo
 {
     Usuario usuarioLeido;
 
@@ -222,7 +277,7 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi)
     fread(usuarioLeido.bibliotecaUsuario, sizeof(Juego), usuarioLeido.validosBiblioteca, archi);
     ///ACA cargo la biblioteca de ese usuario en especifico a ese usuario.
 
-    usuarioLeido.carritoDeJuegos = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosCarrito);
+    usuarioLeido.carritoDeJuegos = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosCarrito); //ahora que carrito de juegos no es un array dinámico hay que modificar esto. Me está agarrando sueño así que probablemente mi cerebro esté fallando, pero quiero revisar si es necesario modificar la función que carga los array en el archivo. (no me acuerdo si me fijé)
     if(!usuarioLeido.carritoDeJuegos)
     {
         strcpy(usuarioLeido.userName, "ERROR. . .");
@@ -238,76 +293,19 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi)
     ///devuelvo ese usuario con todos sus parametros cargados
 }
 
-                                //esto es a lo que me refería con el conteo de usuarios
-int contarCantUsuariosArchi () //cuantos existen en el archivo
-///Para que serviria esta funcion? Digo pq ya tendriamos el entero al principio del archivo para usar como contador y validos en todo el proyecto
-{
-    FILE *archi = fopen ("example.bin", "rb");
-
-    int contador = 0;
-
-    Usuario aux;
-
-    if (archi)
-    {
-        while (fread(&aux.userName, sizeof(char), LIMITE, archi) > 0) // creo que esta mal esto, le pasas la dir de memoria de aux.username, pero ya es una dir de memoria (un arreglo)
-//ademas, no lo se, pero creo que contarias caracteres basura. Por ejemplo si tiene un solo char la string, le sobran 48 espacios con basura, y ahi le estas poniendo de cantidad 50 veces
-        {
-            contador++;
-            fread(&aux.password, sizeof(char), LIMITE, archi);
-            fread(&aux.eliminado, sizeof(int), 1, archi); //da igual si está eliminado, es para hacer el array con el que voy a trabajar
-            fread(&aux.billetera, sizeof(float), 1, archi);
-
-            fread(&aux.validosBiblioteca, sizeof(int), 1, archi); //leo cuántos validos de biblioteca hay
-            aux.bibliotecaUsuario = malloc(sizeof(Juego)*aux.validosBiblioteca); // los uso para ahí crear el array
-            fread(aux.bibliotecaUsuario, sizeof(Juego), aux.validosBiblioteca, archi); //y lo leo con la cantidad de validos, supuestamente así sí funciona
-
-            fread(&aux.validosCarrito, sizeof(int), 1, archi); // hago lo mismo en cuanto
-            aux.carritoDeJuegos = malloc (sizeof(Juego)*aux.validosCarrito);
-            fread(aux.carritoDeJuegos, sizeof(Juego), aux.validosCarrito, archi);
-
-            fread(&aux.historialDeJuego, sizeof(Pila), 1, archi);
-
-            free (aux.bibliotecaUsuario);
-            free(aux.carritoDeJuegos);
-        }
-        fclose(archi);
-        ///El tema de contar es muy engorroso, son muchos fread y muchos datos separados en un mismo archivo
-    }else
-    {
-        printf("\nHa ocurrido un problema en la apertura del archivo.\n");
-    }
-
-    return contador;
-}
-
-//falta una función para pasar el array de usuarios devuelta al archivo
-//void pasarUsuariosDeArrAArchivo (Usuario arr[] , int validos) //En teoría está "hecho", pero no se guarda la biblioteca ni el carrito.
-//{
-//    FILE *archi = fopen(LISTAUSUARIOS, "w+b"); //w+b porque siempre trabajo con el listado completo de usuarios en un array, a+b agregaría solo al final
-//
-//    if (archi != NULL)
-//    {
-//        fwrite(arr, sizeof(Usuario), validos, archi);
-//        fclose(archi);
-//    }else
-//    {
-//        printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
-//    }
-//}
-
 void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int validosUsuarios)
 {
     FILE *archi = fopen(nombreArchivo, "wb");
 
     if(archi)
     {
-        fwrite(&validosUsuarios, sizeof(int), 1, archi);
+        fwrite(&validosUsuarios, sizeof(int), 1, archi); //se guardan los validos al principio del archivo
         for(int i = 0 ; i < validosUsuarios ; i++)
         {
-            guardarUnUsuarioEnArchi(archi, arr[i]); //lito :3
+            guardarUnUsuarioEnArchi(archi, arr[i]);
         }
         fclose(archi);
+        /// en archivo quedaria: int (validos) | usuarioEnespecifico (usuario) |juego1 (juego) | juego2 (juego) | despues seguiria con otro usuario y sus juegos y asi
     }
     else
         printf("\nHubo un error en el guardado de los usuarios. Cualquier cambio realizado no se ha guardado.\n");
@@ -315,18 +313,10 @@ void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario arr[], int valido
 
 void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario)
 {
-    fwrite(&usuario, sizeof(Usuario), 1, archi); //osea ahorra tiempo de escribir código pero quedan aisladas los 2 de abajo
-    //pero creo que el principal problema que se me viene es cómo cargar los arrays con las bibliotecas y carritos
+    fwrite(&usuario, sizeof(Usuario), 1, archi);
 
-    /// A que te referis con cargar los arreglos de las bibliotecas y carrito?
     fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi);
 
-    fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi);
-
-    ///fijate que NO quedan aisladas en el archivo porque las escribo, si tengo 2 juegos, los validos de la biblioteca seran 2.
-    /// escribo esos dos juegos en el archivo
-    /// quedaria: int (validos) | usuarioEnespecifico (usuario) |juego1 (juego) | juego2 (juego) | despues seguiria con otro usuario y sus juegos y asi
-    ///Por eso es que no guardo todo de una
 }
 
 //
@@ -370,6 +360,7 @@ void eliminarUsuario(Usuario *usuarioAEliminar)
 
 void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos)
 { //Nota: esto no se usa tampoco? //No es que no se usa, lo pedia la consigna, lo metemos por ahi y fue
+    //cuál consigna lo pide?
     int pos = buscarUsuarioMayorCantDeJuegosComprados(arr, validos);
 
     if (pos > -1)

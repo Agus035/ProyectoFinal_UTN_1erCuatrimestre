@@ -10,7 +10,7 @@ void guardarJuegosEnArchivo(char nombreArchivo[])
         cargarJuegoATienda(archi);
         fclose(archi);
     }
-    else //lo tuve que cambiar de cómo estaba porque no compilaba no se por q
+    else
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
 }
 

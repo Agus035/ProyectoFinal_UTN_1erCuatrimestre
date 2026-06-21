@@ -4,8 +4,9 @@
 char matAdmin[2][LIMITE] = {"admin", "admin"}; //un usuario y una contraseña en la mat del admin
 //matAdmin[0] = username
 //matAdmin[1] = password
+///si después podés editar la función que crea al admin usando esta matriz sería feliz (si no lo haces dsps lo hago :'^) )
 
-int cantUsuariosEnElPrograma = 0;
+///RECORDATORIO: hay que explicar lo que hace cada una de las funciones en comentarios, según lo que dice la consigna.
 
 ///Main
 int main()
