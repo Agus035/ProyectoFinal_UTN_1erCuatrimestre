@@ -75,7 +75,7 @@ void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
 float sumarPrecioJuegos (Juego arr[], int validos, int i);
 
 // Carrito / Modificacion
-float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar);
+float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoAComprar); // devuelve lo que se debe de debitar al usuario
 
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
@@ -83,5 +83,9 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
 // Quitar de biblioteca
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar);
 void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego); //Y reembolsa el dinero al usuario
+
+// Consulta?
+int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char password[]);
+
 
 #endif // USUARIO_H_INCLUDED

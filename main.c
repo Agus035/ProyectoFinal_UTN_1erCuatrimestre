@@ -14,7 +14,24 @@ int main()
 {
 
 
-    Usuario *arr = NULL; //arreglo que contiene a todos los usuarios
+//    Usuario *arr = NULL; //arreglo que contiene a todos los usuarios
+
+    ///Temporal para probar carrito
+
+    Juego test = cargarNuevoJuego();
+//    Juego test2 = cargarNuevoJuego();
+
+    Usuario *arrUsuarios = malloc(sizeof(Usuario)*1); //creo un array de 1 usuario
+
+    Usuario admin = crearUsuarioAdmin();
+
+    arrUsuarios[0] = admin;
+
+    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test);
+//    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test2);
+
+    mostrarDatosUsuario(arrUsuarios[0]);
+    ///Temporal
 
     //Recordatorio de crear admin y al menos 10 juegos
     //Que admin sea el primer usuario

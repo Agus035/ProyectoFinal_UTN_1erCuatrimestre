@@ -39,9 +39,8 @@ Usuario registrarUsuario() //los validos de esto se establecen en función madre
     usuarioCargado.bibliotecaUsuario = NULL;
     usuarioCargado.validosBiblioteca = 0;
 
-    usuarioCargado.carritoDeJuegos
-    //saqué el igualar el array de carrito a null porque ahora es array fijo
-    usuarioCargado.validosCarrito    = 0;
+    usuarioCargado.carritoDeJuegos = NULL;
+    usuarioCargado.validosCarrito = 0;
 
     usuarioCargado.eliminado = 0;
 
@@ -60,7 +59,10 @@ Usuario crearUsuarioAdmin()
     strcpy(admin.password, "admin");
     admin.eliminado = 0;
     admin.billetera = 1000;
-    admin.validosCarrito = 0; //recordar que no se inicializa el array de 10 fijo del carrito
+
+    admin.carritoDeJuegos = NULL;
+    admin.validosCarrito = 0;
+
     inicpila(&admin.historialDeJuego);
 
     admin.bibliotecaUsuario = NULL;
@@ -236,7 +238,7 @@ int creacionArchivoDeUsuarios (Usuario **arr) //si no existe el archivo usuario,
 
     int validos = -1; //se devuelve como "validos" en el main. Es -1 si hay error en fopen
 
-    Usuario aux;
+    Usuario *aux;
 
     if (archi)
     {
@@ -429,8 +431,8 @@ void mostrarDatosUsuario(Usuario usuarioCargado)
     printf("Nombre de usuario: %s\n", usuarioCargado.userName);
     //printf("Password: %s\n", usuarioCargado.password);
     printf("Dinero en la cuenta: $%.2f\n", usuarioCargado.billetera);
-    printf("Juegos obtenidos: %i\n",usuarioCargado.validosBiblioteca);
-    printf("Juegos en Carrito: %i\n",usuarioCargado.validosCarrito);
+    printf("Cantidad de juegos en libreria: %i\n",usuarioCargado.validosBiblioteca);
+    printf("Cantidad de juegos en carrito: %i\n",usuarioCargado.validosCarrito);
 
     printf("\n===============FIN DE LA MUESTRA================\n");
 }
@@ -502,22 +504,23 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
 
 /// Carrito =======================================================================================
 
-float cargarACarritoUsuario(Juego **arr, int *validosCarrito, Juego juegoAComprar) // devuelve lo que se debe de debitar al usuario
+
+float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoAComprar) // devuelve lo que se debe de debitar al usuario
 {
     float sumaJuegosEnCarrito = 0;
 
     (*validosCarrito) += 1;
 
-    (*arr) = (Juego *) realloc((*arr), sizeof(Juego) * (*validosCarrito));
-    if (!(*arr))
+    (*carrito) = (Juego *) realloc((*carrito), sizeof(Juego) * (*validosCarrito)); //puede convenga crear un aux para esto en vez de igualarlo directamente, si devuelve null realloc se pierde todo
+    if (!(*carrito))
     {
         printf("\nERROR EN REALLOC. . .\n");
         (*validosCarrito) -= 1;
         return -1;
     }
-    (*arr)[(*validosCarrito) - 1] = juegoAComprar;
+    (*carrito)[(*validosCarrito) - 1] = juegoAComprar;
 
-    sumaJuegosEnCarrito = sumarPrecioJuegos((*arr), (*validosCarrito), 0); //le paso un puntero simple (un arreglo)
+    sumaJuegosEnCarrito = sumarPrecioJuegos((*carrito), (*validosCarrito), 0); //le paso un puntero simple (un arreglo)
 
     return sumaJuegosEnCarrito;
 
@@ -531,7 +534,7 @@ float sumarPrecioJuegos (Juego arr[], int validos, int i) // devuelve suma del p
     if(i == validos - 1)
         sumaTotal = arr[i].precioJuego;
     else
-        sumaTotal = arr[i].precioJuego + sumarPrecioJuegos(arr, validos, i + 1);
+        sumaTotal = arr[i].precioJuego + sumarPrecioJuegos(arr, validos, i + 1); //wow q recursivo
 
     return sumaTotal;
 }
@@ -620,14 +623,14 @@ int contarDimPila(Pila pila)
 
 int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char password[])
 {
-    int flag = 0;
+    int flag = -1;
 
     for(int i = 0 ; i < validos && flag == 0; i++)
     {
-        if(strcmp(arr[i].userName, username) == 0 && strcmp(arr[i].password, password) == 0)
-            flag = 1;
+        if(strcmp(arr[i].userName, username) == -1 && strcmp(arr[i].password, password) == -1)
+            flag = i;
     }
 
-    return flag; //1, contraseña y usuario ingresado valido
-                //0, contraseña o usuario invalido, no seamos especificos ya fue
+    return flag; //Devuelve la pos de ese usuario para luego hacer usuario de la sesion iniciada = arr[esa posicion que devuelve
+                //devuelve -1 si la contraseña o usuario son incorrectos
 }

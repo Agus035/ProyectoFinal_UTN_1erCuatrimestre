@@ -33,16 +33,16 @@ void cargarJuegoATienda(FILE *archi)
     }
 }
 
-Juego cargarNuevoJuego() //le agregué archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
+Juego cargarNuevoJuego() //le (había) agregado archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
 {
     Juego nuevoJuego;
     printf("\n=============CREACION DEL JUEGO NUEVO================\n");
     printf("Ingrese el nombre del juego: ");
     fflush(stdin);
-    scanf("%49[^\n]", nuevoJuego.nombreJuego);
+    scanf(" %49[^\n]", nuevoJuego.nombreJuego);
     printf("\nIngrese la categoria del juego: ");
     fflush(stdin);
-    scanf("%49[^\n]", nuevoJuego.categoriaJuego);
+    scanf(" %49[^\n]", nuevoJuego.categoriaJuego);
     printf("\nIngrese el precio del juego: ");
     while(scanf("%f", &nuevoJuego.precioJuego) != 1)
     {
@@ -173,7 +173,7 @@ void eliminarJuegoDeTienda (char nombreArchivo[]) //BAJA
 
         printf("\nIngrese el nombre del juego que quiere eliminar: ");
         fflush(stdin);
-        scanf("%49[^\n]", juegoAEliminar);
+        scanf(" %49[^\n]", juegoAEliminar);
 
         flag = verificarExistenciaJuego(archi, juegoAEliminar);
 
@@ -218,7 +218,7 @@ void modificarJuego (char nombreArchivo[])
 
         printf("\nCual es el nombre del juego que desea modificar? ");
         fflush(stdin);
-        scanf("%49[^\n]", nombreJuegoBuscado);
+        scanf(" %49[^\n]", nombreJuegoBuscado);
 
         flag = verificarExistenciaJuego(archi, nombreJuegoBuscado);
 
@@ -270,17 +270,17 @@ int menuSelectorModificarJuego (Juego *aux)
         case 1:
             printf("\nIngrese el nuevo nombre del juego: ");
             fflush(stdin);
-            scanf("%49[^\n]", (*aux).nombreJuego);
+            scanf(" %49[^\n]", (*aux).nombreJuego);
             break;
         case 2:
             printf("\nIngrese la nueva categoria del juego: ");
             fflush(stdin);
-            scanf("%49[^\n]", (*aux).categoriaJuego);
+            scanf(" %49[^\n]", (*aux).categoriaJuego);
             break;
         case 3:
             printf("\nIngrese el nuevo precio del juego: ");
             fflush(stdin);
-            scanf("%49[^\n]", (*aux).precioJuego);
+            scanf(" %49[^\n]", (*aux).precioJuego);
             break;
         case 4:
             printf("\nSaliendo del menu...\n\n");
