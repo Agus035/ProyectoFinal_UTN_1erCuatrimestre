@@ -25,12 +25,6 @@ void cargarJuegoATienda(FILE *archi);
 Juego cargarNuevoJuego();
 int determinarIDNuevoJuego();
 
-// Consulta / lectura
-void leerJuegosDeTienda(char nombreArchivo[]);
-void leerJuegosArchivo(FILE *archi);
-void leerUnJuego(Juego unJuego);
-Juego buscarJuegoPorId (int idBuscada); //hay que verificar que el Juego que devuelve no tenga id -1 (significa error/que no se encontró)
-
 // Baja / eliminar
 void eliminarJuegoDeTienda (char nombreArchivo[]);
 void marcarJuegoActualComoEliminado (FILE *archi);
@@ -38,6 +32,12 @@ void marcarJuegoActualComoEliminado (FILE *archi);
 // Modificar
 void modificarJuego (char nombreArchivo[]); //puede modificarse todo menos la id (y tampoco puede eliminarse el juego porque hay una función aparte para eso)
 int menuSelectorModificarJuego (Juego *aux);
+
+// Consulta / lectura
+void leerJuegosDeTienda(char nombreArchivo[]);
+void leerJuegosArchivo(FILE *archi);
+void leerUnJuego(Juego unJuego);
+Juego buscarJuegoPorId (int idBuscada); //hay que verificar que el Juego que devuelve no tenga id -1 (significa error/que no se encontró)
 
 // Filtrado por categoría
 int verificarExistenciaJuego (FILE *archi, char nombreBuscado[]); //indica por flag 1 si un juego existe por nombre (lo pongo en esta sección de filtrado porque si no no sé donde)

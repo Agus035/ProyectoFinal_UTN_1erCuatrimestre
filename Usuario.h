@@ -31,10 +31,21 @@ typedef struct
 ///(hoy/mañana te ayudo pq algunos creo sería literal copiar y pegar (con mini modificaciones) las funciones que ya tenemos en juegos.h/c)
 
 // Registro / creación / Alta
-Usuario registrarUsuario();
-Usuario crearUsuarioAdmin();
-void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios) ;
+///A HACER:
+///Requisito fundamental no guardar usuarios repetidos (según consigna)
+///Ver si puedo re-utilizar y modificar la que tengo en juego.c para esto
+Usuario registrarUsuario(); //crea un usuario
+Usuario crearUsuarioAdmin(); //crea un usuario "admin"
+void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios); //recibe el array dinámico de usuarios, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro.
 int cargarArrDeUsuariosDinamico (Usuario **arr);
+///^ esta función ya no existe
+///[A HACER] Hasta te diría que eliminemos todos los headers y los pongamos de nuevo, hay muchas funciónes que fueron borradas o modificadas
+
+
+// Baja / eliminar
+void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos); //verifica si existe el usuario que se quiere eliminar. Llama a la función de abajo si lo encuentra, caso contrario no hace nada.
+///A HACER: lo que dice el comentario dentro de la función de debajo
+void eliminarUsuario(Usuario *usuarioAEliminar); //elimina de manera lógica al usuario que se recibe (cambia su flag de eliminado a 1)
 
 //Funciones con Pilas
 int contarDimPila(Pila pila);
@@ -52,10 +63,8 @@ void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario);
 // Funciones para el usuario Admin
 int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]);
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos);
+///[A HACER]:
 ///hay que hacer un ordenamiento de usuarios con selección e inserción (parte de consigna). Tal vez crear una copia del array usuarios y que el admin pueda ordenar y mostrar ese array para ver a todos los usuarios
-
-// Borrado Logico / Baja
-void eliminarUsuario(Usuario *usuarioAEliminar);
 
 // Mostrar Datos / Listado
 void mostrarDatosUsuario(Usuario usuarioCargado);
@@ -71,6 +80,8 @@ void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 //Nota: no voy a usar estos (a menos que objetes)
 //pq sino como admin tendría 3 opciones de consulta
 ///Igual esto es lo que pedia la consigna de buscar una struct por un campo en especifico de ella
+///^ Revisé la consigna, se refiere a filtrar por eleccion (buscar por parametro X usuario por ejemplo)
+///[A HACER] -> un filtro de usuarios (busqueda de usuarios que tengan mas de X juego?). Creo que se puede hacer un copy paste del que está en juegos
 
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);

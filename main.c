@@ -17,47 +17,32 @@ int main()
     Usuario *arrUsuarios = NULL; //futuro array de usuarios
     int validos = 0; //futuro validos de usuarios
 
+    printf("Bienvenido a STOM! El mejor programa para comprar juegos.\n\n\n");
+
     int posicionEnArray = menuInicio(&arrUsuarios, &validos); //leer lo que devuelve en general.c
 
-
     if (posicionEnArray == -3 || posicionEnArray == -2) //se eligió cerrar el programa o se registró un usuario
-    {
+    {//Hay diferencia por un printf que ocurre dentro de menuInicio
         return 0; //se cierra el programa.
     }else if (posicionEnArray == -1) //esto ocurre si en algún punto hubo error de fopen, realloc o malloc
     {
-        printf("\nHa ocurrido un error crítico en alguna parte del programa. Se ha finalizado el programa.\n");
+        printf("\nHa ocurrido un error critico en alguna parte del programa. Se ha finalizado el programa.\n");
         return 0;
     }
 
+    //Y ahora que tengo la posición del usuario puedo comenzar a modificarlo
 
-//    Usuario *arr = NULL; //arreglo que contiene a todos los usuarios
+    //función de menu de usuario
+    //dentro hay un if que habilita una última opción de funciones de admin
 
-    ///Temporal para probar carrito
-//
-//    Juego test = cargarNuevoJuego();
-//    Juego test2 = cargarNuevoJuego();
-//
-//    Usuario *arrUsuarios = malloc(sizeof(Usuario)*2); //creo un array de 1 usuario
-//
-//    Usuario admin = crearUsuarioAdmin();
-//
-//    arrUsuarios[0] = admin;
-//
-//    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test);
-//    cargarACarritoUsuario(&arrUsuarios[0].carritoDeJuegos, &arrUsuarios[0].validosCarrito, test2);
-//
-//    mostrarDatosUsuario(arrUsuarios[0]);
-//
-//    mostrarCarritoDeUsuario(arrUsuarios[0]);
+    //^ y aunque no parezca eso sería todo el main
+    //a menos que se me ocurra hacer algun printf de error
 
+    //-----------------------------------------------------------------
 
-    ///FIN Temporal
-
-    //Recordatorio de crear admin y al menos 10 juegos
-    //Que admin sea el primer usuario
+    //Recordatorio de crear al menos 10 juegos
     //Recordatorio que usuarios es todo trabajado con array
 
-    printf("Bienvenido a STOM! El mejor programa para comprar juegos.\n\n\n");
 
     //Para ordernarme pongo lo que necesito
     //0) Intro de STOM (msg de bienvenida)

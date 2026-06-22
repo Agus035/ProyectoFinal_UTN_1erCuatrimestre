@@ -136,6 +136,135 @@ int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario
 
 
 
+///Funciones de Usuario ya logeado
+
+    //2 a) Opciones disponibles (usuario comun):
+    //2 a) Ver tienda (juegos) -> opción de búsqueda, filtrado y ordenamientos,
+    // ver carrito (+ lógica de compra, incluye pila)
+    // ver biblioteca
+    // deshacer última compra y otra opción de devolver cualquier otro juego (solo disponible si el usuario tiene al menos 1 juego),
+    // consultar saldo, cargar saldo
+    // eliminar usuario -> he decidido que solo el admin puede eliminar usuarios. Digo para no escribir de más cosas que no se piden.
+
+    //Dentro del menú de arriba, pongo un if mostrando más opciones si el usuario es admin, y pasa lo de abajo
+
+
+void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioActual) //Contiene el menu principal. Llama funciones y a otros menús de ser necesario.
+{
+    char continuo[3] = "si";
+    int decisionMenu;
+
+    do
+    {
+        printf("\n--MENU PRINCIPAL--\n\n");
+        printf("1. Ver tienda.\n");
+        printf("2. Ver mi carrito.\n");
+        printf("3. Comprar juegos de mi carrito.\n");
+        printf("4. Deshacer ultima compra.\n");
+        printf("5. Consultar saldo.\n");
+        printf("6. Cargar saldo.\n");
+        printf("7. Salir del programa.\n");
+        printf("8. OPCIONES ADMIN.\n");
+        printf("-------\n\n");
+
+        printf("Eliga la opcion a la que desea ingresar: ");
+
+        while (scanf(" %i", &decisionMenu) != 1)
+        {
+            printf("\nPor favor ingrese el numero de una de las opciones.\n\n");
+            fflush(stdin);
+            printf("Eliga la opcion a la que desea ingresar: ");
+        }
+
+        switch (decisionMenu)
+        {
+            case 1:
+                menuTienda();
+                break;
+            case 2:
+                mostrarCarritoDeUsuario((*arrUsuarios)[posUsuarioActual]);
+                break;
+            case 3:
+
+
+                break;
+            case 4:
+                printf("\nSueldo actual: $%f", (*arrUsuarios)[posUsuarioActual].billetera);
+                printf("\n");
+                break;
+            case 5:
+                cargarDineroAlUsuario()
+
+
+
+
+        }
+
+
+    }while(strcmpi(continuo,"si") == 0 && decisionMenu != 7);
+
+    //switches aca
+}
+
+
+void logicaDeCompraCarrito ()
+{
+
+}
+
+
+// opción de búsqueda, filtrado y ordenamientos,
+void menuTienda () //como solo muestra datos relacionados a qué hay en la tienda, no recibe datos cargados de usuarios
+{
+    int decision;
+
+    do
+    {
+        printf("\n--Menu de Tienda--\n\n");
+        printf("1. Ver todos los juegos.\n");
+        printf("2. Filtrar juegos por categoria.\n");
+        printf("3. Ver juegos por orden de precio.\n");
+        printf("4. Ver juegos por orden alfabetico.\n");
+        printf("5. Volver al menu principal.\n");
+        printf("----------\n\n");
+
+        printf("Su decision: ");
+
+        while (scanf(" %i", &decision) != 1)
+        {
+            printf("\nPor favor ingrese un numero.\n\n");
+            fflush(stdin);
+            printf("Su decision: ");
+        }
+
+        switch(decision)
+        {
+            case 1:
+                leerJuegosDeTienda(JUEGOSTIENDA);
+                break;
+            case 2:
+                char categoriaIngresada[50];
+                scanf(" %49[^\n]", categoriaIngresada);
+                leerJuegosFiltradosTienda(JUEGOSTIENDA, categoriaIngresada);
+                break;
+            case 3:
+                leerJuegosOrdenadosPrecioTienda(JUEGOSTIENDA);
+                break;
+            case 4:
+                leerJuegosOrdenadosNombreTienda(JUEGOSTIENDA);
+                break;
+            case 5:
+                break;
+            default:
+                printf("\nEsa no es una opcion valida. Intente de nuevo.\n");
+                break;
+        }
+
+    }while (decision != 5); //solamente se sale del menu si efectivamente quiere salirse (opcion 5)
+
+    return;
+}
+
 
 
 
@@ -144,6 +273,11 @@ int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario
 
 
 ///Funciones admin
+
+///[A HACER] <- puse muchas de estas tags por el código para no perderme en lo que falta hacer
+/// necesito que agregues más opciones de switch:
+/// hacé que admin también tenga la opción de añadir y otra de eliminar juegos <- todo eso está ya en funciones por suerte (juego.h), es solo llamarlas dependiendo el switch
+/// y una ultima opción en el switch para volver al menú normal (y dejá esa opción vacía, después le agrego lo que necesito)
 
 void funcionesAdicionalesParaAdmin()
 {
@@ -171,7 +305,10 @@ void funcionesAdicionalesParaAdmin()
     ejecutarFuncionesAdicionalesParaAdmin(decision);
 }
 
-void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos)
+
+
+
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //acá no es necesario traerlo como doble puntero al array de usuarios?
 {
     char nombreDeUsuarioAEliminar[LIMITE];
 

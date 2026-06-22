@@ -6,18 +6,15 @@ Usuario registrarUsuario() //crea y devuelve un solo usuario. los validos de est
 {
     Usuario usuarioCargado;
 
-    int flag = 0;
-
     char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
 
     printf("\n=============CREACION DEL USUARIO================\n");
-
 
     do
     {
         printf("Ingrese el nombre de usuario: ");
         fflush(stdin);
-        scanf("%50[^\n]", inputTeclado);
+        scanf(" %50[^\n]", inputTeclado);
         if(strlen(inputTeclado) >= LIMITE)
             printf("\nVuelva a ingresar un nombre dentro del rango!\n");
 
@@ -31,7 +28,7 @@ Usuario registrarUsuario() //crea y devuelve un solo usuario. los validos de est
 
         printf("\nPASSWORD: ");
         fflush(stdin);
-        scanf("%50[^\n]", inputTeclado);
+        scanf(" %50[^\n]", inputTeclado);
         if(strlen(inputTeclado) >= LIMITE)
             printf("\nVuelva a ingresar un password dentro del rango!\n");
 
@@ -351,17 +348,26 @@ int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]
 }
 /// Eliminar usuarios como Admin =======================================================================================
 
+///A HACER:
+///La consigna pide que al "eliminar" un usuario, se guarden los cambios al archivo
+///O modificamos esta función para que lo haga, o lo hacemos dentro del switch después de llamar a esta función.
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos)
 {
-    int pos = buscarUsuarioPorNombreUsuario(nombreDeUsuarioAEliminar, arr, validos);
-
-    if (pos > -1)
+    if (strcmp(nombreDeUsuarioAEliminar, "admin") != 0) //solo permito eliminar si el nombre ingresado no es admin
     {
-        eliminarUsuario(&arr[pos]);
-        printf("\nUsuario [%s] eliminado.\n", nombreDeUsuarioAEliminar);
+        int pos = buscarUsuarioPorNombreUsuario(nombreDeUsuarioAEliminar, arr, validos);
+
+        if (pos > -1)
+        {
+            eliminarUsuario(&arr[pos]);
+            printf("\nUsuario [%s] eliminado.\n", nombreDeUsuarioAEliminar);
+        }
+        else
+            printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuarioAEliminar);
+    }else
+    {
+        printf("\nNo puede eliminarse el usuario admin.\n");
     }
-    else
-        printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuarioAEliminar);
 }
 
 /// Eliminar =======================================================================================
@@ -513,13 +519,13 @@ float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoACo
     float sumaJuegosEnCarrito = 0;
 
     (*validosCarrito) += 1;
-
-    (*carrito) = (Juego *) realloc((*carrito), sizeof(Juego) * (*validosCarrito)); //puede convenga crear un aux para esto en vez de igualarlo directamente, si devuelve null realloc se pierde todo
+    //acá hay que evitar reemplazar el puntero del carrito pq realloc puede devolver null. Hay que crear un auxiliar e igualarlo por carrito. Dsps si realloc funcionó reemplazamos carrito por aux. No lo hago ahora pq tengo sueño y seguro rompo algo.
+    (*carrito) = (Juego *) realloc((*carrito), sizeof(Juego) * (*validosCarrito));
     if (!(*carrito))
     {
         printf("\nERROR EN REALLOC. . .\n");
         (*validosCarrito) -= 1;
-        return -1;
+        return -1; //con lo de arriba tambien nos ahorramos el borrar completamente los validos del carrito, simplemente decimos no se pudo cobrar nada
     }
     (*carrito)[(*validosCarrito) - 1] = juegoAComprar;
 
@@ -654,13 +660,19 @@ int verificarNombreUsuarioRegistrado(Usuario *arr, int validos, char username[])
 
 
 
-/// Mostrar Juegos del carrito de ese Usuario
+/// Mostrar Juegos del carrito de usuario específico
 void mostrarCarritoDeUsuario (Usuario usuario)
 {
-    for(int i = 0 ; i < usuario.validosCarrito ; i++)
+    if (usuario.validosCarrito == 0)
     {
-        printf("\n=============Juego en Carrito (U: %s)#%i================\n", usuario.userName, i+1);
-        leerUnJuego(usuario.carritoDeJuegos[i]);
-        printf("\n======================================\n");
+        printf("\nNo hay juegos en el carrito.\n\n");
+    }else
+    {
+        for(int i = 0 ; i < usuario.validosCarrito ; i++)
+        {
+            printf("\n=============Juego en Carrito (U: %s)#%i================\n", usuario.userName, i+1);
+            leerUnJuego(usuario.carritoDeJuegos[i]);
+            printf("\n======================================\n");
+        }
     }
 }

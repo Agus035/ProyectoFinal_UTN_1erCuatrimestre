@@ -84,7 +84,7 @@ int determinarIDNuevoJuego()//Se ignora la ID de juegos eliminados (nota debajo)
 
 // ── Consulta / lectura ────────────────────────────────────────────────────────
 
-void leerJuegosDeTienda(char nombreArchivo[])
+void leerJuegosDeTienda(char nombreArchivo[]) //abre el archivo y llama a la función que lee todos los juegos
 {
     FILE *archi = fopen(nombreArchivo, "rb");
     if (archi)
@@ -96,10 +96,10 @@ void leerJuegosDeTienda(char nombreArchivo[])
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE/NO existe. . .\n");
 }
 
-void leerJuegosArchivo(FILE *archi)
+void leerJuegosArchivo(FILE *archi) //lee todos los juegos del archivo que recibe
 {
     Juego aux;
-    int contador = 1;
+    int contador = 1; //contador es solo estético para el printf de abajo
 
     while (fread(&aux, sizeof(Juego), 1, archi) > 0)
     {
