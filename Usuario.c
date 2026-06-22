@@ -576,7 +576,7 @@ float cargarACarritoUsuario(Usuario *usuarioRecibido, Juego juegoAComprar) // de
     }
     else
     {
-        printf("\nYA tienes este juego en la biblioteca. . .\n");
+        printf("\nYA tienes este juego en el carrito. . .\n");
         return -2; // -2 Indica que ya tienes este juego en la biblioteca, -1 indica error
     }
 }
