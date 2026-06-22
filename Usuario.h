@@ -106,6 +106,7 @@ float sumarJuegosEnCarrito(Usuario usuario);
 
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
+int verificarSiJuegoEnBibliotecaUsuario (Usuario *usuarioRecibido, Juego juegoRecibido);
 
 // Quitar de biblioteca
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar);

@@ -607,7 +607,7 @@ void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego j
 }
 
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //verificacion si el usuario tiene o no el juego se hace previamente en el main
-{
+{ ///[HECHO PERO CONSULTA]hice una función de verificación, hasta te diría ponerla al principio de esto. Qué opinas? no sé si hay un potencial error que no veo
     (*usuarioACargar).validosBiblioteca += 1;
 
     Juego *aux = (Juego*) realloc((*usuarioACargar).bibliotecaUsuario, sizeof(Juego) * (*usuarioACargar).validosBiblioteca); // Aumenta en 1 la dim de la biblioteca del usuario para aniadir un juego
@@ -630,6 +630,22 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
 
     else
         apilar(&(*usuarioACargar).historialDeJuego, juegoACargar.id); // Si pila tiene la dim suficiente, se carga la id del juego al tope
+}
+
+int verificarSiJuegoEnBibliotecaUsuario (Usuario *usuarioRecibido, Juego juegoRecibido) //Devuelve 1 si encontró, 0 si no lo hizo
+{
+    int validosBibl = (*usuarioRecibido).validosBiblioteca;
+    Juego *bibl = (*usuarioRecibido).bibliotecaUsuario;
+
+    int flag = 0;
+
+    for(int i = 0 ; i < validosBibl && flag == 0; i++) // Busco hasta llegar al final de biblioteca o encontrar el juego recibido por parametro
+    {
+        if(strcmp(bibl[i].nombreJuego, juegoRecibido.nombreJuego) == 0)
+            flag = 1;
+    }
+
+    return flag;
 }
 
 /// Pilas =======================================================================================
