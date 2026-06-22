@@ -280,7 +280,11 @@ int menuSelectorModificarJuego (Juego *aux)
         case 3:
             printf("\nIngrese el nuevo precio del juego: ");
             fflush(stdin);
-            scanf(" %49[^\n]", (*aux).precioJuego);
+            while(scanf(" %f", (*aux).precioJuego) != 1)
+            {
+                fflush(stdin);
+                printf("\nIngrese el nuevo precio del juego: ");
+            }
             break;
         case 4:
             printf("\nSaliendo del menu...\n\n");

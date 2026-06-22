@@ -16,6 +16,12 @@ int menuOpcionesValidasVerificadas (int decision, Usuario **arrUsuarios, int *va
 int menuOpcionesLoggeoRegistro(int decision, Usuario **arrUsuarios, int *cantUsuarios); //tiene solo las funciones de registro y loggeo (se hace después de muchas verificaciones). Devuelve la posición del usuario a trabajar en array
 int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios); //Se escribe usuario y contraseña. Si son correctos, devuelve la posición en el array que tiene el usuario, y se continúa con eso. Si no
 
+//Funciones admin
+
+void funcionesAdicionalesParaAdmin();
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos);
+
+
 
 
 #endif // GENERAL_H_INCLUDED
