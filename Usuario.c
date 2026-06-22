@@ -59,8 +59,8 @@ Usuario crearUsuarioAdmin()
 {
     Usuario admin;
 
-    strcpy(admin.userName, "admin");
-    strcpy(admin.password, "admin");
+    strcpy(admin.userName, matAdmin[0]);
+    strcpy(admin.password, matAdmin[1]);
     admin.eliminado = 0;
     admin.billetera = 1000;
 
@@ -363,6 +363,8 @@ void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], in
     else
         printf("\nUsuario [%s] NO encontrado.\n", nombreDeUsuarioAEliminar);
 }
+
+
 
 /// Eliminar =======================================================================================
 

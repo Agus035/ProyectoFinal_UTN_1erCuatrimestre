@@ -108,3 +108,61 @@ void sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios)
     verificarUsuarioRegistrado(*arrUsuarios, *cantUsuarios, nombreUsuarioIngresado, contraseniaUsuarioIngresado);
 
 }
+
+///Funciones admin
+
+void funcionesAdicionalesParaAdmin()
+{
+    int decision;
+
+    printf("1. Eliminar Usuario.\n");
+    printf("2. Modificar un Juego.\n");
+    printf("3. Cerrar el programa.\n");
+
+    do
+    {
+        printf("\nSu decision: ");
+        while(scanf("%i", &decision) != 1)
+        {
+            printf("\nPor favor ingrese el numero de una de las opciones.\n");
+            fflush(stdin);
+            printf("\nSu decision: ");
+        }
+
+        if(decision < 1 || decision > 3)
+            printf("\nPor favor ingrese una opcion valida.\n");
+
+    }while(decision < 1 || decision > 3);
+
+    ejecutarFuncionesAdicionalesParaAdmin(decision);
+}
+
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos)
+{
+    char nombreDeUsuarioAEliminar[LIMITE];
+
+    int idJuegoAmodificar;
+
+    switch(decision)
+    {
+        case 1:
+
+            printf("\nIngrese el nombre de usuario a eliminar del sistema: ");
+            fflush(stdin);
+            scanf(" %49[^\n]", nombreDeUsuarioAEliminar);
+            eliminarUsuarioComoAdmin(nombreDeUsuarioAEliminar,usuariosEnSistema, validos);
+
+            break;
+
+        case 2:
+
+            modificarJuego(JUEGOSTIENDA);
+
+            break;
+
+        case 3:
+            printf("\nMuchas gracias por haber utilizado STOM. Vuelva pronto.\n");
+
+            break;
+    }
+}
