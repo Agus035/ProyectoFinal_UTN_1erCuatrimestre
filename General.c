@@ -149,23 +149,34 @@ int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario
     //Dentro del menú de arriba, pongo un if mostrando más opciones si el usuario es admin, y pasa lo de abajo
 
 
+    ///FUNCIONAMIENTO DE CARRITO
+    //por no describirlo antes ahora hay dolor
+    //usuario elige opción de agregar juego a carrito -> busca por nombre. Si existe Y no está ya en el carrito Y el usuario no lo tiene ya en su biblioteca, se agrega (función "cargarACarritoUsuario") y se avisa. Si no existe o no se cumple uno de los otros dos requisitos, se avisa que no se agregó.
+    //usuario vuelve al menú principal (puede decidir agregar otro juego)
+    //ahora al elegir "comprar juegos de mi carrito" -> llamo a "sumarPrecioJuegos" para que me calcule la cant a pagar y se compara con el sueldo actual
+    //si la cant a pagar es mayor al saldo actual, no pasa nada. Si lo es, se llama a "cargarABibliotecaUsuario" -> pero parece necesito la lógica para agregar todos los juegos del carrito, pq la función solo acepta 1
+
+
+
 void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioActual) //Contiene el menu principal. Llama funciones y a otros menús de ser necesario.
 {
     char continuo[3] = "si";
     int decisionMenu;
+    float dineroAPagar = 0;
 
     do
     {
         printf("\n--MENU PRINCIPAL--\n\n");
         printf("1. Ver tienda.\n");
-        printf("2. Agregar juegos a carrito.\n");
+        printf("2. Agregar juegos a carrito.\n"); //falta
         printf("3. Ver mi carrito.\n");
-        printf("4. Comprar juegos de mi carrito.\n");
-        printf("5. Deshacer ultima compra.\n");
-        printf("6. Consultar saldo.\n");
-        printf("7. Cargar saldo.\n");
-        printf("8. Salir del programa.\n");
-        printf("9. OPCIONES ADMIN.\n");
+        printf("4. Vaciar mi carrito.\n"); //falta
+        printf("5. Comprar juegos de mi carrito.\n"); //falta
+        printf("6. Deshacer ultima compra.\n"); //acá necesito tu ayuda, no sé cómo funciona tu función
+        printf("7. Consultar saldo.\n");
+        printf("8. Cargar saldo.\n");
+        printf("9. Salir del programa.\n");
+        printf("10. OPCIONES ADMIN.\n");
         printf("-------\n\n");
 
         printf("Eliga la opcion a la que desea ingresar: ");
@@ -182,20 +193,46 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             case 1:
                 menuTienda();
                 break;
-            case 2:
-                mostrarCarritoDeUsuario((*arrUsuarios)[posUsuarioActual]);
+            case 2: //falta [A HACER]
+                //funcion que agrega juego de tienda a carrito
+                //^ quiero que el usuario busque juego por nombre -> si existe, se pasa el juego como parametro a "cargarACarritoUsuario" -> se continua preguntando con do while si quiere agregarse más al carrito.
+                //antes de agregar el juego al carrito, debo de verificar que no exista ya en el carrito o en la bilbioteca del usuario
+                //puede que tenga que modificar la función de arriba
+                //tengo que hacer una función que vacíe todo el carrito (pq parece lo más fácil de escribir, no quiero hacer otro sistema de quitar un juego específico dsps de verificar exista en carrito)
                 break;
             case 3:
-                //funcion que agrega juego de tienda a carrito (si existe)
+                mostrarCarritoDeUsuario((*arrUsuarios)[posUsuarioActual]);
                 break;
-            case 4:
+            case 4: //falta
+                if((*arrUsuarios)[posUsuarioActual].validosCarrito == 0)
+                {
+                    printf("No hay juegos en su carrito.");
+                }else
+                {
+                    //funcion que vacía carrito
+                }
+                break;
+            case 5:
 
-            case 6:
+
+            case 7:
                 printf("\nSueldo actual: $%f", (*arrUsuarios)[posUsuarioActual].billetera);
                 printf("\n");
                 break;
-            case 5:
-                cargarDineroAlUsuario()
+            case 8:
+                cargarDineroAlUsuario((*arrUsuarios)[posUsuarioActual].billetera);
+                break;
+            case 9:
+                printf("\nMuchas por visitar STOM. Esperamos vuelva pronto.\n\n");
+                break;
+            case 10:
+                if (strcmp((*arrUsuarios)[posUsuarioActual].userName, "admin") == 0)
+                {
+                    funcionesAdicionalesParaAdmin() //llamo a tu función, creo que también hay que darle el array dinámico y validos
+                }else
+                {
+                    printf("\nUsted no es admin. No puede acceder a las funciones admin.\n");
+                }
 
 
 
@@ -203,7 +240,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
         }
 
 
-    }while(strcmpi(continuo,"si") == 0 && decisionMenu != 8);
+    }while(strcmpi(continuo,"si") == 0 && decisionMenu != 9);
 
     //switches aca
 }

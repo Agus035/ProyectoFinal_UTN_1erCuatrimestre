@@ -505,7 +505,7 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
 
     (*usuarioACargarDinero).billetera += saldoACargar;
 
-    printf("\n=============FINALIZACION DE INGRESO================\n");
+    printf("\n=============FINALIZACION DE INGRESO================\n\n");
 }
 
 /// Carrito =======================================================================================
@@ -584,7 +584,7 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
 
     (*usuarioACargar).bibliotecaUsuario[((*usuarioACargar).validosBiblioteca - 1)] = juegoACargar;
 
-    int contarDimHistorial = contarDimPila((*usuarioACargar).historialDeJuego);
+    int contarDimHistorial = contarDimPila((*usuarioACargar).historialDeJuego); //puede tenga mucho sueño pero no entiendo qué está pasando acá
 
     if(contarDimHistorial >= 50)
         reajustarDimPilaTope(&(*usuarioACargar).historialDeJuego, juegoACargar.id);
