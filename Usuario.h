@@ -1,7 +1,8 @@
 #ifndef USUARIO_H_INCLUDED
 #define USUARIO_H_INCLUDED
 #include "Juego.h"
-#include <errno.h> //errno es una variable global. Al ocurrir cualquier error al ejecutar algo, codeblocks guarda el error en esta variable. Me sirve para saber si un fopen falló porque el archivo no existe, o porque hubo cualquier otro problema con el fopen
+#include <errno.h> //errno es una variable global. Al ocurrir cualquier error al ejecutar algo, codeblocks guarda el error en esta variable. Me sirve para saber si un fopen falló
+                 // porque el archivo no existe, o porque hubo cualquier otro problema con el fopen
 
 #define VERIFICARLIMITE 51 //estaba en juegos, te lo traje acá pq en juegos no se usa
 #define LISTAUSUARIOS "usuarios.bin"
@@ -59,7 +60,7 @@ void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegi
 int creacionArchivoDeUsuarios (Usuario **arr); //si no existe el archivo usuario, lo crea y añade al primer usuario admin
 Usuario leerUsuarioCompletoDeArchi(FILE *archi); //NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo
 // Pasar arreglo dinamico de usuarios a Archivo
-void guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario *arr, int validosUsuarios); //Guarda todos los usuarios en archivo. Nota: utiliza "wb", se elimina el archivo ya existente
+int guardarArrUsuariosEnArchivo(char nombreArchivo[], Usuario *arr, int validosUsuarios);
 void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario);
 
 // Funciones para el usuario Admin
@@ -69,7 +70,7 @@ void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], in
 ///hay que hacer un ordenamiento de usuarios con selección e inserción (parte de consigna). Tal vez crear una copia del array usuarios y que el admin pueda ordenar y mostrar ese array para ver a todos los usuarios
 void posNombreMenor (Usuario arr[], int validos, int posInicial);
 void ordSeleccionNombreUsuario(Usuario arr[], int validos);
-void insertarUsuarioMenorCantJuegos(Usuario arr[], int validos, Usuario usuarioAinsertar);
+void insertarUsuarioMenorCantJuegos(Usuario arr[], int pos, Usuario usuarioAinsertar);
 void ordInsercionUsuarioJuegos(Usuario arr[], int validos);
 /// HECHO ^^^^^^^^^^^^
 
@@ -93,7 +94,7 @@ void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);
-void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
+int debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
 float sumarPrecioJuegos (Juego arr[], int validos, int i);
 
 // Carrito / Modificacion
@@ -111,7 +112,6 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego); 
 
 // Consulta?
 int verificarUsuarioRegistrado(Usuario arr[], int validos, char username[], char password[]);
-int verificarNombreUsuarioRegistrado(Usuario *arr, int validos, char username[]);
-
+int verificarNombreUsuarioRegistrado(Usuario arr[] , int validos, char username[]);
 
 #endif // USUARIO_H_INCLUDED
