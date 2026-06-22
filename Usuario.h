@@ -35,7 +35,7 @@ typedef struct
 ///Requisito fundamental no guardar usuarios repetidos (según consigna)
 ///Ver si puedo re-utilizar y modificar la que tengo en juego.c para esto
 
-///HECHO
+///HECHO ^^^^^^^^^^^^^^^^
 
 Usuario registrarUsuario(); //crea un usuario
 Usuario crearUsuarioAdmin(); //crea un usuario "admin"
