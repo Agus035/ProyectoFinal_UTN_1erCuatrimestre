@@ -229,7 +229,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             case 10:
                 if (strcmp((*arrUsuarios)[posUsuarioActual].userName, "admin") == 0)
                 {
-                    funcionesAdicionalesParaAdmin(); //llamo a tu función, creo que también hay que darle el array dinámico y validos
+                    funcionesAdicionalesParaAdmin(*arrUsuarios, validos); //llamo a tu función, creo que también hay que darle el array dinámico y validos
                 }else
                 {
                     printf("\nUsted no es admin. No puede acceder a las funciones admin.\n");
@@ -321,7 +321,7 @@ void menuTienda () //como solo muestra datos relacionados a qué hay en la tiend
 
 ///HECHO ^^^^^^^^^^^^^^^^ FALTA esa ultima opcion
 
-void funcionesAdicionalesParaAdmin()
+void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
 {
     int decision;
 
@@ -348,12 +348,12 @@ void funcionesAdicionalesParaAdmin()
 
     }while(decision < 1 || decision > 6);
 
-    ejecutarFuncionesAdicionalesParaAdmin(decision);
+    ejecutarFuncionesAdicionalesParaAdmin(decision, arrUsuarios, validos);
 }
 
 
 
-void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //acá no es necesario traerlo como doble puntero al array de usuarios?
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //no sé si es necesario doble puntero para el array este -> creo q no porque no hay malloc realloc pero pregunto
 {
     char nombreDeUsuarioAEliminar[LIMITE];
 
@@ -379,7 +379,7 @@ void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSiste
             break;
 
         case 5:
-            // VOLVER AL MENU NORMAL
+            return: //vuelve al menu principal
             break;
 
         case 6:
