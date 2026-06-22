@@ -607,7 +607,7 @@ void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego j
 }
 
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //verificacion si el usuario tiene o no el juego se hace previamente en el main
-{ ///[HECHO PERO CONSULTA]hice una función de verificación, hasta te diría ponerla al principio de esto. Qué opinas? no sé si hay un potencial error que no veo
+{
     (*usuarioACargar).validosBiblioteca += 1;
 
     Juego *aux = (Juego*) realloc((*usuarioACargar).bibliotecaUsuario, sizeof(Juego) * (*usuarioACargar).validosBiblioteca); // Aumenta en 1 la dim de la biblioteca del usuario para aniadir un juego

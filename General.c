@@ -209,24 +209,27 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 juegoAIngresar = buscarJuegoPorNombre(juegoBuscado);
                 flagExistenciaJuegoEnBiblioteca = verificarSiJuegoEnBibliotecaUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar);
 
-                if (juegoAIngresar.id == -1) //si falla la busqueda/fopen
+                if (flagExistenciaJuegoEnBiblioteca == 0)
                 {
-                    printf("\nNo se ha podido agregar el juego al carrito.\n\n");
-                }else
-                {
-                    auxDineroAPagar = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar) //si devuelve -1 -> error realloc
-                    printf("\nEl monto a pagar por el total de juegos en su carrito es $%f. Revise su saldo antes de ir a pagar.\n", dineroAPagar);
-                    if (auxDineroAPagar != -1)
+                    if (juegoAIngresar.id == -1) //si falla la busqueda/fopen
                     {
+                        printf("\nNo se ha podido agregar el juego al carrito.\n\n");
+                    }else
+                    {
+                        auxDineroAPagar = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar) //si devuelve -1 -> error realloc
+                        printf("\nEl monto a pagar por el total de juegos en su carrito es $%f. Revise su saldo antes de ir a pagar.\n", dineroAPagar);
+                        if (auxDineroAPagar != -1)
+                        {
 
-                    }else //hay error
-                    {
-                        printf("\nOcurrio un error al aumentar la cantidad de espacio en el carrito. Intente de nuevo.\n");
+                        }else //hay error
+                        {
+                            printf("\nOcurrio un error al aumentar la cantidad de espacio en el carrito. Intente de nuevo.\n");
+                        }
                     }
 
-
-
-
+                }else
+                {
+                    printf("\nEl juego ya se encuentra en su biblioteca. Eliga otro juego.\n");
                 }
 
 
