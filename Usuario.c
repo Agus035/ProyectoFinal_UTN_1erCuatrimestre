@@ -709,3 +709,14 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) //por temas de como
 //Tambien le debita el total de todos los juegos al usuario
 /// LA VERIFICACION si el usuario tiene el monto sufciente hagamosla en el main en vez de en la funcion
 /// ^^importante
+
+float sumarJuegosEnCarrito(Usuario usuario)
+{
+    float montoTotal = 0;
+
+    for(int i = 0 ; i < usuario.validosCarrito ; i++)
+        montoTotal += usuario.carritoDeJuegos[i].precioJuego;
+
+    return montoTotal;
+}
+/// ^^^ Esta funcion se llama en el main antes de ejecutar "comprarJuegosDelCarrito()"
