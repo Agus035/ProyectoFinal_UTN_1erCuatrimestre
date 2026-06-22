@@ -285,12 +285,15 @@ void funcionesAdicionalesParaAdmin()
 
     printf("1. Eliminar Usuario.\n");
     printf("2. Modificar un Juego.\n");
+    printf("3. Cargar un Juego a la Tienda\n");
+    printf("4. Quitar un Juego de la Tienda\n");
     printf("3. Cerrar el programa.\n");
 
     do
     {
         printf("\nSu decision: ");
-        while(scanf(" %i", &decision) != 1) //no me acuerdo si se agraba espacio antes del % o es solo con strings
+        while(scanf("%i", &decision) != 1) //no me acuerdo si se agraba espacio antes del % o es solo con strings
+                                            //el espacio es el fflush de versiones nuevas, al ser un entero no necesita
         {
             printf("\nPor favor ingrese el numero de una de las opciones.\n");
             fflush(stdin);
