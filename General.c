@@ -279,7 +279,7 @@ void menuTienda () //como solo muestra datos relacionados a qué hay en la tiend
 /// hacé que admin también tenga la opción de añadir y otra de eliminar juegos <- todo eso está ya en funciones por suerte (juego.h), es solo llamarlas dependiendo el switch
 /// y una ultima opción en el switch para volver al menú normal (y dejá esa opción vacía, después le agrego lo que necesito)
 
-///HECHO
+///HECHO ^^^^^^^^^^^^^^^^ FALTA esa ultima opcion
 
 void funcionesAdicionalesParaAdmin()
 {

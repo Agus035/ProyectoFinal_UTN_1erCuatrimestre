@@ -2,23 +2,40 @@
 
 /// Registro =======================================================================================
 
-Usuario registrarUsuario() //crea y devuelve un solo usuario. los validos de esto se establecen en función madre
+Usuario registrarUsuario(Usuario arr[], int validos) //crea y devuelve un solo usuario. los validos de esto se establecen en función madre
 {
     Usuario usuarioCargado;
 
     char inputTeclado[VERIFICARLIMITE]; //51 para verificacion de caracteres org
 
+    int existe = 0;
+
     printf("\n=============CREACION DEL USUARIO================\n");
 
     do
     {
-        printf("Ingrese el nombre de usuario: ");
-        fflush(stdin);
-        scanf(" %50[^\n]", inputTeclado);
-        if(strlen(inputTeclado) >= LIMITE)
-            printf("\nVuelva a ingresar un nombre dentro del rango!\n");
+        if(existe == 1)
+            printf("\nUH-OH!, este nombre de usuario no esta disponible!\n");
 
-    }while(strlen(inputTeclado) >= LIMITE);
+        do
+        {
+            printf("Ingrese el nombre de usuario: ");
+            fflush(stdin);
+            scanf(" %50[^\n]", inputTeclado);
+            if(strlen(inputTeclado) >= LIMITE)
+                printf("\nVuelva a ingresar un nombre dentro del rango!\n");
+
+        }while(strlen(inputTeclado) >= LIMITE);
+
+        for(int i = 0 ; i < validos && existe == 0 ; i++)
+        {
+            if(strcmp(arr[i], inputTeclado) == 0)
+                existe = 1;
+        }
+
+    }while(existe == 1);
+
+
 
     strcpy(usuarioCargado.userName, inputTeclado);
 

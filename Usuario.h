@@ -34,6 +34,9 @@ typedef struct
 ///A HACER:
 ///Requisito fundamental no guardar usuarios repetidos (según consigna)
 ///Ver si puedo re-utilizar y modificar la que tengo en juego.c para esto
+
+///HECHO
+
 Usuario registrarUsuario(); //crea un usuario
 Usuario crearUsuarioAdmin(); //crea un usuario "admin"
 void agregarUsuarioAArr (Usuario **arr, int *cantUsuarios); //recibe el array dinámico de usuarios, aumenta validos por 1, ingresa al usuario en el array. Es básicamente una opción de registro.
