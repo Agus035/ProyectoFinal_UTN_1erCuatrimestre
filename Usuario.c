@@ -365,9 +365,6 @@ int verificarAdmin(char mat[][LIMITE], char usuarioAdmin[], char passwordAdmin[]
 }
 /// Eliminar usuarios como Admin =======================================================================================
 
-///A HACER:
-///La consigna pide que al "eliminar" un usuario, se guarden los cambios al archivo
-///O modificamos esta función para que lo haga, o lo hacemos dentro del switch después de llamar a esta función.
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos)
 {
     if (strcmp(nombreDeUsuarioAEliminar, "admin") != 0) //solo permito eliminar si el nombre ingresado no es admin
@@ -525,7 +522,7 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
 
     (*usuarioACargarDinero).billetera += saldoACargar;
 
-    printf("\n=============FINALIZACION DE INGRESO================\n");
+    printf("\n=============FINALIZACION DE INGRESO================\n\n");
 }
 
 /// Carrito =======================================================================================
@@ -604,7 +601,7 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
 
     (*usuarioACargar).bibliotecaUsuario[((*usuarioACargar).validosBiblioteca - 1)] = juegoACargar;
 
-    int contarDimHistorial = contarDimPila((*usuarioACargar).historialDeJuego);
+    int contarDimHistorial = contarDimPila((*usuarioACargar).historialDeJuego); //puede tenga mucho sueño pero no entiendo qué está pasando acá
 
     if(contarDimHistorial >= 50)
         reajustarDimPilaTope(&(*usuarioACargar).historialDeJuego, juegoACargar.id);
@@ -745,3 +742,50 @@ void insertarUsuarioMenorCantJuegos(Usuario arr[], int validos, Usuario usuarioA
     }
     arr[i + 1] = usuarioAinsertar;
 }
+
+void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) //por temas de comodidad, hagamos que se saque todo de una, o sea, que el usuario compre todos los juegos en el carrito
+{
+    float montoADebitar = 0;
+
+    int nuevaDimBiblioteca = (*usuarioAComprarJuegos).validosCarrito + (*usuarioAComprarJuegos).validosBiblioteca;
+
+    (*usuarioAComprarJuegos).bibliotecaUsuario = (Juego*) realloc((*usuarioAComprarJuegos).bibliotecaUsuario, sizeof(Juego) * nuevaDimBiblioteca);
+    if(!(*usuarioAComprarJuegos).bibliotecaUsuario)
+    {
+        printf("\nERROR EN MALLOC. . .\n");
+        return;
+    }
+
+    int valBiblioteca = (*usuarioAComprarJuegos).validosBiblioteca;
+    int x = 0;
+
+    for (int i = valBiblioteca ; i < nuevaDimBiblioteca ; i++)
+    {
+        (*usuarioAComprarJuegos).bibliotecaUsuario[i] = (*usuarioAComprarJuegos).carritoDeJuegos[x];
+        montoADebitar += (*usuarioAComprarJuegos).carritoDeJuegos[x].precioJuego;
+        x++;
+    }
+
+    //cuando se termina de copiar los juegos del carrito a la biblioteca se libera la memoria
+    free((*usuarioAComprarJuegos).carritoDeJuegos);
+    (*usuarioAComprarJuegos).validosCarrito = 0;
+    (*usuarioAComprarJuegos).validosBiblioteca = nuevaDimBiblioteca;
+
+    debitarDineroAlUsuario(usuarioAComprarJuegos, montoADebitar);
+}
+
+//esta funcion quita todos los juegos de la tienda y los carga al arreglo dinamico de biblioteca
+//Tambien le debita el total de todos los juegos al usuario
+/// LA VERIFICACION si el usuario tiene el monto sufciente hagamosla en el main en vez de en la funcion
+/// ^^importante
+
+float sumarJuegosEnCarrito(Usuario usuario)
+{
+    float montoTotal = 0;
+
+    for(int i = 0 ; i < usuario.validosCarrito ; i++)
+        montoTotal += usuario.carritoDeJuegos[i].precioJuego;
+
+    return montoTotal;
+}
+/// ^^^ Esta funcion se llama en el main antes de ejecutar "comprarJuegosDelCarrito()"

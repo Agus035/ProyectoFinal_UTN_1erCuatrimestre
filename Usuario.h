@@ -47,7 +47,6 @@ int cargarArrDeUsuariosDinamico (Usuario **arr);
 
 // Baja / eliminar
 void eliminarUsuarioComoAdmin(char nombreDeUsuarioAEliminar[], Usuario arr[], int validos); //verifica si existe el usuario que se quiere eliminar. Llama a la función de abajo si lo encuentra, caso contrario no hace nada.
-///A HACER: lo que dice el comentario dentro de la función de debajo
 void eliminarUsuario(Usuario *usuarioAEliminar); //elimina de manera lógica al usuario que se recibe (cambia su flag de eliminado a 1)
 
 //Funciones con Pilas
@@ -91,6 +90,7 @@ void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 ///^ Revisé la consigna, se refiere a filtrar por eleccion (buscar por parametro X usuario por ejemplo)
 ///[A HACER] -> un filtro de usuarios (busqueda de usuarios que tengan mas de X juego?). Creo que se puede hacer un copy paste del que está en juegos
 
+
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);
 void debitarDineroAlUsuario (Usuario *usuarioADebitar, float montoADebitar);
@@ -99,6 +99,8 @@ float sumarPrecioJuegos (Juego arr[], int validos, int i);
 // Carrito / Modificacion
 float cargarACarritoUsuario(Juego **carrito, int *validosCarrito, Juego juegoAComprar); //Carga un juego al carrito de un usuario. Devuelve lo que se debe de debitar al usuario
 void mostrarCarritoDeUsuario (Usuario usuario); //Muestra el carrito de un usuario
+void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos);
+float sumarJuegosEnCarrito(Usuario usuario);
 
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //

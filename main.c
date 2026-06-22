@@ -35,6 +35,8 @@ int main()
     //función de menu de usuario
     //dentro hay un if que habilita una última opción de funciones de admin
 
+    //potencialmente acá se pone guardar en el archivo usuarios todo lo de usuarios
+
     //^ y aunque no parezca eso sería todo el main
     //a menos que se me ocurra hacer algun printf de error
 
