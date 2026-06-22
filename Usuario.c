@@ -555,16 +555,12 @@ float cargarACarritoUsuario(Usuario *usuarioRecibido, Juego juegoAComprar) // de
         validosCarritoAux -= 1;
         return -1; // Devuelvo ERROR
     }
-    carritoAux[(validosCarritoAux) - 1] = juegoAComprar;
+    carritoAux[(validosCarritoAux) - 1] = juegoAComprar; // Agrego el juego que se desea comprar en la ultima posicion del carrito
 
-    sumaJuegosEnCarrito = sumarPrecioJuegos(carritoAux, validosCarritoAux, 0); //le paso un puntero simple (un arreglo)
+    sumaJuegosEnCarrito = sumarPrecioJuegos(carritoAux, validosCarritoAux, 0); //Le paso el arreglo de juegos para contar el monto total que existe en carrito
 
     (*usuarioRecibido).carritoDeJuegos = carritoAux;
     (*usuarioRecibido).validosCarrito = validosCarritoAux;
-
-    (*carrito)[(*validosCarrito) - 1] = juegoAComprar; // Agrego el juego que se desea comprar en la ultima posicion del carrito
-
-    sumaJuegosEnCarrito = sumarPrecioJuegos((*carrito), (*validosCarrito), 0); //Le paso el arreglo de juegos para contar el monto total que existe en carrito
 
     return sumaJuegosEnCarrito; // Devuelve la suma de todos los juegos en el carrito, no lo debita
 }
