@@ -695,6 +695,7 @@ void mostrarCarritoDeUsuario (Usuario usuario)
 }
 
 /// Ordenamientos con usuarios
+//seleccion
 void ordSeleccionNombreUsuario(Usuario arr[], int validos)
 {
     int posMenor;
@@ -727,4 +728,20 @@ void posNombreMenor (Usuario arr[], int validos, int posInicial)
     return posMenor;
 }
 
+//insercion
+void ordInsercionUsuarioJuegos(Usuario arr[], int validos)
+{
+    for (int = 0 ; i < validos - 1 ; i++)
+        insertarUsuarioMenorCantJuegos(arr, i, arr[i+1]);
+}
 
+void insertarUsuarioMenorCantJuegos(Usuario arr[], int validos, Usuario usuarioAinsertar)
+{
+    int i = validos - 1;
+
+    for(i ; i >= 0 && usuarioAinsertar.validosBiblioteca < arr[i].validosBiblioteca ; i--)
+    {
+        arr[i + 1] = arr[i];
+    }
+    arr[i + 1] = usuarioAinsertar;
+}
