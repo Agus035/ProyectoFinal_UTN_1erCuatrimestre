@@ -221,7 +221,8 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                     printf("\nNo hay juegos en su carrito.\n\n");
                 }else
                 {
-                    (*arrUsuarios)[posUsuarioActual].carritoDeJuegos = malloc(sizeof(Juego)*0);
+                    free((*arrUsuarios)[posUsuarioActual].carritoDeJuegos);
+                    (*arrUsuarios)[posUsuarioActual].carritoDeJuegos = NULL;
                     (*arrUsuarios)[posUsuarioActual].validosCarrito = 0;
                     printf("\nSe han eliminado todos los juegos de su carrito.\n\n");
                 }
@@ -415,6 +416,8 @@ void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSiste
 
     int idJuegoAmodificar;
 
+    int posCaseCuatro;
+
     switch(decision)
     {
         case 1:
@@ -441,7 +444,11 @@ void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSiste
             printf("\nIngrese el usuario que usted busca: ");
             fflush(stdin);
             scanf(" %49[^\n]", nombreDeUsuarioIngresado);
-            buscarUsuarioPorNombreUsuario(nombreDeUsuarioIngresado, usuariosEnSistema, validos);
+            posCaseCuatro = buscarUsuarioPorNombreUsuario(nombreDeUsuarioIngresado, usuariosEnSistema, validos);
+            if(posCaseCuatro != -1)
+                mostrarDatosUsuario(usuariosEnSistema[posCaseCuatro]);
+            else
+                printf("\nUSUARIO %s NO encontrado.\n", nombreDeUsuarioIngresado);
             break;
 
         case 6:
