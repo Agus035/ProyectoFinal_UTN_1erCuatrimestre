@@ -172,8 +172,8 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
         printf("2. Agregar juego a carrito.\n"); ///Agrega UN juego al carrito. ///MODULARIZAR EN FUNCIÓN, PERO 99% DONE
         printf("3. Ver mi carrito.\n"); //DONE
         printf("4. Vaciar mi carrito.\n"); ///FALTA MODULARIZAR
-        printf("5. Comprar juegos de mi carrito.\n"); ///falta
-        printf("6. Deshacer ultima compra.\n"); ///acá necesito tu ayuda, no sé cómo funciona tu función
+        printf("5. Comprar juegos de mi carrito.\n");
+        printf("6. Deshacer ultima compra.\n");
         printf("7. Consultar saldo.\n"); //DONE
         printf("8. Cargar saldo.\n"); //DONE
         printf("9. Salir del programa.\n"); //DONE
@@ -364,8 +364,11 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
     printf("2. Modificar un Juego.\n");
     printf("3. Cargar un nuevo Juego a la Tienda\n");
     printf("4. Quitar un Juego de la Tienda\n");
-    printf("5. Volver al Menu\n\n");
-    printf("6. Cerrar el programa.\n");
+    printf("5. Buscar usuario.\n");
+    printf("6. Ver usuarios por nombre alfabetico.\n");
+    printf("7. Ver usuarios por cantidad de juegos.\n");
+    printf("8. Identificar usuario que mas juegos tiene.");
+    printf("9. Volver al Menu Usuario\n\n");
 
     do
     {
@@ -377,10 +380,10 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
             printf("\nSu decision: ");
         }
 
-        if(decision < 1 || decision > 6)
+        if(decision < 1 || decision > 9)
             printf("\nPor favor ingrese una opcion valida.\n");
 
-    }while(decision < 1 || decision > 6);
+    }while(decision < 1 || decision > 9);
 
     ejecutarFuncionesAdicionalesParaAdmin(decision, arrUsuarios, validos);
 }
@@ -389,7 +392,7 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
 
 void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //no sé si es necesario doble puntero para el array este -> creo q no porque no hay malloc realloc pero pregunto
 {
-    char nombreDeUsuarioAEliminar[LIMITE];
+    char nombreDeUsuarioIngresado[LIMITE];
 
     int idJuegoAmodificar;
 
@@ -399,9 +402,8 @@ void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSiste
 
             printf("\nIngrese el nombre de usuario a eliminar del sistema: ");
             fflush(stdin);
-            scanf(" %49[^\n]", nombreDeUsuarioAEliminar);
-            eliminarUsuarioComoAdmin(nombreDeUsuarioAEliminar,usuariosEnSistema, validos);
-
+            scanf(" %49[^\n]", nombreDeUsuarioIngresado);
+            eliminarUsuarioComoAdmin(nombreDeUsuarioIngresado,usuariosEnSistema, validos);
             break;
 
         case 2:
@@ -412,12 +414,31 @@ void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSiste
             guardarJuegosEnArchivo(JUEGOSTIENDA);
             break;
 
+        case 4:
+            eliminarJuegoDeTienda(JUEGOSTIENDA);
+            break;
+
         case 5:
-            return; //vuelve al menu principal
+            printf("\nIngrese el usuario que usted busca: ");
+            fflush(stdin);
+            scanf(" %49[^\n]", nombreDeUsuarioIngresado);
+            buscarUsuarioPorNombreUsuario(nombreDeUsuarioIngresado, usuariosEnSistema, validos);
             break;
 
         case 6:
-            printf("\nMuchas gracias por haber utilizado STOM. Vuelva pronto.\n");
+            mostrarUsuariosOrdenadosNombre(usuariosEnSistema, validos);
+            break;
+
+        case 7:
+            mostrarUsuariosOrdenadosCantJuegos(usuariosEnSistema, validos);
+            break;
+
+        case 8:
+            mostrarUsuarioConMayorCantDeJuegos(usuariosEnSistema, validos);
+            break;
+
+        case 9:
+            return; //vuelve al menu principal
             break;
     }
 }
