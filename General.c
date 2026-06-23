@@ -347,10 +347,13 @@ void menuTienda () //como solo muestra datos relacionados a qué hay en la tiend
                 leerJuegosDeTienda(JUEGOSTIENDA);
                 break;
             case 2:
+                {
                 char categoriaIngresada[50];
+                limpiarStdin();
                 scanf(" %49[^\n]", categoriaIngresada);
                 leerJuegosFiltradosTienda(JUEGOSTIENDA, categoriaIngresada);
                 break;
+                }
             case 3:
                 leerJuegosOrdenadosPrecioTienda(JUEGOSTIENDA);
                 break;
