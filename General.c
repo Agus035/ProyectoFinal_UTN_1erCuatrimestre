@@ -202,37 +202,13 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 //tengo que hacer una función que vacíe todo el carrito (pq parece lo más fácil de escribir, no quiero hacer otro sistema de quitar un juego específico dsps de verificar exista en carrito)
 
                 //esto va a estar en función int que devuelve el "dinero a pagar" actual (con flags de error incluídas)
-                int flagExistenciaJuegoEnBiblioteca;
-                int flagExistenciaJuegoEnCarrito;
-                char juegoBuscado[LIMITE];
-                Juego juegoAIngresar;
-                printf("\nEscriba el juego que quiere agregar a su carrito: ");
-                scanf(" %49[^\n]", juegoBuscado);
-                juegoAIngresar = buscarJuegoPorNombre(juegoBuscado);
-                flagExistenciaJuegoEnBiblioteca = verificarSiJuegoEnBibliotecaUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar);
-                flagExistenciaJuegoEnCarrito = verificarSiJuegoEnCarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar);
-
-                if (flagExistenciaJuegoEnBiblioteca == 0 && flagExistenciaJuegoEnCarrito == 0)
+                float temp = logicaDeCompraCarrito(arrUsuarios, validos, posUsuarioActual, dineroAPagar);
+                if (temp == -1) //por algún error
                 {
-                    if (juegoAIngresar.id == -1) //si falla la busqueda/fopen
-                    {
-                        printf("\nNo se ha podido agregar el juego al carrito.\n\n");
-                    }else
-                    {
-                        int auxDineroAPagar = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar); //si devuelve -1 -> error realloc
-                        printf("\nEl monto a pagar por el total de juegos en su carrito es $%f. Revise su saldo antes de ir a pagar.\n", dineroAPagar);
-                        if (auxDineroAPagar != -1)
-                        {
-                            dineroAPagar = auxDineroAPagar; //finalmente reemplazo el valor a pagar
-                            printf("\nSe ha cargado el juego al carrito exitosamente.\n\n");
-                        }else //ocurrió un error
-                        {
-                            printf("\nOcurrio un error al aumentar la cantidad de espacio en el carrito. Intente de nuevo.\n");
-                        }
-                    }
+                    printf("\n\nNo se guardo ningun juego al carrito.\n\n")
                 }else
                 {
-                    printf("\nEl juego ya se encuentra en su carrito o biblioteca. Elija otro juego.\n");
+                    dineroAPagar = temp;
                 }
                 break;
             case 3:
@@ -284,9 +260,51 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
 }
 
 
-void logicaDeCompraCarrito ()
+float logicaDeCompraCarrito (Usuario **arrUsuarios, int validos, int posUsuarioActual, float dineroAPagar)
 {
+    float saldoRestar = 0; //va a modificarse como flag de error (-1) o como el saldo que hay que quitarle al usuario
 
+    int flagExistenciaJuegoEnBiblioteca;
+    int flagExistenciaJuegoEnCarrito;
+    char juegoBuscado[LIMITE];
+    Juego juegoAIngresar;
+    printf("\nEscriba el juego que quiere agregar a su carrito: ");
+    scanf(" %49[^\n]", juegoBuscado);
+    juegoAIngresar = buscarJuegoPorNombre(juegoBuscado);
+    flagExistenciaJuegoEnBiblioteca = verificarSiJuegoEnBibliotecaUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar);
+    flagExistenciaJuegoEnCarrito = verificarSiJuegoEnCarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar);
+
+    if (flagExistenciaJuegoEnBiblioteca == 0 && flagExistenciaJuegoEnCarrito == 0)
+    {
+        if (juegoAIngresar.id == -1) //si falla la busqueda/fopen
+        {
+            printf("\nNo se ha podido abrir el archivo de juegos para agregar al carrito.\n\n");
+            saldoRestar = -1; //flag de error
+        }else
+        {
+            int auxDineroAPagar = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAIngresar); //si devuelve -1 -> error realloc
+            printf("\nEl monto a pagar por el total de juegos en su carrito es $%f. Revise su saldo antes de ir a pagar.\n", dineroAPagar);
+            if (auxDineroAPagar != -1 && auxDineroAPagar != -2)
+            {
+                saldoRestar = auxDineroAPagar; //voy a devolver este valor a pagar
+                printf("\nSe ha cargado el juego al carrito exitosamente.\n\n");
+            }else if(auxDineroAPagar == -2)
+            {
+                printf("\nEste juego ya esta en su carrito.\n");
+                saldoRestar = -1;
+            }else
+            {
+                printf("\nOcurrio un error al aumentar la cantidad de espacio en el carrito. Intente de nuevo.\n");
+                saldoRestar = -1;
+            }
+        }
+    }else
+    {
+        printf("\nEl juego ya se encuentra en su carrito o biblioteca. Elija otro juego.\n");
+        saldoRestar = -1;
+    }
+
+    return saldoRestar;
 }
 
 
