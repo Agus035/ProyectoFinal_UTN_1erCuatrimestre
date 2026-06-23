@@ -225,7 +225,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                         {
                             dineroAPagar = auxDineroAPagar; //finalmente reemplazo el valor a pagar
                             printf("\nSe ha cargado el juego al carrito exitosamente.\n\n");
-                        }else //hay error
+                        }else //ocurrió un error
                         {
                             printf("\nOcurrio un error al aumentar la cantidad de espacio en el carrito. Intente de nuevo.\n");
                         }
@@ -362,8 +362,7 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
     do
     {
         printf("\nSu decision: ");
-        while(scanf("%i", &decision) != 1) //no me acuerdo si se agraba espacio antes del % o es solo con strings
-                                            //el espacio es el fflush de versiones nuevas, al ser un entero no necesita
+        while(scanf("%i", &decision) != 1) //solo en respuesta a lo que estaba acá: no me acuerdo por qué, pero me había salido un error al hacer testeos en main si no había espacios antes del parantesis (al usar strings específicamente) -> estuve agregando espacios antes de los % en todos los scanf de strigns pero puede me falte alguno
         {
             printf("\nPor favor ingrese el numero de una de las opciones.\n");
             fflush(stdin);
