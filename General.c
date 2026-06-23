@@ -349,6 +349,8 @@ void menuTienda () //como solo muestra datos relacionados a qué hay en la tiend
             case 2:
                 {
                 char categoriaIngresada[LIMITE];
+                printf("\nIngrese la categoria que desea filtrar: ");
+                limpiarStdin();
                 scanf(" %49[^\n]", categoriaIngresada);
                 leerJuegosFiltradosTienda(JUEGOSTIENDA, categoriaIngresada);
                 break;
