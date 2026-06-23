@@ -172,6 +172,9 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
     int decisionMenu;
     float dineroAPagar = sumarPrecioJuegos((*arrUsuarios)[posUsuarioActual].carritoDeJuegos, (*arrUsuarios)[posUsuarioActual].validosCarrito, 0); //al entrar al menu, si el usuario tiene juegos en su carrito, se calcula cuanto debe pagar
     //^ después ver si reemplazar con sumarJuegosEnCarrito no genera problemas
+    char nombreAIngresarCaseDos[LIMITE];
+    Juego juegoAAniadirCaseDos;
+    float totalEnCarritoCaseDos;
 
     do
     {
@@ -202,23 +205,37 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             case 1:
                 menuTienda();
                 break;
-            case 2: //falta modularizar
+            case 2:
+                printf("\nIngrese el nombre del juego a aniadir al carrito: ");
+                fflush(stdin);
+                scanf(" %49[^\n]", nombreAIngresarCaseDos);
+
+                juegoAAniadirCaseDos = buscarJuegoPorNombre(nombreAIngresarCaseDos);
+
+                if(juegoAAniadirCaseDos.id == -1) // suponiendo que el archivo existe porque -1 puede ser si el archivo no existe o no se encontro el juego
+                {
+                    printf("\nEl juego no existe\n");
+                    break;
+                }
+                else // Se carga el juego que se quiere añadir al carrito al carrito del usuario si no ocurre un error o advertencia
+                {
+                    totalEnCarritoCaseDos = cargarACarritoUsuario(arrUsuarios[posUsuarioActual], juegoAAniadirCaseDos); // Se pasa el juego al carrito y se devuelve el total, solo para mostrar, el case 2 solo es para agregar un juego, no para debitar
+                    if(totalEnCarritoCaseDos == -1)
+                        printf("\nOcurrio un ERROR. . . El carrito no fue modificado. . .\n");
+                    else if (totalEnCarritoCaseDos == -2)
+                        printf("\nADVERTENCIA: YA tienes este juego en el carrito. . .\n");
+                    else
+                        printf("\nLa suma de todos los juegos en tu carrito es de: $%.2f\n", totalEnCarritoCaseDos); // El carrito es modificado agregando el juego
+                }
+
+                break;
                 //funcion que agrega juego de tienda a carrito
                 //^ quiero que el usuario busque juego por nombre -> si existe, se pasa el juego como parametro a "cargarACarritoUsuario" -> se continua preguntando con do while si quiere agregarse más al carrito.
                 //antes de agregar el juego al carrito, debo de verificar que no exista ya en el carrito o en la bilbioteca del usuario
                 //puede que tenga que modificar la función de arriba
                 //tengo que hacer una función que vacíe todo el carrito (pq parece lo más fácil de escribir, no quiero hacer otro sistema de quitar un juego específico dsps de verificar exista en carrito)
-
+                /// Te dejo aca abajo tu comentario
                 //esto va a estar en función int que devuelve el "dinero a pagar" actual (con flags de error incluídas)
-                float temp = logicaDeCompraCarrito(arrUsuarios, validos, posUsuarioActual, dineroAPagar);
-                if (temp == -1) //por algún error
-                {
-                    printf("\n\nNo se guardo ningun juego al carrito.\n\n");
-                }else
-                {
-                    dineroAPagar = temp;
-                }
-                break;
             case 3:
                 mostrarCarritoDeUsuario((*arrUsuarios)[posUsuarioActual]);
                 break;
