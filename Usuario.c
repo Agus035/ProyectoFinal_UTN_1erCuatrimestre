@@ -287,11 +287,13 @@ int pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegis
     if (usuariosRegistradosEnSistema == 0)
         return -2; //NO existen usuarios en el sistema
 
+    //SI EXISTEN USUARIOS EN EL SISTEMA, sigo abajo
+
     (*arr) = (Usuario*) malloc(sizeof(Usuario) * usuariosRegistradosEnSistema); // Creo un arreglo dinamico con la dimension obtenida
     if(!(*arr))
     {
         printf("\nERROR EN MALLOC. . .\n");
-        return -1; // Devuelvo ERROR
+        return -1; // Devuelvo ERROR, la funcion de arriba devolvera -1 tambien, o sea, error
     }
 
     while(i < usuariosRegistradosEnSistema)
@@ -301,9 +303,9 @@ int pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegis
         if(strcmp((*arr)[i].userName, "ERROR. . .") == 0 && (*arr)[i].billetera == -1) // Ambos tienen que cumplir por si a los profes se les ocurre llamar a un usuario "ERROR. . ."
         {
             printf("\nERROR: Fallo la carga del usuario #%d. Carga interrumpida.\n", i + 1);
-            free(*arr); // se libera la memoria donde fallo malloc
+            free(*arr); // se libera todo el arreglo de usuario, porque tendria usuarios corruptos (usuarios con Error y billetera -1)
             (*arr) = NULL; // El arr pasa a estar inicializado en null
-            return -1; // Devuelvo ERROR
+            return -1; // Devuelvo ERROR si ocurrio un error en la carga "leerUsuarioCompletoDeArchi", principalemnte en malloc
         }
         i++;
     }
