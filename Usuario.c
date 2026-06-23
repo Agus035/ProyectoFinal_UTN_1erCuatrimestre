@@ -647,7 +647,12 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
     for (int i = valBiblioteca ; i < nuevaDimBiblioteca ; i++)
     {//Paso los elementos a partir de la primer posicion del carrito a la biblioteca despues del ultimo juego que tenia el usuario en la biblioteca
 
-        apilar(&aux, (*usuarioAComprarJuegos).carritoDeJuegos[x].id); // apilo las ids de los juegos comprados a una pila auxiliar
+        int contDimPila = contarDimPila((*usuarioAComprarJuegos).historialDeJuego);
+
+        if(contDimPila >= 50)
+            reajustarDimPilaTope((*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
+        else
+            apilar((*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
 
         (*usuarioAComprarJuegos).bibliotecaUsuario[i] = (*usuarioAComprarJuegos).carritoDeJuegos[x];
         montoADebitar += (*usuarioAComprarJuegos).carritoDeJuegos[x].precioJuego; // suma de monto a debitar de los juegos
@@ -663,16 +668,6 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
 
     debitarDineroAlUsuario(usuarioAComprarJuegos, montoADebitar); // Se le debita el usuario el total sumado previamente
 
-    int contarDimHistorial = contarDimPila((*usuarioAComprarJuegos).historialDeJuego); // Se cuenta la dim de la pila para saber si esta al llena (50 elementos cargados) o no
-
-    while(!pilavacia(&aux))
-    {
-        if(contarDimHistorial >= 50) // Si la pila esta COMPLETAMENTE llena, se elimina el valor mas viejo para agregar la id del ultimo juego agregado al tope de la pila
-            reajustarDimPilaTope(&(*usuarioAComprarJuegos).historialDeJuego, desapilar(&aux));
-
-        else
-            apilar(&(*usuarioAComprarJuegos).historialDeJuego, desapilar(&aux)); // Si pila tiene la dim suficiente, se carga la id del juego al tope
-    }
 }
 //esta funcion quita todos los juegos de la tienda y los carga al arreglo dinamico de biblioteca
 //Tambien le debita el total de todos los juegos al usuario
