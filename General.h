@@ -26,14 +26,7 @@ void menuTienda (); //como solo muestra datos relacionados a qué hay en la tien
 
 ///Menu de admin
 void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos); //Contiene un menú con acciones solo permitidas para el admin. La mayoría relacionada con modificar juegos y/o usuarios.
-void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //
-
-
-
-//Funciones admin
-
-void funcionesAdicionalesParaAdmin();
-void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos);
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos); //Ejecuta las funciones según la decisión tomada en funcionesAdicionalesParaAdmin()
 
 
 
