@@ -92,6 +92,10 @@ void mostrarUsuarioConMayorCantDeJuegos (Usuario arr[], int validos);
 ///[A HACER] -> un filtro de usuarios (busqueda de usuarios que tengan mas de X juego?). Creo que se puede hacer un copy paste del que está en juegos
 /// ^^^^^^^^^^^^^ YA HAY UNA FUNCION QUE BUSCA EL USUARIO CON MAYOR CANT DE JUEGOS [HECHO]
 
+// Mostrar usuarios ordenados por nombre y ordenados por quien tiene mayor cantidad de juegos
+void mostrarUsuariosOrdenadosNombre (Usuario arr[], int validos);
+void mostrarUsuariosOrdenadosCantJuegos(Usuario arr[], int validos);
+
 
 // Billetera / Precio / Modificacion
 void cargarDineroAlUsuario(Usuario *usuarioACargarDinero);

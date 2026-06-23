@@ -832,7 +832,7 @@ void ordSeleccionNombreUsuario(Usuario arr[], int validos) // ord por seleccion 
     }
 }
 
-void posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la pos donde se encuentra el menor elemento (el nombre)
+int posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la pos donde se encuentra el menor elemento (el nombre)
 {
     int posMenor = posInicial;
 
@@ -841,7 +841,7 @@ void posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la 
 
     for (int i = posMenor + 1 ; i < validos ; i++)
     {
-        if(strcmpi(nombreMenor, arr[i]) > 0)
+        if(strcmpi(nombreMenor, arr[i].userName) > 0)
         {
             posMenor = i;
             strcpy(nombreMenor, arr[i].userName);
@@ -854,7 +854,10 @@ void posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la 
 void ordInsercionUsuarioJuegos(Usuario arr[], int validos)
 {
     for (int i = 0 ; i < validos - 1 ; i++)
+    {
         insertarUsuarioMenorCantJuegos(arr, i, arr[i+1]); // Tomo el usuario en su posicion siguiente para insertarlo en su pos correcta
+    }
+}
 
 void insertarUsuarioMenorCantJuegos(Usuario arr[], int pos, Usuario usuarioAinsertar) // En un arreglo, se inserta un usuario en donde corresponda comparando con los anteriores
 {
@@ -910,3 +913,4 @@ void mostrarUsuariosOrdenadosNombre (Usuario arr[], int validos)
 
     free(aux); // se libera la memoria de aux
 }
+

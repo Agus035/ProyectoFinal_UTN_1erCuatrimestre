@@ -125,7 +125,7 @@ Juego buscarJuegoPorNombre (char nombreJuegoBuscado[]) //devuelve Juego buscado 
     FILE *archi =  fopen(JUEGOSTIENDA, "rb");
 
     Juego aux;
-    aux.Id = -1; //devuelve el juego con esta id en caso de no poder abrirse el archivo
+    aux.id = -1; //devuelve el juego con esta id en caso de no poder abrirse el archivo
 
     int flag = 0;
 
@@ -135,7 +135,7 @@ Juego buscarJuegoPorNombre (char nombreJuegoBuscado[]) //devuelve Juego buscado 
 
         if (flag != 0)
         {
-            fseek(archi, sizeof(Juego)*-1, archi); //retrocedo un paso para obtener el juego
+            fseek(archi,-(long)sizeof(Juego), SEEK_CUR); //retrocedo un paso para obtener el juego
             fread(&aux, sizeof(Juego), 1, archi);
         }
 
@@ -223,11 +223,11 @@ void marcarJuegoActualComoEliminado (FILE *archi) //se asume el indicador de pos
 {
     Juego aux;
 
-    fseek(archi, -sizeof(Juego), SEEK_CUR); //retrocedo para posicionarme y leer
+    fseek(archi, -(long)sizeof(Juego), SEEK_CUR); //retrocedo para posicionarme y leer
     fread(&aux, sizeof(Juego), 1, archi);
     aux.eliminado = 1;
 
-    fseek(archi, -sizeof(Juego), SEEK_CUR);  //retrocedo para posicionarme y reemplazar
+    fseek(archi, -(long)sizeof(Juego), SEEK_CUR);  //retrocedo para posicionarme y reemplazar
     fwrite(&aux, sizeof(Juego), 1, archi);
 }
 
@@ -254,14 +254,14 @@ void modificarJuego (char nombreArchivo[])
         {
             int cambio;
             Juego aux; //creo un auxiliar
-            fseek(archi, sizeof(Juego)*-1, SEEK_CUR);
+            fseek(archi, -(long)sizeof(Juego), SEEK_CUR);
             fread(&aux, sizeof(Juego), 1, archi); //el auxiliar ahora contiene los datos del juego
 
             cambio = menuSelectorModificarJuego(&aux); //se modifica lo que se necesita en otra función, devuelve la opcion que se eligió en el menú
             if (cambio >= 1 && cambio <= 3)
             {
 
-                fseek(archi, sizeof(Juego)*(-1), SEEK_CUR);
+                fseek(archi, -(long)sizeof(Juego), SEEK_CUR);
                 fwrite(&aux, sizeof(Juego), 1, archi);
                 printf("\nEl cambio se ha realizado correctamente.\n");
             }
@@ -308,7 +308,7 @@ int menuSelectorModificarJuego (Juego *aux)
         case 3:
             printf("\nIngrese el nuevo precio del juego: ");
             fflush(stdin);
-            while(scanf(" %f", (*aux).precioJuego) != 1)
+            while(scanf(" %f", &(*aux).precioJuego) != 1)
             {
                 fflush(stdin);
                 printf("\nIngrese el nuevo precio del juego: ");

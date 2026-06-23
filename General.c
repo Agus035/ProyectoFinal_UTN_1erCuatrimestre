@@ -330,8 +330,6 @@ void menuTienda () //como solo muestra datos relacionados a qué hay en la tiend
         }
 
     }while (decision != 5); //solamente se sale del menu si efectivamente quiere salirse (opcion 5)
-
-    return;
 }
 
 
