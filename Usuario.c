@@ -515,7 +515,7 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego) /
 
         ultimoJuegoComprado.id = desapilar(historialId); // Desapilo la id del ultimo juego comprado
 
-        Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id); // Lo busco en la tienda por id y lo devuelvo, -1 si esta eliminado o error
+        Juego juegoAQuitar = buscarJuegoPorId(tope(historialId)); // Lo busco en la tienda por id y lo devuelvo, -1 si esta eliminado o error
 
         if(juegoAQuitar.id != -1) // Verifico que no haya error
         {
@@ -687,7 +687,7 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
         int contDimPila = contarDimPila((*usuarioAComprarJuegos).historialDeJuego);
 
         if(contDimPila >= 50)
-            reajustarDimPilaTope(usuarioAComprarJuegos.historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
+            reajustarDimPilaTope(&(*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
         else
             apilar(&(*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
 

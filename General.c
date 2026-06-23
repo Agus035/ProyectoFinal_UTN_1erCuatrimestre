@@ -33,6 +33,7 @@ int menuInicio(Usuario **arrUsuarios, int *validos) //devuelve la posición del 
             printf("Su decision: ");
         }
 
+
         if (decision > 3 || decision < 1)
         {
             printf("\nPor favor ingrese una opcion valida.\n");
@@ -200,6 +201,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             limpiarStdin();
             printf("Eliga la opcion a la que desea ingresar: ");
         }
+        limpiarStdin();
 
         switch (decisionMenu)
         {
