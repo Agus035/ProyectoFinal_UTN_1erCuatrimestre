@@ -219,11 +219,11 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 }
                 else // Se carga el juego que se quiere añadir al carrito al carrito del usuario si no ocurre un error o advertencia
                 {
-                    totalEnCarritoCaseDos = cargarACarritoUsuario(arrUsuarios[posUsuarioActual], juegoAAniadirCaseDos); // Se pasa el juego al carrito y se devuelve el total, solo para mostrar, el case 2 solo es para agregar un juego, no para debitar
+                    totalEnCarritoCaseDos = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAAniadirCaseDos); // Se pasa el juego al carrito y se devuelve el total, solo para mostrar, el case 2 solo es para agregar un juego, no para debitar
                     if(totalEnCarritoCaseDos == -1)
                         printf("\nOcurrio un ERROR. . . El carrito no fue modificado. . .\n");
                     else if (totalEnCarritoCaseDos == -2)
-                        printf("\nADVERTENCIA: YA tienes este juego en el carrito. . .\n");
+                        printf("\nADVERTENCIA: YA tienes este juego en el carrito o tienda. . .\n");
                     else
                         printf("\nLa suma de todos los juegos en tu carrito es de: $%.2f\n", totalEnCarritoCaseDos); // El carrito es modificado agregando el juego
                 }

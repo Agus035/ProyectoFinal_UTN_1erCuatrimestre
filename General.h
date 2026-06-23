@@ -22,7 +22,7 @@ int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios); //Se escribe usuari
 
 ///Menu de usuario normal
 void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioActual); //Contiene el menu principal una vez logeado. Llama funciones y a otros menús de ser necesario.
-float logicaDeCompraCarrito (Usuario **arrUsuarios, int validos, int posUsuarioActual, float dineroAPagar); //Agrega un juego al carrito. Se verifica no esté ya en carrito o biblioteca. Devuelve el valor total de todos los juegos del carrito sumados.
+//float logicaDeCompraCarrito (Usuario **arrUsuarios, int validos, int posUsuarioActual, float dineroAPagar); //Agrega un juego al carrito. Se verifica no esté ya en carrito o biblioteca. Devuelve el valor total de todos los juegos del carrito sumados.
 
 ///Menu específico para la tienda
 void menuTienda (); //como solo muestra datos relacionados a qué hay en la tienda, no recibe datos cargados de usuarios. Llama a funciones de juego.h

@@ -578,6 +578,11 @@ float cargarACarritoUsuario(Usuario *usuarioRecibido, Juego juegoAComprar) // de
 {
     int flag = 0;
 
+    if (verificarSiJuegoEnBibliotecaUsuario(usuarioRecibido, juegoAComprar) == 1)
+    {
+        flag = 1;
+    }
+
     for(int i = 0 ; i < (*usuarioRecibido).validosCarrito && flag == 0 ; i++)
     {
         if(strcmp((*usuarioRecibido).carritoDeJuegos[i].nombreJuego, juegoAComprar.nombreJuego) == 0)
