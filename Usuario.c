@@ -80,10 +80,10 @@ Usuario crearUsuarioAdmin() // Se crea un usuario administrador dependiendo de l
     admin.eliminado = 0;
     admin.billetera = 1000; // Inicializado en 1000 porque es admin
 
+    inicpila(&admin.historialDeJuego);
+
     admin.carritoDeJuegos = NULL;
     admin.validosCarrito = 0;
-
-    inicpila(&admin.historialDeJuego);
 
     admin.bibliotecaUsuario = NULL;
     admin.validosBiblioteca = 0;
@@ -253,8 +253,20 @@ int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr) //Trae los
     {
         fread(&validos, sizeof(int), 1, archi); // los validos de todos los usuarios es el primer y unico dato entero que se encuentra al principio del archivo
                                                 // A partir de ahi, se trabaja con usuarios y sus arreglos dinamicos
-        pasarUsuarioArchiAArrDinArchi(archi, arr, validos); // Paso el archivo a un Arreglo dinamico de usuarios que es con lo que trabajaremos en el main
-                                                            // Los validos obtenidos son lo primero que esta en el archivo
+        int flag = pasarUsuarioArchiAArrDinArchi(archi, arr, validos); // Paso el archivo a un Arreglo dinamico de usuarios que es con lo que trabajaremos en el main
+                                                                        // Los validos obtenidos son lo primero que esta en el archivo
+        if(flag == -1) // Si ocurre un error, el archivo se cierra y devuelve -1, error
+        {
+            printf("\nERROR -1, MALLOC. . .\n");
+            fclose(archi);
+            return flag;
+        } // -1 si ocurre un error
+        else if(flag == -2)
+        {// -2 es solo una advertencia, no un error
+            printf("\nADVERTENCIA -2, NO EXISTEN USUARIOS EN EL SISTEMA. . .\n");
+            fclose(archi);
+            return 0; // Al no existir usuarios, se devuelve 0 como validos
+        }
         fclose(archi);
     }
     else
@@ -268,23 +280,34 @@ int pasarUsuariosArchivoAArrDin (char nombreArchivo[], Usuario **arr) //Trae los
     return validos; // se devuelven los validos obtenidos del archivo o un ERROR
 }
 
-void pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema) // Paso los validos obtenidos del mismo archivo
+int pasarUsuarioArchiAArrDinArchi (FILE *archi, Usuario **arr, int usuariosRegistradosEnSistema) // Paso los validos obtenidos del mismo archivo
 {
     int i = 0;
+
+    if (usuariosRegistradosEnSistema == 0)
+        return -2; //NO existen usuarios en el sistema
 
     (*arr) = (Usuario*) malloc(sizeof(Usuario) * usuariosRegistradosEnSistema); // Creo un arreglo dinamico con la dimension obtenida
     if(!(*arr))
     {
         printf("\nERROR EN MALLOC. . .\n");
-        return;
+        return -1; // Devuelvo ERROR
     }
 
     while(i < usuariosRegistradosEnSistema)
     {
-        (*arr)[i] = leerUsuarioCompletoDeArchi(archi); // Se carga el arreglo en cada posicion con su usuario correspondiente dentro del archivo
-                                                       // Cuando devuelve el usuario, puede seguir con el siguiente hasta que termine la carga
+        (*arr)[i] = leerUsuarioCompletoDeArchi(archi);// Se carga el arreglo en cada posicion con su usuario correspondiente dentro del archivo
+                                                    // Cuando devuelve el usuario, puede seguir con el siguiente hasta que termine la carga
+        if(strcmp((*arr)[i].userName, "ERROR. . .") == 0 && (*arr)[i].billetera == -1) // Ambos tienen que cumplir por si a los profes se les ocurre llamar a un usuario "ERROR. . ."
+        {
+            printf("\nERROR: Fallo la carga del usuario #%d. Carga interrumpida.\n", i + 1);
+            free(*arr); // se libera la memoria donde fallo malloc
+            (*arr) = NULL; // El arr pasa a estar inicializado en null
+            return -1; // Devuelvo ERROR
+        }
         i++;
     }
+    return 1; // Si no hubo errores
 }
 
 Usuario leerUsuarioCompletoDeArchi(FILE *archi) ///NOTA: antes de llamar a esta función, sí o si hay que mover el indicador de posición 1 posición delante de los validos al inicio del archivo
@@ -294,14 +317,18 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi) ///NOTA: antes de llamar a esta 
     fread(&usuarioLeido, sizeof(Usuario), 1, archi); // Leo un usuario, sus parametros biblioteca y carrito pierden su dir de memoria al cargarse al archivo.
                                                     // Por eso en la carga de un usuario al archivo, luego de escribirlo, se escribe su biblioteca y carrito.
 
-    usuarioLeido.bibliotecaUsuario = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosBiblioteca); // Se crea la biblioteca de ese usuario con la cantidad de Juegos que tenia antes de cerrarse el programa
+    if(usuarioLeido.validosBiblioteca > 0) // Se verifica que tenga al menos 1 juego para no hacer malloc con dimension 0
+        usuarioLeido.bibliotecaUsuario = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosBiblioteca); // Se crea la biblioteca de ese usuario con la cantidad de Juegos que tenia antes de cerrarse el programa
+    else
+        usuarioLeido.bibliotecaUsuario = NULL; // Si es 0 se inicializa en NULL, el usuario no tiene juegos
     ///los validos de la biblioteca si obtengo, cuando hago fread de un usuario obtengo todo lo que no sea arreglo dinamico
     /// los validos me sirven para saber cuanto me tengo que mover en el archivo sizeof(Juego) * validosbiblioteca por ej
     /// luego puedo hacer billetera y cuando termino ya tengo un usuario completo, no hay perdida de datos.
 
-    if(!usuarioLeido.bibliotecaUsuario)
+    if(!usuarioLeido.bibliotecaUsuario && usuarioLeido.validosBiblioteca > 0) // Verifico si hubo error en malloc y sus validos son mayor a 0
     {
         strcpy(usuarioLeido.userName, "ERROR. . .");
+        usuarioLeido.billetera = -1; // Esto es para verificar tambien que el saldo sea -1, ya q es imposible, y por si los profes quieren llamar un usuario "ERROR. . ."
         printf("\nERROR EN MALLOC. . .\n");
         return usuarioLeido; // Devuelve un usuario con ERROR
     }
@@ -309,10 +336,15 @@ Usuario leerUsuarioCompletoDeArchi(FILE *archi) ///NOTA: antes de llamar a esta 
     fread(usuarioLeido.bibliotecaUsuario, sizeof(Juego), usuarioLeido.validosBiblioteca, archi); // Luego de leer la totalidad de un Usuario, comienzo a leer sus juegos dependiendo de sus validos en la biblioteca
     ///ACA cargo la biblioteca de ese usuario en especifico a ese usuario.
 
-    usuarioLeido.carritoDeJuegos = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosCarrito); // Se crea el carrito de compra de ese usuario con los juegos que tenia antes de que el programa termine, igual que biblioteca
-    if(!usuarioLeido.carritoDeJuegos)
+    if(usuarioLeido.validosCarrito > 0) // Se verifica que tenga al menos 1 juego en carrito para no hacer malloc con dimension 0
+        usuarioLeido.carritoDeJuegos = (Juego*) malloc(sizeof(Juego) * usuarioLeido.validosCarrito); // Se crea el carrito de compra de ese usuario con los juegos que tenia antes de que el programa termine, igual que biblioteca
+    else
+        usuarioLeido.carritoDeJuegos = NULL;// Si es 0 se inicializa en NULL, el usuario no tiene juegos en su carrito
+
+    if(!usuarioLeido.carritoDeJuegos && usuarioLeido.validosCarrito > 0) // Lo mismo que en la biblioteca, el problema es por malloc, no porque tenga 0 la dim del carrito
     {
         strcpy(usuarioLeido.userName, "ERROR. . .");
+        usuarioLeido.billetera = -1;
         printf("\nERROR EN MALLOC. . .\n");
         free(usuarioLeido.bibliotecaUsuario); // Se libera la memoria de la biblioteca en caso de que ocurra un error con carrito
         return usuarioLeido;// devuelvo usuario ERROR
@@ -352,9 +384,10 @@ void guardarUnUsuarioEnArchi(FILE *archi, Usuario usuario) //Guarda los datos de
 {
     fwrite(&usuario, sizeof(Usuario), 1, archi); // Escribo el usuario con sus parametros biblioteca y carrito con sus dir de memoria actuales
                                                 //                                                                            ^^ al volver a iniciar el programa su dir de memoria cambia, por eso reescribo la vieja con la nueva y sus datos anteriores
-    fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi); // Escribo los juegos correspondiente a ese usuario a continuacion
-
-    fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi); // Escribo los juegos que se encuentran en el carrito a continuacion
+    if(usuario.validosBiblioteca > 0) // Se verifica en biblioteca y carrito que tenga juegos para guardar, si no, no se guardan
+        fwrite(usuario.bibliotecaUsuario, sizeof(Juego), usuario.validosBiblioteca, archi); // Escribo los juegos correspondiente a ese usuario a continuacion
+    if(usuario.validosCarrito > 0)
+        fwrite(usuario.carritoDeJuegos, sizeof(Juego), usuario.validosCarrito, archi); // Escribo los juegos que se encuentran en el carrito a continuacion
 }
 
 
@@ -480,9 +513,9 @@ void deshacerUltimaCompra(Pila *historialId, Usuario *usuarioAReembolsarJuego) /
 
         ultimoJuegoComprado.id = desapilar(historialId); // Desapilo la id del ultimo juego comprado
 
-        Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id); // Lo busco en la tienda por id
+        Juego juegoAQuitar = buscarJuegoPorId(ultimoJuegoComprado.id); // Lo busco en la tienda por id y lo devuelvo, -1 si esta eliminado o error
 
-        if(ultimoJuegoComprado.id != -1) // Verifico que no haya error
+        if(juegoAQuitar.id != -1) // Verifico que no haya error
         {
             float montoAReembolsar = juegoAQuitar.precioJuego; // El monto a reembolsarse al usuario es el mismo que el precio de ESE juego
 
@@ -630,7 +663,7 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
     int nuevaDimBiblioteca = (*usuarioAComprarJuegos).validosCarrito + (*usuarioAComprarJuegos).validosBiblioteca; // Sumo la dim del carrito y la dim de la biblioteca para tener la nueva dim total de la biblioteca
 
     Juego *juegoAux = (Juego*) realloc((*usuarioAComprarJuegos).bibliotecaUsuario, sizeof(Juego) * nuevaDimBiblioteca); // Cambio la dim de la biblioteca
-
+                                // Si es null ^ actua como malloc
     if(!juegoAux)
     {
         printf("\nERROR EN MALLOC. . . NO se compro ningun juego, la biblioteca y el carrito no sufrieron cambios. . .\n");
@@ -688,6 +721,13 @@ void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego j
         }
     }
 
+    if((*validosBiblioteca) == 0) // Si al quitarse el juego la biblioteca se queda sin juegos, entonces
+    {
+        free((*arr)); // libero la memoria
+        (*arr) = NULL; // Al tener 0 juegos vuelve a ser null
+        return; // El programa termina en vez de seguir con cosas innecesarias
+    }
+
     Juego *aux = (Juego*) realloc((*arr), sizeof(Juego) * (*validosBiblioteca)); // Utilizo los nuevos validos como dim (Reducido)
 
     if(!aux)
@@ -706,7 +746,7 @@ void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar) //ver
 
     Juego *aux = (Juego*) realloc((*usuarioACargar).bibliotecaUsuario, sizeof(Juego) * (*usuarioACargar).validosBiblioteca); // Aumenta en 1 la dim de la biblioteca del usuario para aniadir un juego
 
-    if (!(*usuarioACargar).bibliotecaUsuario)
+    if (!aux)
     {
         printf("\nERROR EN REALLOC. . . NO se aniadio ningun juego a la biblioteca. . .\n");
         (*usuarioACargar).validosBiblioteca -= 1; // Validos vuelve a su valor org, no hubo modificaciones en la biblioteca
@@ -782,7 +822,7 @@ int verificarUsuarioRegistrado(Usuario *arr, int validos, char username[], char 
 {
     int flag = -1;
 
-    for(int i = 0 ; i < validos && flag == 0; i++)
+    for(int i = 0 ; i < validos && flag == -1; i++)
     {
         if(strcmp(arr[i].userName, username) == 0 && strcmp(arr[i].password, password) == 0 && flag == -1)
             flag = i; // comparo el nombre y contrasenia de cada usuario con el recibido por parametro hasta encontrar similitud
@@ -845,7 +885,7 @@ int posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la p
     int posMenor = posInicial;
 
     char nombreMenor[LIMITE];
-    strcpy(nombreMenor, arr[0].userName); // El primer elemento comienza siendo el menor para comenzar a comparar
+    strcpy(nombreMenor, arr[posMenor].userName); // El primer elemento comienza siendo el menor para comenzar a comparar
 
     for (int i = posMenor + 1 ; i < validos ; i++)
     {
