@@ -612,6 +612,57 @@ int verificarSiJuegoEnCarritoUsuario (Usuario *usuarioRecibido, Juego juegoRecib
     return flag;
 }
 
+float sumarJuegosEnCarrito(Usuario usuario)
+{
+    float montoTotal = 0;
+
+    for(int i = 0 ; i < usuario.validosCarrito ; i++)
+        montoTotal += usuario.carritoDeJuegos[i].precioJuego;
+
+    return montoTotal;
+}
+/// ^^^ Esta funcion se llama en el main antes de ejecutar "comprarJuegosDelCarrito()"
+
+void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los juegos que existen en el carrito
+{// La verificacion se hace previamente de acceder a esta funcion con la funcion ya hecha de contar el monto total de un arreglo de juegos y si el usuario tiene ese monto disponible para comprar
+    float montoADebitar = 0;
+
+    int nuevaDimBiblioteca = (*usuarioAComprarJuegos).validosCarrito + (*usuarioAComprarJuegos).validosBiblioteca; // Sumo la dim del carrito y la dim de la biblioteca para tener la nueva dim total de la biblioteca
+
+    Juego *aux = (Juego*) realloc((*usuarioAComprarJuegos).bibliotecaUsuario, sizeof(Juego) * nuevaDimBiblioteca); // Cambio la dim de la biblioteca
+
+    if(!aux)
+    {
+        printf("\nERROR EN MALLOC. . . NO se compro ningun juego, la biblioteca y el carrito no sufrieron cambios. . .\n");
+        return; // No se pudo redimensionar
+    }
+    (*usuarioAComprarJuegos).bibliotecaUsuario = aux; // Se pudo redimensionar la biblioteca
+
+    int valBiblioteca = (*usuarioAComprarJuegos).validosBiblioteca; // Comienzo a partir del ultimo juego que estaba en la biblioteca
+    int x = 0; // primer elemento que se encuentra en el carrito
+
+    for (int i = valBiblioteca ; i < nuevaDimBiblioteca ; i++)
+    {//Paso los elementos a partir de la primer posicion del carrito a la biblioteca despues del ultimo juego que tenia el usuario en la biblioteca
+        (*usuarioAComprarJuegos).bibliotecaUsuario[i] = (*usuarioAComprarJuegos).carritoDeJuegos[x];
+        montoADebitar += (*usuarioAComprarJuegos).carritoDeJuegos[x].precioJuego; // suma de monto a debitar de los juegos
+        x++;
+        // me voy desplazando en el carrito por cada juego hasta terminar de recorrerlo
+    }
+
+    //cuando se termina de copiar los juegos del carrito a la biblioteca se libera la memoria
+    free((*usuarioAComprarJuegos).carritoDeJuegos);
+    (*usuarioAComprarJuegos).validosCarrito = 0;
+    (*usuarioAComprarJuegos).validosBiblioteca = nuevaDimBiblioteca;
+    // Los validos pasan a ser la nueva dim
+
+    debitarDineroAlUsuario(usuarioAComprarJuegos, montoADebitar); // Se le debita el usuario el total sumado previamente
+}
+
+//esta funcion quita todos los juegos de la tienda y los carga al arreglo dinamico de biblioteca
+//Tambien le debita el total de todos los juegos al usuario
+/// LA VERIFICACION si el usuario tiene el monto sufciente hagamosla en el main en vez de en la funcion
+/// ^^importante
+
 /// Biblioteca personal =======================================================================================
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar) //siendo el arr de tipo juego la biblioteca de ese usuario y SABIENDO QUE ESE USUARIO TIENE ESE JUEGO POR VERIFICACION PREVIA/FUERA DE LA FUNCION
             //Recibo la dir de memoria de la biblioteca del usuario que se va a modificar, dir de memoria de sus validos y el juego a quitar.
@@ -686,7 +737,7 @@ int verificarSiJuegoEnBibliotecaUsuario (Usuario *usuarioRecibido, Juego juegoRe
 /// Pilas =======================================================================================
 
 void reajustarDimPilaTope(Pila *pila, int datoAIngresar) // Elimino el dato mas viejo de la pila y apilo el dato a ingresar en el tope
-{
+ {
     Pila aux;
     inicpila(&aux);
 
@@ -781,7 +832,7 @@ void ordSeleccionNombreUsuario(Usuario arr[], int validos) // ord por seleccion 
     }
 }
 
-int posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la pos donde se encuentra el menor elemento (el nombre)
+void posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la pos donde se encuentra el menor elemento (el nombre)
 {
     int posMenor = posInicial;
 
@@ -790,7 +841,7 @@ int posNombreMenor (Usuario arr[], int validos, int posInicial) // Se busca la p
 
     for (int i = posMenor + 1 ; i < validos ; i++)
     {
-        if(strcmpi(nombreMenor, arr[i].userName) > 0)
+        if(strcmpi(nombreMenor, arr[i]) > 0)
         {
             posMenor = i;
             strcpy(nombreMenor, arr[i].userName);
@@ -804,8 +855,6 @@ void ordInsercionUsuarioJuegos(Usuario arr[], int validos)
 {
     for (int i = 0 ; i < validos - 1 ; i++)
         insertarUsuarioMenorCantJuegos(arr, i, arr[i+1]); // Tomo el usuario en su posicion siguiente para insertarlo en su pos correcta
-}
-
 
 void insertarUsuarioMenorCantJuegos(Usuario arr[], int pos, Usuario usuarioAinsertar) // En un arreglo, se inserta un usuario en donde corresponda comparando con los anteriores
 {
@@ -818,54 +867,46 @@ void insertarUsuarioMenorCantJuegos(Usuario arr[], int pos, Usuario usuarioAinse
     arr[i + 1] = usuarioAinsertar;
 }
 
-float sumarJuegosEnCarrito(Usuario usuario)
+void mostrarUsuariosOrdenadosCantJuegos(Usuario arr[], int validos)
 {
-    float montoTotal = 0;
+    Usuario *aux = NULL; // Se utiliza un aux para no modificar el original
 
-    for(int i = 0 ; i < usuario.validosCarrito ; i++)
-        montoTotal += usuario.carritoDeJuegos[i].precioJuego;
-
-    return montoTotal;
-}
-/// ^^^ Esta funcion se llama en el main antes de ejecutar "comprarJuegosDelCarrito()"
-
-void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los juegos que existen en el carrito -> los agrega a la bilbioteca
-{// La verificacion se hace previamente de acceder a esta funcion con la funcion ya hecha de contar el monto total de un arreglo de juegos y si el usuario tiene ese monto disponible para comprar
-    float montoADebitar = 0;
-
-    int nuevaDimBiblioteca = (*usuarioAComprarJuegos).validosCarrito + (*usuarioAComprarJuegos).validosBiblioteca; // Sumo la dim del carrito y la dim de la biblioteca para tener la nueva dim total de la biblioteca
-
-    Juego *aux = (Juego*) realloc((*usuarioAComprarJuegos).bibliotecaUsuario, sizeof(Juego) * nuevaDimBiblioteca); // Cambio la dim de la biblioteca
-
+    aux = (Usuario*) malloc(sizeof(Usuario) * validos);
     if(!aux)
     {
-        printf("\nERROR EN MALLOC. . . NO se compro ningun juego, la biblioteca y el carrito no sufrieron cambios. . .\n");
-        return; // No se pudo redimensionar
-    }
-    (*usuarioAComprarJuegos).bibliotecaUsuario = aux; // Se pudo redimensionar la biblioteca
-
-    int valBiblioteca = (*usuarioAComprarJuegos).validosBiblioteca; // Comienzo a partir del ultimo juego que estaba en la biblioteca
-    int x = 0; // primer elemento que se encuentra en el carrito
-
-    for (int i = valBiblioteca ; i < nuevaDimBiblioteca ; i++)
-    {//Paso los elementos a partir de la primer posicion del carrito a la biblioteca despues del ultimo juego que tenia el usuario en la biblioteca
-        (*usuarioAComprarJuegos).bibliotecaUsuario[i] = (*usuarioAComprarJuegos).carritoDeJuegos[x];
-        montoADebitar += (*usuarioAComprarJuegos).carritoDeJuegos[x].precioJuego; // suma de monto a debitar de los juegos
-        x++;
-        // me voy desplazando en el carrito por cada juego hasta terminar de recorrerlo
+        printf("ERROR EN MALLOC. . .");
+        return;
     }
 
-    //cuando se termina de copiar los juegos del carrito a la biblioteca se libera la memoria
-    free((*usuarioAComprarJuegos).carritoDeJuegos);
-    (*usuarioAComprarJuegos).validosCarrito = 0;
-    (*usuarioAComprarJuegos).validosBiblioteca = nuevaDimBiblioteca;
-    // Los validos pasan a ser la nueva dim
+    for(int i = 0 ; i < validos ; i++)
+    {
+        aux[i] = arr[i]; // cargo el arreglo aux para mostrarlo
+    }
 
-    debitarDineroAlUsuario(usuarioAComprarJuegos, montoADebitar); // Se le debita el usuario el total sumado previamente
+    ordInsercionUsuarioJuegos(aux, validos);
+    mostrarArrUsuarios(aux, validos);
+
+    free(aux); // se libera la memoria de aux
 }
 
-//esta funcion quita todos los juegos de la tienda y los carga al arreglo dinamico de biblioteca
-//Tambien le debita el total de todos los juegos al usuario
-/// LA VERIFICACION si el usuario tiene el monto sufciente hagamosla en el main en vez de en la funcion
-/// ^^importante
+void mostrarUsuariosOrdenadosNombre (Usuario arr[], int validos)
+{
+    Usuario *aux = NULL; // Se utiliza un aux para no modificar el original
 
+    aux = (Usuario*) malloc(sizeof(Usuario) * validos);
+    if(!aux)
+    {
+        printf("ERROR EN MALLOC. . .");
+        return;
+    }
+
+    for(int i = 0 ; i < validos ; i++)
+    {
+        aux[i] = arr[i]; // cargo el arreglo aux para mostrarlo
+    }
+
+    ordSeleccionNombreUsuario(aux, validos);
+    mostrarArrUsuarios(aux, validos);
+
+    free(aux); // se libera la memoria de aux
+}

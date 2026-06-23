@@ -39,7 +39,7 @@
 	<malloc.h>
 	"pila.h"
 
-1782173166 source:d:\github\proyectofinal_utn_1ercuatrimestre\main.c
+1782173538 source:d:\github\proyectofinal_utn_1ercuatrimestre\main.c
 	"Juego.h"
 	"Usuario.h"
 	"General.h"
@@ -53,7 +53,7 @@
 1782108060 source:d:\github\proyectofinal_utn_1ercuatrimestre\usuario.c
 	"usuario.h"
 
-1782173327 d:\github\proyectofinal_utn_1ercuatrimestre\usuario.h
+1782173538 d:\github\proyectofinal_utn_1ercuatrimestre\usuario.h
 	"Juego.h"
 	<errno.h>
 
