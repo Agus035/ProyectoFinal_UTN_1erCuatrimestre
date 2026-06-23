@@ -96,7 +96,7 @@ int menuOpcionesLoggeoRegistro(int decision, Usuario **arrUsuarios, int *cantUsu
     return flag;
 }
 
-int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario y contraseña. Si son correctos, devuelve la posición en el array que tiene el usuario, y se continúa con eso. Si no
+int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario y contraseña. Si son correctos, devuelve la posición en el array que tiene el usuario, y se continúa el resto del programa con esa posición. Caso contrario, devuelve error.
 {
     int posicionUsuarioEnArray = -1;
 
@@ -155,8 +155,6 @@ int sistemaLoggeo(Usuario **arrUsuarios, int *cantUsuarios) //Se escribe usuario
     //usuario vuelve al menú principal (puede decidir agregar otro juego)
     //ahora al elegir "comprar juegos de mi carrito" -> llamo a "sumarPrecioJuegos" para que me calcule la cant a pagar y se compara con el sueldo actual
     //si la cant a pagar es mayor al saldo actual, no pasa nada. Si lo es, se llama a "cargarABibliotecaUsuario" -> pero parece necesito la lógica para agregar todos los juegos del carrito, pq la función solo acepta 1
-
-
 
 void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioActual) //Contiene el menu principal. Llama funciones y a otros menús de ser necesario.
 {
@@ -260,7 +258,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
 }
 
 
-float logicaDeCompraCarrito (Usuario **arrUsuarios, int validos, int posUsuarioActual, float dineroAPagar)
+float logicaDeCompraCarrito (Usuario **arrUsuarios, int validos, int posUsuarioActual, float dineroAPagar) //Agrega un juego al carrito. Se verifica no esté ya en carrito o biblioteca. Devuelve el valor total de todos los juegos del carrito sumados.
 {
     float saldoRestar = 0; //va a modificarse como flag de error (-1) o como el saldo que hay que quitarle al usuario
 
@@ -408,7 +406,7 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
 
 
 
-void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos) //no sé si es necesario doble puntero para el array este -> creo q no porque no hay malloc realloc pero pregunto
+void ejecutarFuncionesAdicionalesParaAdmin(int decision, Usuario usuariosEnSistema[], int validos)
 {
     char nombreDeUsuarioIngresado[LIMITE];
 
