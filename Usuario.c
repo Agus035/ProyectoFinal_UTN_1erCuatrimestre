@@ -576,7 +576,7 @@ void cargarDineroAlUsuario(Usuario *usuarioACargarDinero)
 //Recibe el usuario entero, adentro se encarga de modificar todo
 float cargarACarritoUsuario(Usuario *usuarioRecibido, Juego juegoAComprar) // devuelve lo que se debe de debitar al usuario
 {
-    int flag = 0;
+    float flag = 0;
 
     if (verificarSiJuegoEnBibliotecaUsuario(usuarioRecibido, juegoAComprar) == 1)
     {
@@ -699,6 +699,7 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
 
     //cuando se termina de copiar los juegos del carrito a la biblioteca se libera la memoria
     free((*usuarioAComprarJuegos).carritoDeJuegos);
+    (*usuarioAComprarJuegos).carritoDeJuegos = NULL;
     (*usuarioAComprarJuegos).validosCarrito = 0;
     (*usuarioAComprarJuegos).validosBiblioteca = nuevaDimBiblioteca;
     // Los validos pasan a ser la nueva dim
