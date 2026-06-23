@@ -249,7 +249,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 {
                     (*arrUsuarios)[posUsuarioActual].carritoDeJuegos = malloc(sizeof(Juego)*0);
                     (*arrUsuarios)[posUsuarioActual].validosCarrito = 0;
-                    printf("\nSe han eliminado todos los juegos de su carrito.\n\n")
+                    printf("\nSe han eliminado todos los juegos de su carrito.\n\n");
                 }
                 break;
             case 5: //modularizar -> confirmar usuario tiene dinero (retornar flag)

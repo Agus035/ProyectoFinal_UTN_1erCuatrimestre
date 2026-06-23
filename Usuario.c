@@ -627,9 +627,6 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
 {// La verificacion se hace previamente de acceder a esta funcion con la funcion ya hecha de contar el monto total de un arreglo de juegos y si el usuario tiene ese monto disponible para comprar
     float montoADebitar = 0;
 
-    Pila aux;
-    inicpila(&aux);
-
     int nuevaDimBiblioteca = (*usuarioAComprarJuegos).validosCarrito + (*usuarioAComprarJuegos).validosBiblioteca; // Sumo la dim del carrito y la dim de la biblioteca para tener la nueva dim total de la biblioteca
 
     Juego *juegoAux = (Juego*) realloc((*usuarioAComprarJuegos).bibliotecaUsuario, sizeof(Juego) * nuevaDimBiblioteca); // Cambio la dim de la biblioteca
@@ -650,9 +647,9 @@ void comprarJuegosDelCarrito(Usuario *usuarioAComprarJuegos) // Compro TODOS los
         int contDimPila = contarDimPila((*usuarioAComprarJuegos).historialDeJuego);
 
         if(contDimPila >= 50)
-            reajustarDimPilaTope((*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
+            reajustarDimPilaTope(&(*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
         else
-            apilar((*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
+            apilar(&(*usuarioAComprarJuegos).historialDeJuego, (*usuarioAComprarJuegos).carritoDeJuegos[x].id);
 
         (*usuarioAComprarJuegos).bibliotecaUsuario[i] = (*usuarioAComprarJuegos).carritoDeJuegos[x];
         montoADebitar += (*usuarioAComprarJuegos).carritoDeJuegos[x].precioJuego; // suma de monto a debitar de los juegos
@@ -872,9 +869,10 @@ void ordInsercionUsuarioJuegos(Usuario arr[], int validos)
 
 void insertarUsuarioMenorCantJuegos(Usuario arr[], int pos, Usuario usuarioAinsertar) // En un arreglo, se inserta un usuario en donde corresponda comparando con los anteriores
 {
-    int i = pos; // comienza en la pos anterior al que se le inserta
+    // comienza en la pos anterior al que se le inserta
+    int i;
 
-    for(i ; i >= 0 && usuarioAinsertar.validosBiblioteca < arr[i].validosBiblioteca ; i--)
+    for(i = pos ; i >= 0 && usuarioAinsertar.validosBiblioteca < arr[i].validosBiblioteca ; i--)
     {                   // Se compara el usuario a insertar (cant de juegos) con sus posiciones anteriores
         arr[i + 1] = arr[i]; // Se va moviendo el elemento de esta posicion con su siguiente
     }
