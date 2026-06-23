@@ -220,6 +220,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 }
                 else // Se carga el juego que se quiere añadir al carrito al carrito del usuario si no ocurre un error o advertencia
                 {
+                    printf("\n\nel nombre del juego aniadido es %s\n\n", juegoAAniadirCaseDos.nombreJuego);
                     totalEnCarritoCaseDos = cargarACarritoUsuario(&(*arrUsuarios)[posUsuarioActual], juegoAAniadirCaseDos); // Se pasa el juego al carrito y se devuelve el total, solo para mostrar, el case 2 solo es para agregar un juego, no para debitar
                     if(totalEnCarritoCaseDos == -1)
                         printf("\nOcurrio un ERROR. . . El carrito no fue modificado. . .\n");
