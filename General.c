@@ -206,7 +206,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
                 float temp = logicaDeCompraCarrito(arrUsuarios, validos, posUsuarioActual, dineroAPagar);
                 if (temp == -1) //por algún error
                 {
-                    printf("\n\nNo se guardo ningun juego al carrito.\n\n")
+                    printf("\n\nNo se guardo ningun juego al carrito.\n\n");
                 }else
                 {
                     dineroAPagar = temp;
