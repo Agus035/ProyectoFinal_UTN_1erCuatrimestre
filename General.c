@@ -380,6 +380,7 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
 {
     int decision;
 
+    printf("\n--MENU DEL ADMIN--\n\n");
     printf("1. Eliminar Usuario.\n");
     printf("2. Modificar un Juego.\n");
     printf("3. Cargar un nuevo Juego a la Tienda\n");
