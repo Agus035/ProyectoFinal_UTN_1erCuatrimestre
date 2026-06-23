@@ -2,7 +2,7 @@
 
 // ── Alta ────────────────────────────────────────────────────────────────────
 
-void guardarJuegosEnArchivo(char nombreArchivo[])
+void guardarJuegosEnArchivo(char nombreArchivo[]) //Guarda cualquier juego creado en archivo.
 {
     FILE *archi = fopen(nombreArchivo, "a+b");
     if (archi)
@@ -14,7 +14,7 @@ void guardarJuegosEnArchivo(char nombreArchivo[])
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE. . .\n");
 }
 
-void cargarJuegoATienda(FILE *archi)
+void cargarJuegoATienda(FILE *archi) //Llama a función de crear juego, no lo crea si el juego ya existe.
 {
     int flag = 0;
 
@@ -33,7 +33,7 @@ void cargarJuegoATienda(FILE *archi)
     }
 }
 
-Juego cargarNuevoJuego() //le (había) agregado archi para que pueda identificar qué numero de ID poner en base a cuántos juegos hay
+Juego cargarNuevoJuego() //Crea un juego
 {
     Juego nuevoJuego;
     printf("\n=============CREACION DEL JUEGO NUEVO================\n");
@@ -63,9 +63,12 @@ Juego cargarNuevoJuego() //le (había) agregado archi para que pueda identificar
     return nuevoJuego;
 }
 
+//Determina qué ID tiene el juego nuevo, basandose en la cantidad de juegos que existan.
 int determinarIDNuevoJuego()//Se ignora la ID de juegos eliminados (nota debajo)
 {// SE ASUME QUE la tienda de juegos (JUEGOSTIENDA / el archivo con los juegos globales) SIEMPRE va a estar precargado en el sistema
 // Esto para emular los juegos que existen globalmente
+///^ no entiendo a qué te referís
+
     FILE *archi = fopen(JUEGOSTIENDA, "rb");
 
     int cantJuegos = -1;
@@ -77,7 +80,7 @@ int determinarIDNuevoJuego()//Se ignora la ID de juegos eliminados (nota debajo)
         fclose(archi);
     }else
     {
-        printf("\n\nHa ocurrido un error en la lectura del archivo. No puedo asignarse ID.");
+        printf("\n\nHa ocurrido un error en la lectura del archivo. No pudo asignarse ID.\n\n");
     }
 
     return cantJuegos; //las IDs empiezan en 0
@@ -85,7 +88,7 @@ int determinarIDNuevoJuego()//Se ignora la ID de juegos eliminados (nota debajo)
 
 // ── Consulta / lectura ────────────────────────────────────────────────────────
 
-void leerJuegosDeTienda(char nombreArchivo[]) //abre el archivo y llama a la función que lee todos los juegos
+void leerJuegosDeTienda(char nombreArchivo[]) //Abre el archivo y llama a la función que muestra todos los juegos.
 {
     FILE *archi = fopen(nombreArchivo, "rb");
     if (archi)
@@ -97,7 +100,7 @@ void leerJuegosDeTienda(char nombreArchivo[]) //abre el archivo y llama a la fun
         printf("\nERROR, EL ARCHIVO NO PUDO ABRIRSE/NO existe. . .\n");
 }
 
-void leerJuegosArchivo(FILE *archi) //lee todos los juegos del archivo que recibe
+void leerJuegosArchivo(FILE *archi) //Muestra todos los juegos del archivo que recibe
 {
     Juego aux;
     int contador = 0; //contador es solo estético para el printf de abajo
@@ -116,7 +119,7 @@ void leerJuegosArchivo(FILE *archi) //lee todos los juegos del archivo que recib
         printf("\nNO HAY JUEGOS QUE MOSTRAR. . .\n");
 }
 
-void leerUnJuego(Juego unJuego)
+void leerUnJuego(Juego unJuego) //Muestra los datos de un solo juego.
 {
     printf("Nombre del juego: %s\n", unJuego.nombreJuego);
     printf("Categoria del juego: %s\n", unJuego.categoriaJuego);
@@ -124,7 +127,7 @@ void leerUnJuego(Juego unJuego)
     printf("ID del juego: %i\n", unJuego.id);
 }
 
-Juego buscarJuegoPorNombre (char nombreJuegoBuscado[]) //devuelve Juego buscado por nombre
+Juego buscarJuegoPorNombre (char nombreJuegoBuscado[]) //Devuelve el Juego buscado por nombre. Si no se encontró, devuelve juego con id -1
 {
     FILE *archi =  fopen(JUEGOSTIENDA, "rb");
 
@@ -153,7 +156,7 @@ Juego buscarJuegoPorNombre (char nombreJuegoBuscado[]) //devuelve Juego buscado 
     return aux;
 }
 
-Juego buscarJuegoPorId (int idBuscada) //función separada porque parece solo la vamos a usar en relación al usuario
+Juego buscarJuegoPorId (int idBuscada) //Devuelve el Juego buscado por nombre. Si no se encontró, devuelve juego con id -1
 {
     FILE *archi =  fopen(JUEGOSTIENDA, "rb"); // solo quiero leer el archivo, nunca escribir en el
 
