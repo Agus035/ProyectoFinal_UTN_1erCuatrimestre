@@ -114,6 +114,7 @@ int verificarSiJuegoEnCarritoUsuario (Usuario *usuarioRecibido, Juego juegoRecib
 // Biblioteca personal / Modificacion
 void cargarABibliotecaUsuario(Usuario *usuarioACargar, Juego juegoACargar); //
 int verificarSiJuegoEnBibliotecaUsuario (Usuario *usuarioRecibido, Juego juegoRecibido);
+void mostrarBibliotecaDeUsuario (Usuario usuario);
 
 // Quitar de biblioteca
 void quitarJuegoDeBibliotecaUsuario(Juego **arr, int *validosBiblioteca, Juego juegoAQuitar);

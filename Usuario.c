@@ -871,6 +871,23 @@ void mostrarCarritoDeUsuario (Usuario usuario)
     }
 }
 
+///Mostrar juegos de biblioteca de usuario especifico
+void mostrarBibliotecaDeUsuario (Usuario usuario)
+{
+    if (usuario.validosBiblioteca == 0) // Si el usuario no tiene juegos en el carrito, no se muestra nada
+    {
+        printf("\nNo hay juegos en el carrito.\n\n");
+    }else
+    {
+        for(int i = 0 ; i < usuario.validosBiblioteca ; i++) // Se muestra las veces iguales a la cantidad de juegos que tiene el usuario en el carrito
+        {
+            printf("\n=============Juego en Carrito (U: %s)#%i================\n", usuario.userName, i+1);
+            leerUnJuego(usuario.bibliotecaUsuario[i]);
+            printf("\n======================================\n");
+        }
+    }
+}
+
 /// Ordenamientos con usuarios
 //seleccion
 void ordSeleccionNombreUsuario(Usuario arr[], int validos) // ord por seleccion un arreglo de usuarios por el nombre de usuario
