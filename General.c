@@ -395,7 +395,7 @@ void funcionesAdicionalesParaAdmin(Usuario *arrUsuarios, int validos)
     printf("5. Buscar usuario.\n");
     printf("6. Ver usuarios por nombre alfabetico.\n");
     printf("7. Ver usuarios por cantidad de juegos.\n");
-    printf("8. Identificar usuario que mas juegos tiene.");
+    printf("8. Identificar usuario que mas juegos tiene.\n");
     printf("9. Volver al Menu Usuario\n\n");
 
     do
