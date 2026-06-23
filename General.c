@@ -169,9 +169,9 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
     {
         printf("\n--MENU PRINCIPAL--\n\n");
         printf("1. Ver tienda.\n"); //DONE
-        printf("2. Agregar juegos a carrito.\n"); ///MODULARIZAR EN FUNCIÓN, PERO 99% DONE
+        printf("2. Agregar juego a carrito.\n"); ///Agrega UN juego al carrito. ///MODULARIZAR EN FUNCIÓN, PERO 99% DONE
         printf("3. Ver mi carrito.\n"); //DONE
-        printf("4. Vaciar mi carrito.\n"); ///falta
+        printf("4. Vaciar mi carrito.\n"); ///FALTA MODULARIZAR
         printf("5. Comprar juegos de mi carrito.\n"); ///falta
         printf("6. Deshacer ultima compra.\n"); ///acá necesito tu ayuda, no sé cómo funciona tu función
         printf("7. Consultar saldo.\n"); //DONE
@@ -194,7 +194,7 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             case 1:
                 menuTienda();
                 break;
-            case 2: //falta [A HACER]
+            case 2: //falta modularizar
                 //funcion que agrega juego de tienda a carrito
                 //^ quiero que el usuario busque juego por nombre -> si existe, se pasa el juego como parametro a "cargarACarritoUsuario" -> se continua preguntando con do while si quiere agregarse más al carrito.
                 //antes de agregar el juego al carrito, debo de verificar que no exista ya en el carrito o en la bilbioteca del usuario
@@ -241,18 +241,29 @@ void menuPrincipalUsuario (Usuario **arrUsuarios, int validos, int posUsuarioAct
             case 3:
                 mostrarCarritoDeUsuario((*arrUsuarios)[posUsuarioActual]);
                 break;
-            case 4:
+            case 4: //para esto hacer una funcion llamada "confirmarIntencionEliminarCarrito" donde pregunto si de verdad quiere eliminar todo
                 if((*arrUsuarios)[posUsuarioActual].validosCarrito == 0)
                 {
                     printf("\nNo hay juegos en su carrito.\n\n");
                 }else
                 {
-                    //funcion que vacía carrito
+                    (*arrUsuarios)[posUsuarioActual].carritoDeJuegos = malloc(sizeof(Juego)*0);
+                    (*arrUsuarios)[posUsuarioActual].validosCarrito = 0;
+                    printf("\nSe han eliminado todos los juegos de su carrito.\n\n")
                 }
                 break;
-            case 5:
-
-
+            case 5: //modularizar -> confirmar usuario tiene dinero (retornar flag)
+                if((*arrUsuarios)[posUsuarioActual].billetera >= dineroAPagar) //al usuario le alcanza
+                {
+                    comprarJuegosDelCarrito(&(*arrUsuarios)[posUsuarioActual]);
+                }else
+                {
+                    printf("\nSus $%f no alcanzan para comprar su carrito, cuyo total es $%f. Agregue dinero o vacie el carrito.", (*arrUsuarios)[posUsuarioActual].billetera, dineroAPagar);
+                }
+                break;
+            case 6:
+                //falta lo de pila que ahí lleno lo que piden los parametros
+                break;
             case 7:
                 printf("\nSueldo actual: $%f", (*arrUsuarios)[posUsuarioActual].billetera);
                 printf("\n");
